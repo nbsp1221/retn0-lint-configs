@@ -8,6 +8,15 @@
     "eslint",
     "eslint-config"
   ],
+  "homepage": "https://github.com/nbsp1221/retn0-lint-configs#readme",
+  "bugs": {
+    "url": "https://github.com/nbsp1221/retn0-lint-configs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbsp1221/retn0-lint-configs.git",
+    "directory": "packages/eslint-config"
+  },
   "license": "MIT",
   "author": "nbsp1221",
   "type": "module",
