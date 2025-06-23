@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "oxc",
+    "react",
+    "typescript",
+    "unicorn"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    // https://oxc.rs/docs/guide/usage/linter/rules/eslint/eqeqeq.html
+    "eqeqeq": ["error"],
+
+    // https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-unused-vars.html
+    "no-unused-vars": ["warn"]
+  }
+}

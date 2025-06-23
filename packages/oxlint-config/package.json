@@ -1,0 +1,21 @@
+{
+  "name": "@retn0/oxlint-config",
+  "version": "1.0.0",
+  "description": "🧹 My custom Oxlint configuration",
+  "keywords": [
+    "lint",
+    "linter",
+    "oxlint",
+    "oxlint-config"
+  ],
+  "license": "MIT",
+  "author": "nbsp1221",
+  "type": "module",
+  "main": "index.jsonc",
+  "files": [
+    "index.jsonc"
+  ],
+  "peerDependencies": {
+    "oxlint": "^1.3.0"
+  }
+}

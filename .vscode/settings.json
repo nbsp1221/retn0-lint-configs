@@ -1,0 +1,14 @@
+{
+  "cSpell.words": [
+    "nbsp",
+    "oxlint",
+    "retn"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.oxc": "explicit"
+  },
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "files.eol": "\n"
+}

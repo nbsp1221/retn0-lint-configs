@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "./node_modules/@retn0/oxlint-config/index.jsonc"
+  ]
+}

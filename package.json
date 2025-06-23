@@ -1,0 +1,35 @@
+{
+  "name": "retn0-lint-configs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "🧹 My custom linting configuration packages monorepo",
+  "keywords": [
+    "eslint",
+    "eslint-config",
+    "oxlint",
+    "oxlint-config",
+    "lint",
+    "linter",
+    "monorepo"
+  ],
+  "license": "MIT",
+  "author": "nbsp1221",
+  "type": "module",
+  "scripts": {
+    "lint": "pnpm run lint:oxlint && pnpm run lint:eslint",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint ."
+  },
+  "devDependencies": {
+    "@retn0/eslint-config": "workspace:*",
+    "@retn0/oxlint-config": "workspace:*",
+    "@types/react": "19.1.8",
+    "eslint": "9.29.0",
+    "oxlint": "1.3.0",
+    "typescript": "5.8.3"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
