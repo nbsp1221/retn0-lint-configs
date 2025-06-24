@@ -37,6 +37,7 @@ export const baseConfigs = defineConfig([
         ecmaFeatures: {
           jsx: true,
         },
+        jsxPragma: null,
       },
     },
   },

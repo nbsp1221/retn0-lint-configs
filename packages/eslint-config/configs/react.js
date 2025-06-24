@@ -11,5 +11,6 @@ export const reactConfigs = defineConfig({
   },
   rules: {
     ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
   },
 });
