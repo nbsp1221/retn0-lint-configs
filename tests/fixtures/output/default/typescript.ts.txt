@@ -1,0 +1,5 @@
+import type { AType, ZType } from './types';
+import { alpha, zeta } from './values';
+
+const _ignored = 1;
+export const value: ZType | AType = alpha + zeta + _ignored;

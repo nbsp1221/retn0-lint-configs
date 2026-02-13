@@ -1,0 +1,13 @@
+import alpha from 'alpha';
+import { a, b } from 'pkg';
+import zeta from 'zeta';
+
+const items = [1, 2];
+const obj = { b: 1, a: 2 };
+
+function run(value) {
+  return value;
+}
+
+run(items[0]);
+console.log(obj, a, b, alpha, zeta);
