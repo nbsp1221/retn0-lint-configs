@@ -1,7 +1,17 @@
+import { useState } from 'react';
+
 type Props = {
   label: string
 };
 
 export function Button( { label }: Props ){
   return <button>{ label }</button>;
+}
+
+export function ConditionalState({ enabled }: { enabled: boolean }) {
+  if (enabled) {
+    useState(0);
+  }
+
+  return null;
 }

@@ -1,15 +1,7 @@
-import {
-  cp,
-  mkdir,
-  mkdtemp,
-  readdir,
-  readFile,
-  rm,
-  writeFile,
-} from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
-import { type CreateConfigsOptions, createConfigs } from '@retn0/eslint-config';
+import createConfig, { type ConfigOptions } from '@retn0/eslint-config';
 import { ESLint } from 'eslint';
 import { afterAll, describe, expect, it } from 'vitest';
 
@@ -20,7 +12,7 @@ const UPDATE_FIXTURES = process.env.UPDATE_FIXTURES === '1';
 
 interface Suite {
   name: string;
-  options: CreateConfigsOptions;
+  options: ConfigOptions;
 }
 
 interface LintDiagnostic {
@@ -40,7 +32,11 @@ interface LintDiagnostic {
 const suites: Suite[] = [
   {
     name: 'default',
-    options: {},
+    options: {
+      environments: ['node'],
+      perfectionist: true,
+      react: true,
+    },
   },
 ];
 
@@ -62,7 +58,7 @@ describe('eslint fixtures regression', () => {
       const eslint = new ESLint({
         cwd: tempSuiteDir,
         overrideConfigFile: true,
-        overrideConfig: createConfigs(suite.options),
+        overrideConfig: createConfig(suite.options),
         fix: true,
       });
 
@@ -89,25 +85,27 @@ describe('eslint fixtures regression', () => {
 });
 
 afterAll(async () => {
-  await Promise.all(tempDirs.map(dir => rm(dir, { recursive: true, force: true })));
+  await Promise.all(tempDirs.map((dir) => rm(dir, { recursive: true, force: true })));
 });
 
 async function materializeTxtFixtures(rootDir: string): Promise<void> {
   const files = await listFiles(rootDir);
-  await Promise.all(files.map(async (file) => {
-    if (!file.endsWith('.txt')) {
-      return;
-    }
+  await Promise.all(
+    files.map(async (file) => {
+      if (!file.endsWith('.txt')) {
+        return;
+      }
 
-    const fromPath = join(rootDir, file);
-    const toRelativePath = file.slice(0, -4);
-    const toPath = join(rootDir, toRelativePath);
-    const content = await readFile(fromPath, 'utf8');
+      const fromPath = join(rootDir, file);
+      const toRelativePath = file.slice(0, -4);
+      const toPath = join(rootDir, toRelativePath);
+      const content = await readFile(fromPath, 'utf8');
 
-    await mkdir(dirname(toPath), { recursive: true });
-    await writeFile(toPath, content, 'utf8');
-    await rm(fromPath, { force: true });
-  }));
+      await mkdir(dirname(toPath), { recursive: true });
+      await writeFile(toPath, content, 'utf8');
+      await rm(fromPath, { force: true });
+    }),
+  );
 }
 
 async function listFiles(rootDir: string): Promise<string[]> {
@@ -134,25 +132,24 @@ async function listMaterializedFiles(rootDir: string): Promise<string[]> {
   return listFiles(rootDir);
 }
 
-async function readFilesAsText(
-  rootDir: string,
-  files: string[],
-): Promise<Record<string, string>> {
-  const entries = await Promise.all(files.map(async (file) => {
-    const content = await readFile(join(rootDir, file), 'utf8');
-    return [file, content] as const;
-  }));
+async function readFilesAsText(rootDir: string, files: string[]): Promise<Record<string, string>> {
+  const entries = await Promise.all(
+    files.map(async (file) => {
+      const content = await readFile(join(rootDir, file), 'utf8');
+      return [file, content] as const;
+    }),
+  );
 
   return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b)));
 }
 
 function serializeDiagnostics(results: ESLint.LintResult[], cwd: string): LintDiagnostic[] {
   return results
-    .map(result => ({
+    .map((result) => ({
       filePath: relative(cwd, result.filePath).replaceAll('\\', '/'),
       errorCount: result.errorCount,
       warningCount: result.warningCount,
-      messages: result.messages.map(message => ({
+      messages: result.messages.map((message) => ({
         ruleId: message.ruleId,
         severity: message.severity,
         line: message.line,
@@ -172,11 +169,13 @@ async function writeFixtureOutputs(
   await rm(outputSuiteDir, { recursive: true, force: true });
   await mkdir(outputSuiteDir, { recursive: true });
 
-  await Promise.all(Object.entries(outputs).map(async ([file, content]) => {
-    const outputPath = join(outputSuiteDir, `${file}.txt`);
-    await mkdir(dirname(outputPath), { recursive: true });
-    await writeFile(outputPath, content, 'utf8');
-  }));
+  await Promise.all(
+    Object.entries(outputs).map(async ([file, content]) => {
+      const outputPath = join(outputSuiteDir, `${file}.txt`);
+      await mkdir(dirname(outputPath), { recursive: true });
+      await writeFile(outputPath, content, 'utf8');
+    }),
+  );
 
   await writeFile(
     join(outputSuiteDir, '__diagnostics__.json'),
@@ -187,12 +186,14 @@ async function writeFixtureOutputs(
 
 async function readExpectedOutputs(outputSuiteDir: string): Promise<Record<string, string>> {
   const files = await listFiles(outputSuiteDir);
-  const expectedFiles = files.filter(file => file.endsWith('.txt'));
-  const entries = await Promise.all(expectedFiles.map(async (file) => {
-    const content = await readFile(join(outputSuiteDir, file), 'utf8');
-    const materializedFile = file.slice(0, -4);
-    return [materializedFile, content] as const;
-  }));
+  const expectedFiles = files.filter((file) => file.endsWith('.txt'));
+  const entries = await Promise.all(
+    expectedFiles.map(async (file) => {
+      const content = await readFile(join(outputSuiteDir, file), 'utf8');
+      const materializedFile = file.slice(0, -4);
+      return [materializedFile, content] as const;
+    }),
+  );
 
   return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b)));
 }

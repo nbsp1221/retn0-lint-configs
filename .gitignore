@@ -2,3 +2,4 @@
 .pnpm/
 .pnpm-debug.log*
 node_modules/
+packages/*/dist/

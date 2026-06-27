@@ -6,13 +6,72 @@
     "messages": []
   },
   {
+    "filePath": "react-env.d.ts",
+    "errorCount": 0,
+    "warningCount": 0,
+    "messages": []
+  },
+  {
+    "filePath": "react-hook.ts",
+    "errorCount": 1,
+    "warningCount": 0,
+    "messages": [
+      {
+        "ruleId": "@eslint-react/exhaustive-deps",
+        "severity": 2,
+        "line": 6,
+        "column": 6,
+        "endLine": 6,
+        "endColumn": 8
+      }
+    ]
+  },
+  {
     "filePath": "react.tsx",
+    "errorCount": 1,
+    "warningCount": 1,
+    "messages": [
+      {
+        "ruleId": "@eslint-react/use-state",
+        "severity": 1,
+        "line": 13,
+        "column": 5,
+        "endLine": 13,
+        "endColumn": 16
+      },
+      {
+        "ruleId": "@eslint-react/rules-of-hooks",
+        "severity": 2,
+        "line": 13,
+        "column": 5,
+        "endLine": 13,
+        "endColumn": 13
+      }
+    ]
+  },
+  {
+    "filePath": "types.ts",
     "errorCount": 0,
     "warningCount": 0,
     "messages": []
   },
   {
     "filePath": "typescript.ts",
+    "errorCount": 1,
+    "warningCount": 0,
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/switch-exhaustiveness-check",
+        "severity": 2,
+        "line": 14,
+        "column": 11,
+        "endLine": 14,
+        "endColumn": 17
+      }
+    ]
+  },
+  {
+    "filePath": "values.ts",
     "errorCount": 0,
     "warningCount": 0,
     "messages": []

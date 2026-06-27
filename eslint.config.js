@@ -1,8 +1,13 @@
-import { createConfigs } from '@retn0/eslint-config';
-import { defineConfig } from 'eslint/config';
+import retn0 from '@retn0/eslint-config';
+import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import { globalIgnores } from 'eslint/config';
 
-export default defineConfig([
-  ...createConfigs({
-    oxlint: true,
-  }),
-]);
+export default retn0(
+  {
+    environments: ['node'],
+    perfectionist: true,
+    react: true,
+  },
+  eslintConfigOxlint,
+  globalIgnores(['packages/*/dist/**']),
+);

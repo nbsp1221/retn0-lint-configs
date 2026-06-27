@@ -2,37 +2,39 @@
 
 [![gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
 
-This monorepo provides my custom linting configuration packages for modern JavaScript and TypeScript development.
+This monorepo provides my personal linting and formatting configuration packages.
 
 ## Packages
 
-This repository contains two main packages:
+This repository contains four public packages:
 
-- [`@retn0/eslint-config`](./packages/eslint-config): Comprehensive ESLint configuration with code quality and style enforcement.
-- [`@retn0/oxlint-config`](./packages/oxlint-config): High-performance Oxlint configuration for fast linting.
+- [`@retn0/eslint-config`](./packages/eslint-config): My personal ESLint configuration.
+- [`@retn0/eslint-config-oxlint`](./packages/eslint-config-oxlint): My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
+- [`@retn0/oxfmt-config`](./packages/oxfmt-config): My personal Oxfmt configuration.
+- [`@retn0/oxlint-config`](./packages/oxlint-config): My personal Oxlint configuration.
 
 ## Requirements
 
 > [!NOTE]
-> These configurations use the latest linting tools and formats. Make sure you meet the version requirements.
+> Install only the tools and config packages you use.
 
-- [Node.js](https://nodejs.org) 22.0.0 or higher
-- [ESLint](https://eslint.org) 9.29.0 or higher
-- [Oxlint](https://oxc.rs) 1.3.0 or higher (if using Oxlint)
-- [TypeScript](https://www.typescriptlang.org) 5.0.0 or higher (if using TypeScript)
-- [React](https://react.dev) 19.0.0 or higher (if using React)
+- [Node.js](https://nodejs.org) 24.0.0 or higher
+- [ESLint](https://eslint.org) 10.x
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.56.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.71.0 or higher
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.23.x
 
 ## Installation
 
 ```sh
 # npm
-npm install -D eslint oxlint @retn0/eslint-config @retn0/oxlint-config
+npm install -D eslint oxfmt oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
 
 # pnpm
-pnpm add -D eslint oxlint @retn0/eslint-config @retn0/oxlint-config
+pnpm add -D eslint oxfmt oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
 
 # yarn
-yarn add -D eslint oxlint @retn0/eslint-config @retn0/oxlint-config
+yarn add -D eslint oxfmt oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
 ```
 
 ## Usage
@@ -42,40 +44,73 @@ yarn add -D eslint oxlint @retn0/eslint-config @retn0/oxlint-config
 Create an `eslint.config.js` file in the root of your project:
 
 ```js
-import { createConfigs } from '@retn0/eslint-config';
-import { defineConfig } from 'eslint/config';
+import retn0 from '@retn0/eslint-config';
 
-export default defineConfig([
-  ...createConfigs({
-    // Enable Oxlint integration for better performance (recommended)
-    oxlint: true,
-  }),
-
-  // Add your custom configurations here
-]);
+export default retn0({
+  environments: ['node'],
+});
 ```
 
-You can customize the configuration by passing options to `createConfigs()`. Here are the default values:
+Pass options to the default factory when needed:
 
 ```js
-...createConfigs({
-  js: true,
-  ts: true,
-  stylistic: true,
-  perfectionist: {
-    internalPattern: ['^@/.*', '^~/.*'],
+export default retn0({
+  environments: [],
+  javascript: true,
+  typescript: true,
+  react: false,
+  perfectionist: false,
+});
+```
+
+### ESLint Compatibility for Oxlint
+
+If you run Oxlint before ESLint, use `@retn0/oxlint-config` for Oxlint and
+append `@retn0/eslint-config-oxlint` after the base ESLint config:
+
+```ts
+import config from '@retn0/oxlint-config';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [config],
+});
+```
+
+```js
+import retn0 from '@retn0/eslint-config';
+import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+
+export default retn0(
+  {
+    environments: ['node'],
   },
-  react: true,
-  oxlint: false,
-})
+  eslintConfigOxlint,
+);
 ```
 
 ### Oxlint Configuration
 
-Create a `.oxlintrc.json` file in the root of your project:
+This preset enables Oxlint type-aware linting by default.
 
-```json
-{
-  "extends": ["./node_modules/@retn0/oxlint-config/index.jsonc"]
-}
+Create an `oxlint.config.ts` file in the root of your project:
+
+```ts
+import config from '@retn0/oxlint-config';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [config],
+});
+```
+
+### Oxfmt Configuration
+
+Create an `oxfmt.config.ts` file in the root of your project:
+
+```ts
+import config from '@retn0/oxfmt-config';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig(config);
 ```
