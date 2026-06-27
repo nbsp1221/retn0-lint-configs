@@ -1,13 +1,16 @@
 import { execFile } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const repoNodeModules = join(repoRoot, 'node_modules');
+const commandMaxBuffer = 10 * 1024 * 1024;
+const commandTimeoutMs = 30_000;
+const supportedBinNames = new Set(['eslint', 'oxfmt', 'oxlint']);
 
 export interface CommandResult {
   readonly exitCode: number;
@@ -30,15 +33,15 @@ export async function createTempProject(name: string): Promise<TempProject> {
   return {
     root,
     async writeFile(path, content) {
-      const filePath = join(root, path);
+      const filePath = resolveProjectPath(root, path);
       await mkdir(dirname(filePath), { recursive: true });
       await writeFile(filePath, content, 'utf8');
     },
     async readFile(path) {
-      return readFile(join(root, path), 'utf8');
+      return readFile(resolveProjectPath(root, path), 'utf8');
     },
     async runBin(binName, args) {
-      return runCommand(join(repoRoot, 'node_modules/.bin', binName), args, root);
+      return runCommand(resolveBinPath(binName), args, root);
     },
     async cleanup() {
       await rm(root, { recursive: true, force: true });
@@ -48,7 +51,11 @@ export async function createTempProject(name: string): Promise<TempProject> {
 
 async function runCommand(command: string, args: string[], cwd: string): Promise<CommandResult> {
   try {
-    const { stdout, stderr } = await execFileAsync(command, args, { cwd });
+    const { stdout, stderr } = await execFileAsync(command, args, {
+      cwd,
+      maxBuffer: commandMaxBuffer,
+      timeout: commandTimeoutMs,
+    });
     return {
       exitCode: 0,
       stdout,
@@ -57,7 +64,7 @@ async function runCommand(command: string, args: string[], cwd: string): Promise
   } catch (error: unknown) {
     if (isExecError(error)) {
       return {
-        exitCode: error.code ?? 1,
+        exitCode: typeof error.code === 'number' ? error.code : 1,
         stdout: error.stdout,
         stderr: error.stderr,
       };
@@ -65,6 +72,29 @@ async function runCommand(command: string, args: string[], cwd: string): Promise
 
     throw error;
   }
+}
+
+function resolveBinPath(binName: string): string {
+  if (binName !== basename(binName) || !supportedBinNames.has(binName)) {
+    throw new Error(`Unsupported test binary: ${binName}`);
+  }
+
+  return join(repoRoot, 'node_modules/.bin', binName);
+}
+
+function resolveProjectPath(root: string, path: string): string {
+  if (isAbsolute(path)) {
+    throw new Error(`Temp project path must be relative: ${path}`);
+  }
+
+  const filePath = resolve(root, path);
+  const relativePath = relative(root, filePath);
+
+  if (relativePath === '' || (!relativePath.startsWith('..') && !isAbsolute(relativePath))) {
+    return filePath;
+  }
+
+  throw new Error(`Temp project path escapes project root: ${path}`);
 }
 
 function isExecError(error: unknown): error is { code?: number; stdout: string; stderr: string } {
