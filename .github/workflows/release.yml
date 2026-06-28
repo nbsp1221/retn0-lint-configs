@@ -1,27 +1,36 @@
 name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
+  pull-requests: write
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
+  release:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
-      - run: git diff --exit-code
-      - run: pnpm publish -r --access public --no-git-checks --ignore-scripts --dry-run
-      - run: pnpm publish -r --access public --no-git-checks --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: changesets/action@v1.9.0
+        with:
+          commit: '🔖 Version packages'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          publish: pnpm release
+          title: '🔖 Version packages'
+          version: pnpm changeset:version
