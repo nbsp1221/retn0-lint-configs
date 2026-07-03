@@ -9,6 +9,8 @@ import {
 import oxlint from 'eslint-plugin-oxlint';
 import { defineConfig } from 'eslint/config';
 
+type OxlintCompatConfig = Parameters<typeof oxlint.buildFromOxlintConfig>[0];
+
 const eslintRuleDisables = {
   ...createRuleDisablesForTool(javascriptPolicies, 'eslint'),
   ...createRuleDisablesForTool(reactPolicies, 'eslint'),
@@ -16,7 +18,7 @@ const eslintRuleDisables = {
 } satisfies Record<string, 'off'>;
 
 const config = defineConfig([
-  ...oxlint.buildFromOxlintConfig(createOxlintConfig()),
+  ...oxlint.buildFromOxlintConfig(createOxlintConfig() as OxlintCompatConfig),
   {
     name: 'retn0/oxlint',
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],

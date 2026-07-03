@@ -69,12 +69,9 @@ If you run Oxlint before ESLint, use `@retn0/oxlint-config` for Oxlint and
 append `@retn0/eslint-config-oxlint` after the base ESLint config:
 
 ```ts
-import config from '@retn0/oxlint-config';
-import { defineConfig } from 'oxlint';
+import retn0 from '@retn0/oxlint-config';
 
-export default defineConfig({
-  extends: [config],
-});
+export default retn0();
 ```
 
 ```js
@@ -91,17 +88,14 @@ export default retn0(
 
 ### Oxlint Configuration
 
-This preset enables Oxlint type-aware linting by default.
+This preset creates a complete Oxlint config and enables type-aware linting by default.
 
 Create an `oxlint.config.ts` file in the root of your project:
 
 ```ts
-import config from '@retn0/oxlint-config';
-import { defineConfig } from 'oxlint';
+import retn0 from '@retn0/oxlint-config';
 
-export default defineConfig({
-  extends: [config],
-});
+export default retn0();
 ```
 
 ### Oxfmt Configuration

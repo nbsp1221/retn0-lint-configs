@@ -4,8 +4,9 @@ import { javascriptPolicies } from '../policies/javascript.js';
 import { reactPolicies } from '../policies/react.js';
 import { typescriptPolicies } from '../policies/typescript.js';
 import { createRulesForTool } from '../tool-rules.js';
+import { mergeOxlintConfigs } from './merge-config.js';
 
-export function createOxlintConfig() {
+export function createOxlintConfig(...overrides: OxlintConfig[]) {
   const rules: Record<string, RuleConfig> = {
     ...createRulesForTool(javascriptPolicies, 'oxlint'),
     ...createRulesForTool(reactPolicies, 'oxlint'),
@@ -16,10 +17,11 @@ export function createOxlintConfig() {
     'react/react-in-jsx-scope': 'off',
   };
 
-  return {
+  const config = {
     categories: {
       correctness: 'error',
     },
+    ignorePatterns: ['node_modules/**', 'dist/**', 'coverage/**'],
     options: {
       typeAware: true,
     },
@@ -32,4 +34,6 @@ export function createOxlintConfig() {
       },
     ],
   } satisfies OxlintConfig;
+
+  return mergeOxlintConfigs(config, ...overrides);
 }

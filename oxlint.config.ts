@@ -1,6 +1,3 @@
-import config from '@retn0/oxlint-config';
-import { defineConfig } from 'oxlint';
+import retn0 from '@retn0/oxlint-config';
 
-export default defineConfig({
-  extends: [config],
-});
+export default retn0();

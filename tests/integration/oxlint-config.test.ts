@@ -53,6 +53,18 @@ export function Component({ enabled }: { enabled: boolean }) {
       ]),
     );
   });
+
+  it('does not lint dependency files when running from the project root', async () => {
+    project = await createTempProject('oxlint-config-ignores');
+    await writeOxlintProject(project);
+    await project.writeFile('index.ts', 'const value = 1;\n');
+
+    const result = await project.runBin('oxlint', ['--debug=files', '.']);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('index.ts');
+    expect(result.stdout).not.toContain('node_modules/');
+  });
 });
 
 async function writeOxlintProject(project: TempProject): Promise<void> {
@@ -77,12 +89,9 @@ async function writeOxlintProject(project: TempProject): Promise<void> {
   await project.writeFile(
     'oxlint.config.ts',
     `
-import config from '@retn0/oxlint-config';
-import { defineConfig } from 'oxlint';
+import retn0 from '@retn0/oxlint-config';
 
-export default defineConfig({
-  extends: [config],
-});
+export default retn0();
 `,
   );
 }
