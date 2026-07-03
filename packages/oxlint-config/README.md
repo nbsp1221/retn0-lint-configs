@@ -3,34 +3,54 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/oxlint-config)](https://www.npmjs.com/package/@retn0/oxlint-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/oxlint-config)](https://www.npmjs.com/package/@retn0/oxlint-config)
 
-High-performance Oxlint configuration for fast linting.
+My personal Oxlint configuration.
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) 22.0.0 or higher
-- [Oxlint](https://oxc.rs) 1.3.0 or higher
+- [Node.js](https://nodejs.org) 24.0.0 or higher
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.71.0 or higher
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.23.x
 
 ## Installation
 
 ```sh
 # npm
-npm install -D oxlint @retn0/oxlint-config
+npm install -D oxlint oxlint-tsgolint @retn0/oxlint-config
 
 # pnpm
-pnpm add -D oxlint @retn0/oxlint-config
+pnpm add -D oxlint oxlint-tsgolint @retn0/oxlint-config
 
 # yarn
-yarn add -D oxlint @retn0/oxlint-config
+yarn add -D oxlint oxlint-tsgolint @retn0/oxlint-config
 ```
 
 ## Usage
 
-Create a `.oxlintrc.json` file in the root of your project:
+This preset enables Oxlint type-aware linting by default.
 
-```json
-{
-  "extends": ["./node_modules/@retn0/oxlint-config/index.jsonc"]
-}
+Create an `oxlint.config.ts` file in the root of your project:
+
+```ts
+import config from '@retn0/oxlint-config';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [config],
+});
+```
+
+Add local overrides after the shared preset:
+
+```ts
+import config from '@retn0/oxlint-config';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [config],
+  rules: {
+    'no-console': 'warn',
+  },
+});
 ```
 
 ## License

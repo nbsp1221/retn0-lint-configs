@@ -1,5 +1,22 @@
-import type { ZType, AType } from './types';
+import { type ZType, type AType } from './types';
 import { zeta, alpha } from './values';
 
+type Status = 'idle' | 'running' | 'done';
+
 const _ignored = 1;
-export const value: ZType | AType = alpha + zeta + _ignored;
+export const value: ZType | AType = _ignored > 0 ? alpha : zeta;
+
+interface ExportedShape {
+  status: Status;
+}
+
+function getLabel(status: Status): string {
+  switch (status) {
+    case 'idle':
+      return 'Idle';
+    case 'running':
+      return 'Running';
+  }
+}
+
+export { getLabel, ExportedShape };

@@ -1,0 +1,21 @@
+declare module 'react' {
+  export function useEffect(callback: () => void, deps?: readonly unknown[]): void;
+
+  export function useState<T>(initial: T): [T, (value: T) => void];
+}
+
+declare module 'react/jsx-runtime' {
+  export namespace JSX {
+    export type Element = unknown;
+
+    export interface IntrinsicElements {
+      button: {
+        children?: unknown;
+      };
+    }
+  }
+
+  export function jsx(type: unknown, props: unknown, key?: unknown): JSX.Element;
+
+  export function jsxs(type: unknown, props: unknown, key?: unknown): JSX.Element;
+}

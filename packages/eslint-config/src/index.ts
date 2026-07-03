@@ -1,0 +1,46 @@
+import type { Linter } from 'eslint';
+import type { RuntimeEnvironment } from './configs/base.js';
+import { createBaseConfigs } from './configs/base.js';
+import { jsConfigs } from './configs/js.js';
+import { perfectionistConfigs } from './configs/perfectionist.js';
+import { reactHooksConfigs } from './configs/react-hooks.js';
+import { reactConfigs } from './configs/react.js';
+import { tsConfigs } from './configs/ts.js';
+
+export type { RuntimeEnvironment };
+
+export type ConfigInput = Linter.Config | Linter.Config[];
+
+export interface ConfigOptions {
+  environments?: RuntimeEnvironment[];
+  javascript?: boolean;
+  typescript?: boolean;
+  react?: boolean;
+  perfectionist?: boolean;
+}
+
+export function createConfig(
+  options: ConfigOptions = {},
+  ...overrides: ConfigInput[]
+): Linter.Config[] {
+  const {
+    environments = [],
+    javascript = true,
+    typescript = true,
+    react = false,
+    perfectionist = false,
+  } = options;
+
+  const config = [
+    ...createBaseConfigs({ environments }),
+    ...(javascript ? jsConfigs : []),
+    ...(typescript ? tsConfigs : []),
+    ...(react ? [...reactConfigs, ...reactHooksConfigs] : []),
+    ...(perfectionist ? perfectionistConfigs : []),
+    ...overrides.flat(),
+  ] as Linter.Config[];
+
+  return config;
+}
+
+export default createConfig;

@@ -1,0 +1,5 @@
+import type { AType, ZType } from './types';
+
+export const alpha: AType = { kind: 'a' };
+
+export const zeta: ZType = { kind: 'z' };

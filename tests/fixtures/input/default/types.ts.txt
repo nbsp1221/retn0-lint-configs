@@ -1,0 +1,7 @@
+export interface AType {
+  kind: 'a';
+}
+
+export interface ZType {
+  kind: 'z';
+}

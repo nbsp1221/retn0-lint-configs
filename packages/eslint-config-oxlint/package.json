@@ -1,0 +1,56 @@
+{
+  "name": "@retn0/eslint-config-oxlint",
+  "version": "0.1.0",
+  "description": "My personal ESLint compatibility configuration for @retn0/oxlint-config",
+  "keywords": [
+    "config",
+    "eslint",
+    "eslint-config",
+    "javascript",
+    "lint",
+    "linter",
+    "oxlint",
+    "typescript"
+  ],
+  "homepage": "https://github.com/nbsp1221/retn0-lint-configs#readme",
+  "bugs": {
+    "url": "https://github.com/nbsp1221/retn0-lint-configs/issues"
+  },
+  "license": "MIT",
+  "author": "nbsp1221",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbsp1221/retn0-lint-configs.git",
+    "directory": "packages/eslint-config-oxlint"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "eslint-plugin-oxlint": "1.71.0"
+  },
+  "devDependencies": {
+    "@retn0/config-policy": "workspace:*"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "oxlint": "^1.71.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

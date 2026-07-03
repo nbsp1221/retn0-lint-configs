@@ -3,14 +3,12 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/eslint-config)](https://www.npmjs.com/package/@retn0/eslint-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/eslint-config)](https://www.npmjs.com/package/@retn0/eslint-config)
 
-Comprehensive ESLint configuration with code quality and style enforcement.
+My personal ESLint configuration.
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) 22.0.0 or higher
-- [ESLint](https://eslint.org) 9.29.0 or higher
-- [TypeScript](https://www.typescriptlang.org) 5.0.0 or higher (if using TypeScript)
-- [React](https://react.dev) 19.0.0 or higher (if using React)
+- [Node.js](https://nodejs.org) 24.0.0 or higher
+- [ESLint](https://eslint.org) 10.x
 
 ## Installation
 
@@ -30,29 +28,47 @@ yarn add -D eslint @retn0/eslint-config
 Create an `eslint.config.js` file in the root of your project:
 
 ```js
-import { createConfigs } from '@retn0/eslint-config';
-import { defineConfig } from 'eslint/config';
+import retn0 from '@retn0/eslint-config';
 
-export default defineConfig([
-  ...createConfigs(),
-
-  // Add your custom configurations here
-]);
+export default retn0({
+  environments: ['node'],
+});
 ```
 
-You can customize the configuration by passing options to `createConfigs()`. Here are the default values:
+Pass options to the default factory when needed:
 
 ```js
-...createConfigs({
-  js: true,
-  ts: true,
-  stylistic: true,
-  perfectionist: {
-    internalPattern: ['^@/.*', '^~/.*'],
-  },
+export default retn0({
+  environments: [],
+  javascript: true,
+  typescript: true,
+  react: false,
+  perfectionist: false,
+});
+```
+
+Runtime environments are opt-in:
+
+```js
+export default retn0({
+  environments: ['browser', 'vitest'],
   react: true,
-  oxlint: false,
-})
+});
+```
+
+User overrides are appended after the shared config:
+
+```js
+export default retn0(
+  {
+    environments: ['node'],
+  },
+  {
+    rules: {
+      'no-console': 'warn',
+    },
+  },
+);
 ```
 
 ## License
