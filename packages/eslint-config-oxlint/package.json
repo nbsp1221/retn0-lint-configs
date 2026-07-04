@@ -1,6 +1,6 @@
 {
   "name": "@retn0/eslint-config-oxlint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "My personal ESLint compatibility configuration for @retn0/oxlint-config",
   "keywords": [
     "config",
