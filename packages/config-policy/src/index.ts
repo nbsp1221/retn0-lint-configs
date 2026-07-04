@@ -1,4 +1,5 @@
-export * from './configs/oxlint.js';
+export * from './oxlint/config.js';
+export * from './oxlint/merge-config.js';
 export * from './policies/common.js';
 export * from './policies/javascript.js';
 export * from './policies/react.js';

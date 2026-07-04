@@ -10,6 +10,13 @@
       "import": "./src/index.ts"
     }
   },
+  "dependencies": {
+    "es-toolkit": "1.49.0"
+  },
+  "devDependencies": {
+    "eslint": "10.5.0",
+    "oxlint": "1.71.0"
+  },
   "engines": {
     "node": ">=24.0.0"
   }

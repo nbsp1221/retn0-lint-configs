@@ -1,6 +1,8 @@
 import type { OxlintConfig } from 'oxlint';
 import { createOxlintConfig } from '@retn0/config-policy';
 
-const config: OxlintConfig = createOxlintConfig();
+export function createConfig(...overrides: OxlintConfig[]): OxlintConfig {
+  return createOxlintConfig(...overrides);
+}
 
-export default config;
+export default createConfig;
