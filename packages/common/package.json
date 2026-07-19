@@ -1,8 +1,8 @@
 {
-  "name": "@retn0/config-policy",
+  "name": "@retn0/common",
   "version": "0.0.0",
   "private": true,
-  "description": "Internal shared policy for config packages",
+  "description": "Internal shared code for config packages",
   "type": "module",
   "exports": {
     ".": {

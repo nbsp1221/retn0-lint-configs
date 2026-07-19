@@ -44,7 +44,7 @@
     "eslint-plugin-oxlint": "1.71.0"
   },
   "devDependencies": {
-    "@retn0/config-policy": "workspace:*"
+    "@retn0/common": "workspace:*"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",

@@ -54,6 +54,58 @@ export function Component({ enabled }: { enabled: boolean }) {
     );
   });
 
+  it('warns on extreme production size while excluding test filenames', async () => {
+    project = await createTempProject('oxlint-config-maintainability');
+    await writeOxlintProject(project);
+    const oversizedSource = [
+      'function oversized() {',
+      ...Array.from({ length: 301 }, (_, index) => `  console.log(${index});`),
+      '}',
+      ...Array.from({ length: 700 }, (_, index) => `export const value${index} = ${index};`),
+      ...Array.from({ length: 9 }, () => 'if (true) {'),
+      '  console.log("nested");',
+      ...Array.from({ length: 9 }, () => '}'),
+    ].join('\n');
+    await project.writeFile('fixture.js', oversizedSource);
+    await project.writeFile('fixture.spec.js', oversizedSource);
+
+    const result = await project.runBin('oxlint', [
+      '--format=json',
+      'fixture.js',
+      'fixture.spec.js',
+    ]);
+    const diagnostics = diagnosticEntries(result.stdout);
+
+    expect(diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'eslint(max-depth)',
+          filename: 'fixture.js',
+          severity: 'warning',
+        }),
+        expect.objectContaining({
+          code: 'eslint(max-lines)',
+          filename: 'fixture.js',
+          severity: 'warning',
+        }),
+        expect.objectContaining({
+          code: 'eslint(max-lines-per-function)',
+          filename: 'fixture.js',
+          severity: 'warning',
+        }),
+      ]),
+    );
+    expect(
+      diagnostics.filter(
+        (diagnostic) =>
+          diagnostic.filename === 'fixture.spec.js' &&
+          ['eslint(max-depth)', 'eslint(max-lines)', 'eslint(max-lines-per-function)'].includes(
+            diagnostic.code,
+          ),
+      ),
+    ).toEqual([]);
+  });
+
   it('does not lint dependency files when running from the project root', async () => {
     project = await createTempProject('oxlint-config-ignores');
     await writeOxlintProject(project);
@@ -99,4 +151,13 @@ export default retn0();
 function diagnosticCodes(stdout: string): string[] {
   const output = JSON.parse(stdout) as { diagnostics: Array<{ code: string }> };
   return output.diagnostics.map((diagnostic) => diagnostic.code).sort();
+}
+
+function diagnosticEntries(
+  stdout: string,
+): Array<{ code: string; filename: string; severity: string }> {
+  const output = JSON.parse(stdout) as {
+    diagnostics: Array<{ code: string; filename: string; severity: string }>;
+  };
+  return output.diagnostics;
 }

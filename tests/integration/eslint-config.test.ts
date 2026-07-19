@@ -86,6 +86,41 @@ if (left == right) {
     });
   });
 
+  it('warns on extreme production size while excluding test filenames', async () => {
+    const config = createConfig({
+      typescript: false,
+      perfectionist: false,
+      react: false,
+    });
+    const oversizedSource = [
+      'function oversized() {',
+      ...Array.from({ length: 301 }, (_, index) => `  console.log(${index});`),
+      '}',
+      ...Array.from({ length: 700 }, (_, index) => `export const value${index} = ${index};`),
+      ...Array.from({ length: 9 }, () => 'if (true) {'),
+      '  console.log("nested");',
+      ...Array.from({ length: 9 }, () => '}'),
+    ].join('\n');
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: config,
+    });
+
+    const [sourceResult] = await eslint.lintText(oversizedSource, { filePath: 'fixture.js' });
+    const [testResult] = await eslint.lintText(oversizedSource, {
+      filePath: 'fixture.test.js',
+    });
+
+    expect(severitiesByRule(sourceResult)).toMatchObject({
+      'max-depth': 1,
+      'max-lines': 1,
+      'max-lines-per-function': 1,
+    });
+    expect(messagesForRule(testResult, 'max-depth')).toEqual([]);
+    expect(messagesForRule(testResult, 'max-lines')).toEqual([]);
+    expect(messagesForRule(testResult, 'max-lines-per-function')).toEqual([]);
+  });
+
   it('separates structural and multiline declarations while preserving compact groups', async () => {
     const eslint = new ESLint({
       overrideConfigFile: true,

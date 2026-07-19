@@ -1,4 +1,4 @@
-import { mergeOxlintConfigs } from '@retn0/config-policy';
+import { mergeOxlintConfigs } from '@retn0/common';
 import { describe, expect, it } from 'vitest';
 
 describe('oxlint config merger', () => {
