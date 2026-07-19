@@ -5,6 +5,7 @@ import { jsConfigs } from './configs/js.js';
 import { perfectionistConfigs } from './configs/perfectionist.js';
 import { reactHooksConfigs } from './configs/react-hooks.js';
 import { reactConfigs } from './configs/react.js';
+import { stylisticConfigs } from './configs/stylistic.js';
 import { tsConfigs } from './configs/ts.js';
 
 export type { RuntimeEnvironment };
@@ -15,6 +16,7 @@ export interface ConfigOptions {
   environments?: RuntimeEnvironment[];
   javascript?: boolean;
   typescript?: boolean;
+  stylistic?: boolean;
   react?: boolean;
   perfectionist?: boolean;
 }
@@ -27,6 +29,7 @@ export function createConfig(
     environments = [],
     javascript = true,
     typescript = true,
+    stylistic = true,
     react = false,
     perfectionist = false,
   } = options;
@@ -35,6 +38,7 @@ export function createConfig(
     ...createBaseConfigs({ environments }),
     ...(javascript ? jsConfigs : []),
     ...(typescript ? tsConfigs : []),
+    ...(stylistic && (javascript || typescript) ? stylisticConfigs : []),
     ...(react ? [...reactConfigs, ...reactHooksConfigs] : []),
     ...(perfectionist ? perfectionistConfigs : []),
     ...overrides.flat(),

@@ -86,6 +86,143 @@ if (left == right) {
     });
   });
 
+  it('separates structural and multiline declarations while preserving compact groups', async () => {
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: createConfig(
+        {
+          perfectionist: false,
+          react: false,
+          typescript: false,
+        },
+        {
+          files: ['**/*.ts'],
+          languageOptions: {
+            parserOptions: {
+              projectService: false,
+            },
+          },
+        },
+      ),
+      fix: true,
+    });
+
+    const [result] = await eslint.lintText(
+      `
+type UserId = string;
+type SessionId = string;
+type User = {
+  id: UserId;
+};
+type Session = {
+  id: SessionId;
+};
+interface Account {
+  id: string;
+}
+interface Profile {
+  account: Account;
+}
+const add = (left: number, right: number) => left + right;
+const subtract = (left: number, right: number) => left - right;
+const addMany = (values: number[]) => {
+  return values.reduce((total, value) => total + value, 0);
+};
+const subtractMany = (values: number[]) => {
+  return values.reduce((total, value) => total - value, 0);
+};
+function parse(value: string): string;
+
+function parse(value: number): number;
+
+function parse(value: string | number): string | number {
+  return value;
+}
+`,
+      { filePath: 'fixture.ts' },
+    );
+
+    expect(result.output).toBe(`
+type UserId = string;
+type SessionId = string;
+
+type User = {
+  id: UserId;
+};
+
+type Session = {
+  id: SessionId;
+};
+
+interface Account {
+  id: string;
+}
+
+interface Profile {
+  account: Account;
+}
+
+const add = (left: number, right: number) => left + right;
+const subtract = (left: number, right: number) => left - right;
+
+const addMany = (values: number[]) => {
+  return values.reduce((total, value) => total + value, 0);
+};
+
+const subtractMany = (values: number[]) => {
+  return values.reduce((total, value) => total - value, 0);
+};
+
+function parse(value: string): string;
+function parse(value: number): number;
+function parse(value: string | number): string | number {
+  return value;
+}
+`);
+
+    const [exportedResult] = await eslint.lintText(
+      `
+export type UserId = string;
+export type SessionId = string;
+export interface User {
+  id: UserId;
+}
+export class UserService {}
+export const add = (left: number, right: number) => left + right;
+export const subtract = (left: number, right: number) => left - right;
+export const addMany = (values: number[]) => {
+  return values.reduce((total, value) => total + value, 0);
+};
+export default (values: number[]) => {
+  return values.reduce((total, value) => total - value, 0);
+};
+`,
+      { filePath: 'exported-fixture.ts' },
+    );
+
+    expect(exportedResult.output).toBe(`
+export type UserId = string;
+export type SessionId = string;
+
+export interface User {
+  id: UserId;
+}
+
+export class UserService {}
+
+export const add = (left: number, right: number) => left + right;
+export const subtract = (left: number, right: number) => left - right;
+
+export const addMany = (values: number[]) => {
+  return values.reduce((total, value) => total + value, 0);
+};
+
+export default (values: number[]) => {
+  return values.reduce((total, value) => total - value, 0);
+};
+`);
+  });
+
   it('sorts adjacent exports without crossing blank lines or comments', async () => {
     const eslint = new ESLint({
       overrideConfigFile: true,
