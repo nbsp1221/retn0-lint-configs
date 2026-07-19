@@ -21,7 +21,7 @@ import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
 export default retn0(
   {
     environments: ['node'],
-    typescript: false,
+    ts: false,
     perfectionist: false,
     react: false,
   },

@@ -31,12 +31,12 @@ describe('eslint config behavior', () => {
   });
 
   it('does not enable browser or node globals by default', async () => {
-    const [result] = await lintJavaScript(
+    const [result] = await lintJs(
       `
 window.location.href = String(process.pid);
 `,
       createConfig({
-        typescript: false,
+        ts: false,
         perfectionist: false,
         react: false,
       }),
@@ -49,12 +49,12 @@ window.location.href = String(process.pid);
   });
 
   it('enables only requested runtime globals', async () => {
-    const [result] = await lintJavaScript(
+    const [result] = await lintJs(
       `
 window.location.href = String(process.pid);
 `,
       createConfig({
-        typescript: false,
+        ts: false,
         perfectionist: false,
         react: false,
         environments: ['browser'],
@@ -65,7 +65,7 @@ window.location.href = String(process.pid);
   });
 
   it('reports JavaScript correctness rules', async () => {
-    const [result] = await lintJavaScript(
+    const [result] = await lintJs(
       `
 const left = 1;
 const right = 2;
@@ -75,7 +75,7 @@ if (left == right) {
 }
 `,
       createConfig({
-        typescript: false,
+        ts: false,
         perfectionist: false,
         react: false,
       }),
@@ -88,7 +88,7 @@ if (left == right) {
 
   it('warns on extreme production size while excluding test filenames', async () => {
     const config = createConfig({
-      typescript: false,
+      ts: false,
       perfectionist: false,
       react: false,
     });
@@ -128,7 +128,7 @@ if (left == right) {
         {
           perfectionist: false,
           react: false,
-          typescript: false,
+          ts: false,
         },
         {
           files: ['**/*.ts'],
@@ -262,7 +262,7 @@ export default (values: number[]) => {
     const eslint = new ESLint({
       overrideConfigFile: true,
       overrideConfig: createConfig({
-        typescript: false,
+        ts: false,
         perfectionist: true,
         react: false,
       }),
@@ -298,7 +298,7 @@ export { Delta } from './delta';
   });
 });
 
-async function lintJavaScript(
+async function lintJs(
   code: string,
   overrideConfig: ReturnType<typeof createConfig>,
 ): Promise<ESLint.LintResult[]> {

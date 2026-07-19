@@ -14,8 +14,8 @@ export type ConfigInput = Linter.Config | Linter.Config[];
 
 export interface ConfigOptions {
   environments?: RuntimeEnvironment[];
-  javascript?: boolean;
-  typescript?: boolean;
+  js?: boolean;
+  ts?: boolean;
   stylistic?: boolean;
   react?: boolean;
   perfectionist?: boolean;
@@ -27,8 +27,8 @@ export function createConfig(
 ): Linter.Config[] {
   const {
     environments = [],
-    javascript = true,
-    typescript = true,
+    js = true,
+    ts = true,
     stylistic = true,
     react = false,
     perfectionist = false,
@@ -36,9 +36,9 @@ export function createConfig(
 
   const config = [
     ...createBaseConfigs({ environments }),
-    ...(javascript ? jsConfigs : []),
-    ...(typescript ? tsConfigs : []),
-    ...(stylistic && (javascript || typescript) ? stylisticConfigs : []),
+    ...(js ? jsConfigs : []),
+    ...(ts ? tsConfigs : []),
+    ...(stylistic && (js || ts) ? stylisticConfigs : []),
     ...(react ? [...reactConfigs, ...reactHooksConfigs] : []),
     ...(perfectionist ? perfectionistConfigs : []),
     ...overrides.flat(),
