@@ -21,8 +21,8 @@ This repository contains four public packages:
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.56.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.71.0 or higher
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.23.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.73.x
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.25.x
 
 ## Installation
 

@@ -12,14 +12,4 @@ export const jsConfigs = defineConfig([
     extends: ['js/recommended'],
   },
   ...toEslintConfigs(jsPolicyLayers),
-  {
-    name: 'retn0/js/eslint-only',
-    files: jsFilePatterns,
-    rules: {
-      /**
-       * @see https://eslint.org/docs/latest/rules/no-unreachable-loop
-       */
-      'no-unreachable-loop': 'error',
-    },
-  },
 ]);

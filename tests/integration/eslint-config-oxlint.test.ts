@@ -9,7 +9,7 @@ describe('eslint oxlint compatibility behavior', () => {
     project = undefined;
   });
 
-  it('turns off ESLint duplicates while keeping ESLint-only rules active', async () => {
+  it('turns off ESLint duplicates handled by Oxlint', async () => {
     project = await createTempProject('eslint-config-oxlint');
     await project.writeFile('package.json', JSON.stringify({ type: 'module' }, undefined, 2));
     await project.writeFile(
@@ -48,8 +48,8 @@ while (left) {
     const result = await project.runBin('eslint', ['--format=json', 'fixture.js']);
     const ruleIds = eslintRuleIds(result.stdout);
 
-    expect(result.exitCode).toBe(1);
-    expect(ruleIds).toEqual(['no-unreachable-loop']);
+    expect(result.exitCode).toBe(0);
+    expect(ruleIds).toEqual([]);
   });
 });
 

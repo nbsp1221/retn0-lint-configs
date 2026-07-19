@@ -73,6 +73,10 @@ const right = 2;
 if (left == right) {
   console.log(left, right);
 }
+
+while (left) {
+  break;
+}
 `,
       createConfig({
         ts: false,
@@ -82,7 +86,8 @@ if (left == right) {
     );
 
     expect(severitiesByRule(result)).toMatchObject({
-      eqeqeq: 2,
+      'eqeqeq': 2,
+      'no-unreachable-loop': 2,
     });
   });
 

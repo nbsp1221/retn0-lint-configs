@@ -24,6 +24,10 @@ const right = 2;
 if (left == right) {
   console.log(left, right);
 }
+
+while (left) {
+  break;
+}
 `,
     );
     await project.writeFile(
@@ -47,6 +51,7 @@ export function Component({ enabled }: { enabled: boolean }) {
     expect(diagnosticCodes(result.stdout)).toEqual(
       expect.arrayContaining([
         'eslint(eqeqeq)',
+        'eslint(no-unreachable-loop)',
         'typescript(no-explicit-any)',
         'typescript(no-unsafe-call)',
         'react-hooks(rules-of-hooks)',

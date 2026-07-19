@@ -162,6 +162,13 @@ export const jsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://eslint.org/docs/latest/rules/no-unreachable-loop
+       */
+      'no-unreachable-loop': {
+        config: 'error',
+      },
+
+      /**
        * @see https://eslint.org/docs/latest/rules/no-unused-expressions
        */
       'no-unused-expressions': {
