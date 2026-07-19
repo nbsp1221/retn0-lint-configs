@@ -10,6 +10,13 @@ export const javascriptPolicies = {
   },
 
   /**
+   * @see https://eslint.org/docs/latest/rules/curly
+   */
+  'curly': {
+    config: ['error', 'all'],
+  },
+
+  /**
    * @see https://eslint.org/docs/latest/rules/default-case-last
    */
   'default-case-last': {
