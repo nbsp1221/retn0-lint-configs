@@ -8,7 +8,7 @@ My personal Oxfmt configuration.
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
-- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.56.x
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.59.x
 
 ## Installation
 
