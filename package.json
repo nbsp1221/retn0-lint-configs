@@ -26,7 +26,7 @@
     "build": "pnpm -r --if-present build",
     "changeset": "changeset",
     "changeset:status": "changeset status --since=main",
-    "changeset:version": "changeset version",
+    "changeset:version": "changeset version && oxfmt .",
     "check": "pnpm build && pnpm typecheck:raw && pnpm lint:check:raw && pnpm format:check:raw && pnpm test:run",
     "format": "pnpm build && oxfmt .",
     "format:check": "pnpm build && pnpm format:check:raw",
