@@ -1,5 +1,15 @@
 # @retn0/oxlint-config
 
+## 2.2.0
+
+### Minor Changes
+
+- [`2daffae`](https://github.com/nbsp1221/retn0-lint-configs/commit/2daffae956011a23f2463a4dcd9d570eb20d4366) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Add maintainability warnings for extreme file size, function size, and nesting depth while excluding test and spec files.
+
+- [`8728515`](https://github.com/nbsp1221/retn0-lint-configs/commit/87285151d976f4e618318b6c8358e585b6bae375) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Enable `no-unreachable-loop` for Oxlint users and align the Oxlint ecosystem dependencies on compatible versions.
+
+- [`7e78466`](https://github.com/nbsp1221/retn0-lint-configs/commit/7e78466fd391b93ed57d32465305b29197a52f24) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Require curly braces for all control statements by enabling `curly` with the `"all"` option. Brace-less control statements now report an auto-fixable error.
+
 ## 2.1.0
 
 ### Minor Changes
