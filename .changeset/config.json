@@ -10,9 +10,9 @@
   ],
   "commit": false,
   "fixed": [],
-  "format": "oxfmt",
   "ignore": [],
   "linked": [],
+  "prettier": false,
   "privatePackages": {
     "tag": false,
     "version": false

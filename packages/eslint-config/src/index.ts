@@ -5,6 +5,7 @@ import { jsConfigs } from './configs/js.js';
 import { perfectionistConfigs } from './configs/perfectionist.js';
 import { reactHooksConfigs } from './configs/react-hooks.js';
 import { reactConfigs } from './configs/react.js';
+import { stylisticConfigs } from './configs/stylistic.js';
 import { tsConfigs } from './configs/ts.js';
 
 export type { RuntimeEnvironment };
@@ -13,8 +14,9 @@ export type ConfigInput = Linter.Config | Linter.Config[];
 
 export interface ConfigOptions {
   environments?: RuntimeEnvironment[];
-  javascript?: boolean;
-  typescript?: boolean;
+  js?: boolean;
+  ts?: boolean;
+  stylistic?: boolean;
   react?: boolean;
   perfectionist?: boolean;
 }
@@ -25,16 +27,18 @@ export function createConfig(
 ): Linter.Config[] {
   const {
     environments = [],
-    javascript = true,
-    typescript = true,
+    js = true,
+    ts = true,
+    stylistic = true,
     react = false,
     perfectionist = false,
   } = options;
 
   const config = [
     ...createBaseConfigs({ environments }),
-    ...(javascript ? jsConfigs : []),
-    ...(typescript ? tsConfigs : []),
+    ...(js ? jsConfigs : []),
+    ...(ts ? tsConfigs : []),
+    ...(stylistic && (js || ts) ? stylisticConfigs : []),
     ...(react ? [...reactConfigs, ...reactHooksConfigs] : []),
     ...(perfectionist ? perfectionistConfigs : []),
     ...overrides.flat(),

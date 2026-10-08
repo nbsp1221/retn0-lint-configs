@@ -18,3 +18,9 @@ export interface RulePolicy {
 export interface RulePolicies {
   readonly [policyId: string]: RulePolicy;
 }
+
+export interface PolicyLayer {
+  readonly name: string;
+  readonly files: readonly string[];
+  readonly rules: RulePolicies;
+}

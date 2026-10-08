@@ -1,6 +1,6 @@
 {
   "name": "@retn0/eslint-config-oxlint",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "My personal ESLint compatibility configuration for @retn0/oxlint-config",
   "keywords": [
     "config",
@@ -44,7 +44,7 @@
     "eslint-plugin-oxlint": "1.86.0"
   },
   "devDependencies": {
-    "@retn0/config-policy": "workspace:*"
+    "@retn0/common": "workspace:*"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",

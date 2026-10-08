@@ -41,8 +41,9 @@ Pass options to the default factory when needed:
 ```js
 export default retn0({
   environments: [],
-  javascript: true,
-  typescript: true,
+  js: true,
+  ts: true,
+  stylistic: true,
   react: false,
   perfectionist: false,
 });

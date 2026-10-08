@@ -1,6 +1,6 @@
 {
   "name": "@retn0/oxlint-config",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "My personal Oxlint configuration",
   "keywords": [
     "config",
@@ -40,7 +40,7 @@
     "prepack": "pnpm build"
   },
   "devDependencies": {
-    "@retn0/config-policy": "workspace:*"
+    "@retn0/common": "workspace:*"
   },
   "peerDependencies": {
     "oxlint": "^1.86.0",
