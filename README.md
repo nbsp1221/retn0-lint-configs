@@ -119,4 +119,4 @@ pnpm install --frozen-lockfile
 pnpm check
 ```
 
-The workspace rejects releases less than seven days old, fails on peer dependency conflicts and unreviewed dependency build scripts, and checks for publication trust downgrades. The exception for the unchanged `semver@6.3.1` backport is documented in the [dependency review](./docs/dependency-upgrade-2026-10-09.md).
+The workspace rejects releases less than seven days old, fails on peer dependency conflicts and unreviewed dependency build scripts, and checks for publication trust downgrades. The publication-trust exception applies only to the unchanged `semver@6.3.1` backport required by Babel.
