@@ -8,19 +8,19 @@ My personal Oxfmt configuration.
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
-- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.56.x
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.71.x
 
 ## Installation
 
 ```sh
 # npm
-npm install -D oxfmt @retn0/oxfmt-config
+npm install -D oxfmt@~0.71.0 @retn0/oxfmt-config
 
 # pnpm
-pnpm add -D oxfmt @retn0/oxfmt-config
+pnpm add -D oxfmt@~0.71.0 @retn0/oxfmt-config
 
 # yarn
-yarn add -D oxfmt @retn0/oxfmt-config
+yarn add -D oxfmt@~0.71.0 @retn0/oxfmt-config
 ```
 
 ## Usage

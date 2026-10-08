@@ -9,18 +9,19 @@ My personal ESLint configuration.
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
+- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0; verified with 6.0.3
 
 ## Installation
 
 ```sh
 # npm
-npm install -D eslint @retn0/eslint-config
+npm install -D eslint@^10.0.0 typescript@~6.0.3 @retn0/eslint-config
 
 # pnpm
-pnpm add -D eslint @retn0/eslint-config
+pnpm add -D eslint@^10.0.0 typescript@~6.0.3 @retn0/eslint-config
 
 # yarn
-yarn add -D eslint @retn0/eslint-config
+yarn add -D eslint@^10.0.0 typescript@~6.0.3 @retn0/eslint-config
 ```
 
 ## Usage

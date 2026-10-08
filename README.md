@@ -20,21 +20,22 @@ This repository contains four public packages:
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.56.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.71.0 or higher
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.23.x
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.71.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x when using the ESLint compatibility package
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.x, version 7.0.2003 or higher
+- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0 for the ESLint preset; verified with 6.0.3
 
 ## Installation
 
 ```sh
 # npm
-npm install -D eslint oxfmt oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
+npm install -D eslint@^10.0.0 oxfmt@~0.71.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
 
 # pnpm
-pnpm add -D eslint oxfmt oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
+pnpm add -D eslint@^10.0.0 oxfmt@~0.71.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
 
 # yarn
-yarn add -D eslint oxfmt oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
+yarn add -D eslint@^10.0.0 oxfmt@~0.71.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxfmt-config @retn0/oxlint-config
 ```
 
 ## Usage
@@ -108,3 +109,14 @@ import { defineConfig } from 'oxfmt';
 
 export default defineConfig(config);
 ```
+
+## Development
+
+Repository development requires Node.js 24.x (24.11.0 or higher) or 26.0.0 or higher, and pnpm 12.8.2. The published presets retain their Node.js 24.0.0 minimum.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+```
+
+The workspace rejects releases less than seven days old, fails on peer dependency conflicts and unreviewed dependency build scripts, and checks for publication trust downgrades. The exception for the unchanged `semver@6.3.1` backport is documented in the [dependency review](./docs/dependency-upgrade-2026-10-09.md).

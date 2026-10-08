@@ -8,20 +8,20 @@ My personal Oxlint configuration.
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.71.0 or higher
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.23.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.x, version 1.86.0 or higher
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.x, version 7.0.2003 or higher
 
 ## Installation
 
 ```sh
 # npm
-npm install -D oxlint oxlint-tsgolint @retn0/oxlint-config
+npm install -D oxlint@^1.86.0 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
 
 # pnpm
-pnpm add -D oxlint oxlint-tsgolint @retn0/oxlint-config
+pnpm add -D oxlint@^1.86.0 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
 
 # yarn
-yarn add -D oxlint oxlint-tsgolint @retn0/oxlint-config
+yarn add -D oxlint@^1.86.0 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
 ```
 
 ## Usage

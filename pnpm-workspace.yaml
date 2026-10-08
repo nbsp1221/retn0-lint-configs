@@ -1,2 +1,13 @@
 packages:
   - 'packages/*'
+
+saveExact: true
+minimumReleaseAge: 10080
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+trustPolicy: no-downgrade
+# This unchanged 2023 backport predates npm trusted publishing; Babel still requires 6.x.
+trustPolicyExclude:
+  - semver@6.3.1
+strictPeerDependencies: true
+strictDepBuilds: true

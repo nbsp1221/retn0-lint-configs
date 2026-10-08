@@ -9,20 +9,21 @@ My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.71.0 or higher
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.23.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x, matching the bundled eslint-plugin-oxlint version
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.x, version 7.0.2003 or higher
+- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0 when using @retn0/eslint-config; verified with 6.0.3
 
 ## Installation
 
 ```sh
 # npm
-npm install -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+npm install -D eslint@^10.0.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
 
 # pnpm
-pnpm add -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+pnpm add -D eslint@^10.0.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
 
 # yarn
-yarn add -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+yarn add -D eslint@^10.0.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
 ```
 
 ## Usage
