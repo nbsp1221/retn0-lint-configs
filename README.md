@@ -4,6 +4,57 @@
 
 This monorepo provides my personal linting and formatting configuration packages.
 
+## Getting Started
+
+### Oxlint + ESLint (recommended)
+
+Use Oxlint for the rules it supports and ESLint for the remaining rules. The compatibility config disables overlapping ESLint rules.
+
+```sh
+npm install -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+```
+
+Create `oxlint.config.ts`:
+
+```ts
+import retn0 from '@retn0/oxlint-config';
+
+export default retn0();
+```
+
+Create `eslint.config.mjs`:
+
+```js
+import retn0 from '@retn0/eslint-config';
+import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+
+export default retn0(
+  {
+    environments: ['node'],
+  },
+  eslintConfigOxlint,
+);
+```
+
+Include `oxlint.config.ts` and your TypeScript source files in `tsconfig.json`, then run:
+
+```sh
+npx oxlint . && npx eslint .
+```
+
+See the [combined setup guide](./packages/eslint-config-oxlint) for pnpm, Yarn, and tool requirements.
+
+### Use one linter
+
+- [Oxlint only](./packages/oxlint-config): Use the Oxlint preset without ESLint.
+- [ESLint only](./packages/eslint-config): Use the ESLint preset without Oxlint or the compatibility config.
+
+Each setup runs a different set of rules.
+
+### Formatting
+
+[Oxfmt](./packages/oxfmt-config) can be used with any of these linting setups.
+
 ## Packages
 
 This repository contains four public packages:
@@ -23,8 +74,3 @@ This repository contains four public packages:
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.71.x
 - [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x when using the ESLint compatibility package
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
-
-## Getting Started
-
-Follow the installation and usage instructions in each package README linked above.
-For ESLint and Oxlint together, use the [ESLint compatibility guide](./packages/eslint-config-oxlint).
