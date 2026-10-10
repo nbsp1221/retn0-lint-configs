@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/oxlint-config)](https://www.npmjs.com/package/@retn0/oxlint-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/oxlint-config)](https://www.npmjs.com/package/@retn0/oxlint-config)
 
-Shared Oxlint rules with type-aware linting enabled by default.
+My personal Oxlint configuration.
 
 ## Requirements
 
@@ -13,30 +13,22 @@ Shared Oxlint rules with type-aware linting enabled by default.
 
 ## Installation
 
-npm 7+ and pnpm install missing tools automatically with their default settings.
-
 ```sh
 # npm
-npm install -D @retn0/oxlint-config
+npm install -D oxlint oxlint-tsgolint @retn0/oxlint-config
 
 # pnpm
-pnpm add -D @retn0/oxlint-config
-```
+pnpm add -D oxlint oxlint-tsgolint @retn0/oxlint-config
 
-<details>
-<summary>Yarn</summary>
-
-For type-aware linting, use `nodeLinker: node-modules` in `.yarnrc.yml`. Install the tools explicitly:
-
-```sh
+# yarn
 yarn add -D oxlint oxlint-tsgolint @retn0/oxlint-config
 ```
 
-After creating the config below, run `yarn oxlint .`.
-
-</details>
+For type-aware linting with Yarn, use `nodeLinker: node-modules` in `.yarnrc.yml`.
 
 ## Usage
+
+This preset creates a complete Oxlint config and enables type-aware linting by default.
 
 Create an `oxlint.config.ts` file in the root of your project:
 
@@ -46,15 +38,7 @@ import retn0 from '@retn0/oxlint-config';
 export default retn0();
 ```
 
-Run Oxlint:
-
-```sh
-npx oxlint .
-```
-
-## Customization
-
-Pass your own settings to override the preset:
+Add local overrides after the shared preset:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';

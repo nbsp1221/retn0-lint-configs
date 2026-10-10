@@ -2,16 +2,16 @@
 
 [![gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
 
-Shared linting and formatting presets for use across projects.
+This monorepo provides my personal linting and formatting configuration packages.
 
 ## Packages
 
-Choose the packages you need:
+This repository contains four public packages:
 
-- [`@retn0/eslint-config`](./packages/eslint-config): Shared ESLint rules for JavaScript and TypeScript.
-- [`@retn0/eslint-config-oxlint`](./packages/eslint-config-oxlint): Disable ESLint rules already covered by the Oxlint preset.
-- [`@retn0/oxfmt-config`](./packages/oxfmt-config): Shared formatting preferences.
-- [`@retn0/oxlint-config`](./packages/oxlint-config): Shared Oxlint rules with type-aware linting.
+- [`@retn0/eslint-config`](./packages/eslint-config): My personal ESLint configuration.
+- [`@retn0/eslint-config-oxlint`](./packages/eslint-config-oxlint): My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
+- [`@retn0/oxfmt-config`](./packages/oxfmt-config): My personal Oxfmt configuration.
+- [`@retn0/oxlint-config`](./packages/oxlint-config): My personal Oxlint configuration.
 
 ## Requirements
 
@@ -23,7 +23,6 @@ Choose the packages you need:
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.71.x
 - [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x when using the ESLint compatibility package
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.x, version 7.0.2003 or higher
-- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0 for the ESLint preset
 
 ## Getting Started
 

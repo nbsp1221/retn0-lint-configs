@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/oxfmt-config)](https://www.npmjs.com/package/@retn0/oxfmt-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/oxfmt-config)](https://www.npmjs.com/package/@retn0/oxfmt-config)
 
-Shared formatting preferences for Oxfmt.
+My personal Oxfmt configuration.
 
 ## Requirements
 
@@ -12,56 +12,40 @@ Shared formatting preferences for Oxfmt.
 
 ## Installation
 
-npm 7+ and pnpm install missing tools automatically with their default settings.
-
 ```sh
 # npm
-npm install -D @retn0/oxfmt-config
+npm install -D oxfmt @retn0/oxfmt-config
 
 # pnpm
-pnpm add -D @retn0/oxfmt-config
-```
+pnpm add -D oxfmt @retn0/oxfmt-config
 
-<details>
-<summary>Yarn</summary>
-
-Install the tools explicitly:
-
-```sh
+# yarn
 yarn add -D oxfmt @retn0/oxfmt-config
 ```
-
-After creating the config below, run `yarn oxfmt --write .`.
-
-</details>
 
 ## Usage
 
 Create an `oxfmt.config.ts` file in the root of your project:
 
 ```ts
-export { default } from '@retn0/oxfmt-config';
+import config from '@retn0/oxfmt-config';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig(config);
 ```
 
-Format your files:
-
-```sh
-npx oxfmt --write .
-```
-
-## Customization
-
-Spread the preset and override the settings you need:
+Spread the shared config when you need local overrides:
 
 ```ts
 import config from '@retn0/oxfmt-config';
+import { defineConfig } from 'oxfmt';
 
-export default {
+export default defineConfig({
   ...config,
   sortTailwindcss: {
     functions: ['cn', 'clsx', 'cva'],
   },
-};
+});
 ```
 
 ## License
