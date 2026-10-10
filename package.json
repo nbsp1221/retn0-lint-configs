@@ -53,9 +53,9 @@
     "@retn0/eslint-config-oxlint": "workspace:*",
     "@retn0/oxfmt-config": "workspace:*",
     "@retn0/oxlint-config": "workspace:*",
-    "@types/node": "26.6.3",
+    "@types/node": "26.6.4",
     "@types/react": "19.3.0",
-    "eslint": "10.11.0",
+    "eslint": "10.12.0",
     "oxfmt": "0.71.0",
     "oxlint": "1.86.0",
     "oxlint-tsgolint": "7.0.2003",
@@ -66,5 +66,5 @@
   "engines": {
     "node": "^24.11.0 || >=26.0.0"
   },
-  "packageManager": "pnpm@12.8.2"
+  "packageManager": "pnpm@12.9.0"
 }
