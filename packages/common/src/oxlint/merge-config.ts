@@ -1,4 +1,5 @@
 import type { OxlintConfig } from 'oxlint';
+import { omitBy } from '../utils.js';
 
 function mergeArray<T>(base: T[] | undefined, override: T[] | undefined): T[] | undefined {
   if (base === undefined && override === undefined) {
@@ -60,7 +61,7 @@ function mergeOxlintConfig(base: OxlintConfig, override: OxlintConfig): OxlintCo
     settings: mergeObject(base.settings, override.settings),
   } satisfies OxlintConfig;
 
-  return Object.fromEntries(Object.entries(config).filter(([, value]) => value !== undefined));
+  return omitBy(config, (value) => value === undefined);
 }
 
 export function mergeOxlintConfigs(base: OxlintConfig, ...overrides: OxlintConfig[]): OxlintConfig {
