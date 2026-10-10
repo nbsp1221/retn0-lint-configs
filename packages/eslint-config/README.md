@@ -13,7 +13,7 @@ Shared ESLint rules for JavaScript and TypeScript, with optional React support.
 
 ## Installation
 
-npm 7+ and pnpm install missing tools automatically with their default settings. Existing tool versions must satisfy the requirements above.
+npm 7+ and pnpm install missing tools automatically with their default settings.
 
 ```sh
 # npm
@@ -26,10 +26,10 @@ pnpm add -D @retn0/eslint-config
 <details>
 <summary>Yarn</summary>
 
-Install the tools explicitly with compatible versions:
+Install the tools explicitly:
 
 ```sh
-yarn add -D eslint@10 typescript@6.0 @retn0/eslint-config
+yarn add -D eslint typescript@6 @retn0/eslint-config
 ```
 
 After creating the config below, run `yarn eslint .`.

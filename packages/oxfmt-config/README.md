@@ -12,7 +12,7 @@ Shared formatting preferences for Oxfmt.
 
 ## Installation
 
-npm 7+ and pnpm install missing tools automatically with their default settings. Existing tool versions must satisfy the requirements above.
+npm 7+ and pnpm install missing tools automatically with their default settings.
 
 ```sh
 # npm
@@ -25,10 +25,10 @@ pnpm add -D @retn0/oxfmt-config
 <details>
 <summary>Yarn</summary>
 
-Install the tools explicitly with compatible versions:
+Install the tools explicitly:
 
 ```sh
-yarn add -D oxfmt@0.71 @retn0/oxfmt-config
+yarn add -D oxfmt @retn0/oxfmt-config
 ```
 
 After creating the config below, run `yarn oxfmt --write .`.

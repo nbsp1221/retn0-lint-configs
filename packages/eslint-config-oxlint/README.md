@@ -16,7 +16,7 @@ Use with [`@retn0/eslint-config`](../eslint-config) and [`@retn0/oxlint-config`]
 
 ## Installation
 
-npm 7+ and pnpm install missing tools automatically with their default settings. Existing tool versions must satisfy the requirements above.
+npm 7+ and pnpm install missing tools automatically with their default settings.
 
 ```sh
 # npm
@@ -29,11 +29,11 @@ pnpm add -D @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-confi
 <details>
 <summary>Yarn</summary>
 
-For type-aware linting, use `nodeLinker: node-modules` in `.yarnrc.yml`. Install the tools explicitly with compatible versions:
+For type-aware linting, use `nodeLinker: node-modules` in `.yarnrc.yml`. Install the tools explicitly:
 
 ```sh
 yarn add -D @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config \
-  eslint@10 oxlint@1.86 oxlint-tsgolint@7.0 typescript@6.0
+  eslint oxlint oxlint-tsgolint typescript@6
 ```
 
 After creating the config below, run `yarn lint`.
