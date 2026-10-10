@@ -13,16 +13,28 @@ Shared ESLint rules for JavaScript and TypeScript, with optional React support.
 
 ## Installation
 
+npm 7+ and pnpm install missing tools automatically with their default settings. Existing tool versions must satisfy the requirements above.
+
 ```sh
 # npm
-npm install -D eslint@10 typescript@6.0 @retn0/eslint-config
+npm install -D @retn0/eslint-config
 
 # pnpm
-pnpm add -D eslint@10 typescript@6.0 @retn0/eslint-config
+pnpm add -D @retn0/eslint-config
+```
 
-# yarn
+<details>
+<summary>Yarn</summary>
+
+Install the tools explicitly with compatible versions:
+
+```sh
 yarn add -D eslint@10 typescript@6.0 @retn0/eslint-config
 ```
+
+After creating the config below, run `yarn eslint .`.
+
+</details>
 
 ## Usage
 
@@ -35,6 +47,8 @@ export default retn0({
   environments: ['node'],
 });
 ```
+
+TypeScript files must be included in your `tsconfig.json`.
 
 Run ESLint:
 

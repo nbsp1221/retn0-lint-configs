@@ -12,26 +12,35 @@ Shared formatting preferences for Oxfmt.
 
 ## Installation
 
+npm 7+ and pnpm install missing tools automatically with their default settings. Existing tool versions must satisfy the requirements above.
+
 ```sh
 # npm
-npm install -D oxfmt@0.71 @retn0/oxfmt-config
+npm install -D @retn0/oxfmt-config
 
 # pnpm
-pnpm add -D oxfmt@0.71 @retn0/oxfmt-config
+pnpm add -D @retn0/oxfmt-config
+```
 
-# yarn
+<details>
+<summary>Yarn</summary>
+
+Install the tools explicitly with compatible versions:
+
+```sh
 yarn add -D oxfmt@0.71 @retn0/oxfmt-config
 ```
+
+After creating the config below, run `yarn oxfmt --write .`.
+
+</details>
 
 ## Usage
 
 Create an `oxfmt.config.ts` file in the root of your project:
 
 ```ts
-import config from '@retn0/oxfmt-config';
-import { defineConfig } from 'oxfmt';
-
-export default defineConfig(config);
+export { default } from '@retn0/oxfmt-config';
 ```
 
 Format your files:
@@ -46,14 +55,13 @@ Spread the preset and override the settings you need:
 
 ```ts
 import config from '@retn0/oxfmt-config';
-import { defineConfig } from 'oxfmt';
 
-export default defineConfig({
+export default {
   ...config,
   sortTailwindcss: {
     functions: ['cn', 'clsx', 'cva'],
   },
-});
+};
 ```
 
 ## License

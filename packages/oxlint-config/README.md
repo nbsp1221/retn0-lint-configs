@@ -13,16 +13,28 @@ Shared Oxlint rules with type-aware linting enabled by default.
 
 ## Installation
 
+npm 7+ and pnpm install missing tools automatically with their default settings. Existing tool versions must satisfy the requirements above.
+
 ```sh
 # npm
-npm install -D oxlint@1 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
+npm install -D @retn0/oxlint-config
 
 # pnpm
-pnpm add -D oxlint@1 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
-
-# yarn
-yarn add -D oxlint@1 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
+pnpm add -D @retn0/oxlint-config
 ```
+
+<details>
+<summary>Yarn</summary>
+
+For type-aware linting, use `nodeLinker: node-modules` in `.yarnrc.yml`. Install the tools explicitly with compatible versions:
+
+```sh
+yarn add -D oxlint@1 oxlint-tsgolint@7.0 @retn0/oxlint-config
+```
+
+After creating the config below, run `yarn oxlint .`.
+
+</details>
 
 ## Usage
 
