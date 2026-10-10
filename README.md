@@ -29,14 +29,3 @@ Choose the packages you need:
 
 Follow the installation and usage instructions in each package README linked above.
 For ESLint and Oxlint together, use the [ESLint compatibility guide](./packages/eslint-config-oxlint).
-
-## Development
-
-Use Node.js 24.x (24.11.0 or higher) or 26+, and pnpm 12.9.0.
-
-```sh
-pnpm install --frozen-lockfile
-pnpm check
-```
-
-Dependency updates must be at least seven days old and pass the workspace installation checks.
