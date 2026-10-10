@@ -3,25 +3,25 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/eslint-config)](https://www.npmjs.com/package/@retn0/eslint-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/eslint-config)](https://www.npmjs.com/package/@retn0/eslint-config)
 
-My personal ESLint configuration.
+Shared ESLint rules for JavaScript and TypeScript, with optional React support.
 
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0; verified with 6.0.3
+- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0
 
 ## Installation
 
 ```sh
 # npm
-npm install -D eslint@^10.0.0 typescript@~6.0.3 @retn0/eslint-config
+npm install -D eslint@10 typescript@6.0 @retn0/eslint-config
 
 # pnpm
-pnpm add -D eslint@^10.0.0 typescript@~6.0.3 @retn0/eslint-config
+pnpm add -D eslint@10 typescript@6.0 @retn0/eslint-config
 
 # yarn
-yarn add -D eslint@^10.0.0 typescript@~6.0.3 @retn0/eslint-config
+yarn add -D eslint@10 typescript@6.0 @retn0/eslint-config
 ```
 
 ## Usage
@@ -36,7 +36,15 @@ export default retn0({
 });
 ```
 
-Pass options to the default factory when needed:
+Run ESLint:
+
+```sh
+npx eslint .
+```
+
+## Customization
+
+These are the default options:
 
 ```js
 export default retn0({
@@ -49,7 +57,7 @@ export default retn0({
 });
 ```
 
-Runtime environments are opt-in:
+Choose runtime environments and enable React when needed:
 
 ```js
 export default retn0({
@@ -58,7 +66,7 @@ export default retn0({
 });
 ```
 
-User overrides are appended after the shared config:
+Pass your own rules after the preset options:
 
 ```js
 export default retn0(

@@ -3,39 +3,44 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/eslint-config-oxlint)](https://www.npmjs.com/package/@retn0/eslint-config-oxlint)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/eslint-config-oxlint)](https://www.npmjs.com/package/@retn0/eslint-config-oxlint)
 
-My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
+Disable ESLint rules already covered by `@retn0/oxlint-config`.
+Run Oxlint first, then let ESLint check the remaining rules.
 
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x, matching the bundled eslint-plugin-oxlint version
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.x, version 7.0.2003 or higher
-- [TypeScript](https://www.typescriptlang.org) >=4.8.4 <6.1.0 when using @retn0/eslint-config; verified with 6.0.3
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x
+
+Use with [`@retn0/eslint-config`](../eslint-config) and [`@retn0/oxlint-config`](../oxlint-config), which list their additional requirements.
 
 ## Installation
 
 ```sh
 # npm
-npm install -D eslint@^10.0.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+npm install -D @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config \
+  eslint@10 oxlint@1.86 oxlint-tsgolint@~7.0.2003 typescript@6.0
 
 # pnpm
-pnpm add -D eslint@^10.0.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+pnpm add -D @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config \
+  eslint@10 oxlint@1.86 oxlint-tsgolint@~7.0.2003 typescript@6.0
 
 # yarn
-yarn add -D eslint@^10.0.0 oxlint@~1.86.0 oxlint-tsgolint@~7.0.2003 typescript@~6.0.3 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+yarn add -D @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config \
+  eslint@10 oxlint@1.86 oxlint-tsgolint@~7.0.2003 typescript@6.0
 ```
 
 ## Usage
 
-Run Oxlint with `@retn0/oxlint-config` before ESLint, then append this config
-after the base ESLint config:
+Create `oxlint.config.ts`:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';
 
 export default retn0();
 ```
+
+Create `eslint.config.js`, placing the compatibility config after the base preset:
 
 ```js
 import retn0 from '@retn0/eslint-config';
@@ -49,7 +54,7 @@ export default retn0(
 );
 ```
 
-Then run both tools:
+Add a lint script to `package.json`:
 
 ```json
 {
@@ -57,6 +62,12 @@ Then run both tools:
     "lint": "oxlint . && eslint ."
   }
 }
+```
+
+Run both tools:
+
+```sh
+npm run lint
 ```
 
 ## License

@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/oxlint-config)](https://www.npmjs.com/package/@retn0/oxlint-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/oxlint-config)](https://www.npmjs.com/package/@retn0/oxlint-config)
 
-My personal Oxlint configuration.
+Shared Oxlint rules with type-aware linting enabled by default.
 
 ## Requirements
 
@@ -15,18 +15,16 @@ My personal Oxlint configuration.
 
 ```sh
 # npm
-npm install -D oxlint@^1.86.0 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
+npm install -D oxlint@1 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
 
 # pnpm
-pnpm add -D oxlint@^1.86.0 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
+pnpm add -D oxlint@1 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
 
 # yarn
-yarn add -D oxlint@^1.86.0 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
+yarn add -D oxlint@1 oxlint-tsgolint@~7.0.2003 @retn0/oxlint-config
 ```
 
 ## Usage
-
-This preset creates a complete Oxlint config and enables type-aware linting by default.
 
 Create an `oxlint.config.ts` file in the root of your project:
 
@@ -36,7 +34,15 @@ import retn0 from '@retn0/oxlint-config';
 export default retn0();
 ```
 
-Add local overrides after the shared preset:
+Run Oxlint:
+
+```sh
+npx oxlint .
+```
+
+## Customization
+
+Pass your own settings to override the preset:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';

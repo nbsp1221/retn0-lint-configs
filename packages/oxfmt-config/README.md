@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@retn0/oxfmt-config)](https://www.npmjs.com/package/@retn0/oxfmt-config)
 [![npm downloads](https://img.shields.io/npm/dm/@retn0/oxfmt-config)](https://www.npmjs.com/package/@retn0/oxfmt-config)
 
-My personal Oxfmt configuration.
+Shared formatting preferences for Oxfmt.
 
 ## Requirements
 
@@ -14,13 +14,13 @@ My personal Oxfmt configuration.
 
 ```sh
 # npm
-npm install -D oxfmt@~0.71.0 @retn0/oxfmt-config
+npm install -D oxfmt@0.71 @retn0/oxfmt-config
 
 # pnpm
-pnpm add -D oxfmt@~0.71.0 @retn0/oxfmt-config
+pnpm add -D oxfmt@0.71 @retn0/oxfmt-config
 
 # yarn
-yarn add -D oxfmt@~0.71.0 @retn0/oxfmt-config
+yarn add -D oxfmt@0.71 @retn0/oxfmt-config
 ```
 
 ## Usage
@@ -34,7 +34,15 @@ import { defineConfig } from 'oxfmt';
 export default defineConfig(config);
 ```
 
-Spread the shared config when you need local overrides:
+Format your files:
+
+```sh
+npx oxfmt --write .
+```
+
+## Customization
+
+Spread the preset and override the settings you need:
 
 ```ts
 import config from '@retn0/oxfmt-config';
