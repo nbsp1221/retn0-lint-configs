@@ -22,7 +22,7 @@ This repository contains four public packages:
 - [ESLint](https://eslint.org) 10.x
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.71.x
 - [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x when using the ESLint compatibility package
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.x, version 7.0.2003 or higher
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
 
 ## Getting Started
 
