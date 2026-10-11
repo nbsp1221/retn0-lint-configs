@@ -25,7 +25,7 @@ yarn add -D oxfmt @retn0/oxfmt-config
 
 ## Usage
 
-Create an `oxfmt.config.ts` file in the root of your project:
+Create an `oxfmt.config.mts` file in the root of your project:
 
 ```ts
 import config from '@retn0/oxfmt-config';

@@ -14,7 +14,7 @@ Use Oxlint for the rules it supports and ESLint for the remaining rules. The com
 npm install -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
 ```
 
-Create `oxlint.config.ts`:
+Create `oxlint.config.mts`:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';
@@ -36,7 +36,7 @@ export default retn0(
 );
 ```
 
-Include `oxlint.config.ts` and your TypeScript source files in `tsconfig.json`, then run:
+Include `oxlint.config.mts` and your TypeScript source files in `tsconfig.json`, then run:
 
 ```sh
 npx oxlint . && npx eslint .

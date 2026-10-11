@@ -25,7 +25,7 @@ yarn add -D eslint typescript@6 @retn0/eslint-config
 
 ## Usage
 
-Create an `eslint.config.js` file in the root of your project:
+Create an `eslint.config.mjs` file in the root of your project:
 
 ```js
 import retn0 from '@retn0/eslint-config';

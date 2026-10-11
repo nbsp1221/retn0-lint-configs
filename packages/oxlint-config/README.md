@@ -30,7 +30,7 @@ For type-aware linting with Yarn, use `nodeLinker: node-modules` in `.yarnrc.yml
 
 This preset creates a complete Oxlint config and enables type-aware linting by default.
 
-Create an `oxlint.config.ts` file in the root of your project:
+Create an `oxlint.config.mts` file in the root of your project:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';

@@ -29,13 +29,15 @@ For type-aware linting with Yarn, use `nodeLinker: node-modules` in `.yarnrc.yml
 
 ## Usage
 
-Run Oxlint with `@retn0/oxlint-config` before ESLint, then append this config after the base ESLint config:
+Create `oxlint.config.mts`:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';
 
 export default retn0();
 ```
+
+Create `eslint.config.mjs` and append the compatibility config after the base config:
 
 ```js
 import retn0 from '@retn0/eslint-config';
@@ -49,7 +51,7 @@ export default retn0(
 );
 ```
 
-Include `oxlint.config.ts` and your TypeScript source files in `tsconfig.json`.
+Include `oxlint.config.mts` and your TypeScript source files in `tsconfig.json`.
 
 Then run both tools:
 
