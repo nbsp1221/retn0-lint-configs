@@ -1,6 +1,7 @@
 # 🧹 retn0-lint-configs
 
-[![CI](https://img.shields.io/github/actions/workflow/status/nbsp1221/retn0-lint-configs/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/nbsp1221/retn0-lint-configs/actions/workflows/ci.yml) [![gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
+[![CI](https://img.shields.io/github/actions/workflow/status/nbsp1221/retn0-lint-configs/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/nbsp1221/retn0-lint-configs/actions/workflows/ci.yml)
+[![gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
 
 This monorepo provides my personal linting and formatting configuration packages.
 
