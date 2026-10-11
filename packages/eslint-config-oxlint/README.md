@@ -51,7 +51,7 @@ export default retn0(
 );
 ```
 
-Include `oxlint.config.mts` and your TypeScript source files in `tsconfig.json`.
+Include your TypeScript source and config files in `tsconfig.json`.
 
 Then run both tools:
 

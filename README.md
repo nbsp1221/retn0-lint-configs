@@ -36,7 +36,7 @@ export default retn0(
 );
 ```
 
-Include `oxlint.config.mts` and your TypeScript source files in `tsconfig.json`, then run:
+Include your TypeScript source and config files in `tsconfig.json`, then run:
 
 ```sh
 npx oxlint . && npx eslint .
