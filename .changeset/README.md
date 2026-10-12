@@ -8,11 +8,13 @@ Run `pnpm changeset` in a pull request to declare which packages should be relea
 
 Version packages from the consumer's perspective:
 
-- `patch`: Fix incorrect configuration, duplicate diagnostics, packaging, or documentation without intentionally introducing new diagnostics.
-- `minor`: Add, remove, or adjust individual lint rules and options, add backward-compatible capabilities, or introduce a breaking change in a pre-1.0 package.
-- `major`: Change the public API, raise the required Node.js or tool versions, or make broad rule-set changes that require substantial consumer migration in a stable package.
+- `patch`: Fix incorrect configuration, duplicate diagnostics, performance, packaging, or documentation without changing lint or formatting preferences, introducing new diagnostics, or dropping support for existing environments.
+- `minor`: Add, remove, or adjust individual lint rules or formatting preferences, add backward-compatible capabilities or tool support, deprecate configuration options, or introduce a breaking change in a pre-1.0 package.
+- `major`: Make incompatible changes to imports or configuration APIs, drop supported Node.js or tool versions, or make broad rule-set changes that require substantial consumer migration in a stable package.
 
-Rule-set changes are part of this opinionated config's expected evolution. Individual rule changes are therefore minor releases even when they may introduce new diagnostics. Consumers should review the changelog when upgrading.
+Individual lint rule and formatting changes are minor releases even when they introduce new diagnostics or change formatted output. Consumers should review the changelog when upgrading.
+
+Classify dependency updates by their effect on consumers, not the dependency's version number. Development-only updates do not require a package release unless they affect published packages.
 
 ## Writing changesets
 

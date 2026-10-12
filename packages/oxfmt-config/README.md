@@ -8,7 +8,7 @@ My personal Oxfmt configuration.
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
-- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.59.x
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.71.x
 
 ## Installation
 
@@ -25,7 +25,7 @@ yarn add -D oxfmt @retn0/oxfmt-config
 
 ## Usage
 
-Create an `oxfmt.config.ts` file in the root of your project:
+Create an `oxfmt.config.mts` file in the root of your project:
 
 ```ts
 import config from '@retn0/oxfmt-config';

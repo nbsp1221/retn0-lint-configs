@@ -9,8 +9,8 @@ My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.73.x
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.25.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
 
 ## Installation
 
@@ -22,19 +22,22 @@ npm install -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-
 pnpm add -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
 
 # yarn
-yarn add -D eslint oxlint oxlint-tsgolint @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
+yarn add -D eslint oxlint oxlint-tsgolint typescript@6 @retn0/eslint-config @retn0/eslint-config-oxlint @retn0/oxlint-config
 ```
+
+For type-aware linting with Yarn, use `nodeLinker: node-modules` in `.yarnrc.yml`.
 
 ## Usage
 
-Run Oxlint with `@retn0/oxlint-config` before ESLint, then append this config
-after the base ESLint config:
+Create `oxlint.config.mts`:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';
 
 export default retn0();
 ```
+
+Create `eslint.config.mjs` and append the compatibility config after the base config:
 
 ```js
 import retn0 from '@retn0/eslint-config';
@@ -47,6 +50,8 @@ export default retn0(
   eslintConfigOxlint,
 );
 ```
+
+Include your TypeScript source and config files in `tsconfig.json`.
 
 Then run both tools:
 

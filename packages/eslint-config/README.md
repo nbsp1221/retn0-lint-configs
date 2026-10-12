@@ -20,12 +20,12 @@ npm install -D eslint @retn0/eslint-config
 pnpm add -D eslint @retn0/eslint-config
 
 # yarn
-yarn add -D eslint @retn0/eslint-config
+yarn add -D eslint typescript@6 @retn0/eslint-config
 ```
 
 ## Usage
 
-Create an `eslint.config.js` file in the root of your project:
+Create an `eslint.config.mjs` file in the root of your project:
 
 ```js
 import retn0 from '@retn0/eslint-config';
@@ -34,6 +34,8 @@ export default retn0({
   environments: ['node'],
 });
 ```
+
+TypeScript files must be included in your `tsconfig.json`.
 
 Pass options to the default factory when needed:
 

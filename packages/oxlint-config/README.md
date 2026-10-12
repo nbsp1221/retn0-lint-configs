@@ -8,8 +8,8 @@ My personal Oxlint configuration.
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.73.0 or higher
-- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 0.25.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.x, version 1.86.0 or higher
+- [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
 
 ## Installation
 
@@ -24,11 +24,13 @@ pnpm add -D oxlint oxlint-tsgolint @retn0/oxlint-config
 yarn add -D oxlint oxlint-tsgolint @retn0/oxlint-config
 ```
 
+For type-aware linting with Yarn, use `nodeLinker: node-modules` in `.yarnrc.yml`.
+
 ## Usage
 
 This preset creates a complete Oxlint config and enables type-aware linting by default.
 
-Create an `oxlint.config.ts` file in the root of your project:
+Create an `oxlint.config.mts` file in the root of your project:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';
