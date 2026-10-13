@@ -149,6 +149,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-unnecessary-condition
+       */
+      'no-unnecessary-condition': {
+        config: ['error', { allowConstantLoopConditions: 'only-allowed-literals' }],
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unnecessary-condition',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unnecessary-condition',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/no-unnecessary-type-assertion
        */
       'no-unnecessary-type-assertion': {

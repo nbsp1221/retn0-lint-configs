@@ -5,3 +5,5 @@
 ---
 
 Report unsafe type assertions as errors. When combining ESLint and Oxlint, let Oxlint report them without duplicate ESLint diagnostics.
+
+Report unnecessary conditions as errors while allowing literal loop conditions. Keep runtime type guard checks unchanged, and let Oxlint handle this rule when combining both linters.
