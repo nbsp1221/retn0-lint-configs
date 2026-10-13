@@ -6,7 +6,8 @@ describe('eslint config behavior', () => {
   it('rejects unsupported environments', () => {
     expect(() =>
       createConfig({
-        environments: ['invalid-runtime' as never],
+        // @ts-expect-error Exercise runtime validation with an unsupported environment.
+        environments: ['invalid-runtime'],
       }),
     ).toThrow('Unsupported environment "invalid-runtime"');
   });
@@ -323,8 +324,8 @@ function messagesForRule(result: ESLint.LintResult, ruleId: string): string[] {
 
 function severitiesByRule(result: ESLint.LintResult): Record<string, number> {
   return Object.fromEntries(
-    result.messages
-      .filter((message) => message.ruleId)
-      .map((message) => [message.ruleId as string, message.severity]),
+    result.messages.flatMap((message) =>
+      message.ruleId ? [[message.ruleId, message.severity]] : [],
+    ),
   );
 }

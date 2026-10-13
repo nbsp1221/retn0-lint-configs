@@ -22,7 +22,7 @@ describe('omitBy', () => {
 
   it('returns a fresh object when no property matches', () => {
     const settings = Object.freeze({ lint: 'error', format: 'warn' });
-    const result = omitBy(settings, (value) => value.length === 0);
+    const result = omitBy(settings, (value) => typeof value === 'string' && value.length === 0);
 
     expect(result).toEqual(settings);
     expect(result).not.toBe(settings);
@@ -49,10 +49,10 @@ describe('omitBy', () => {
     expect(settings.temporary).toEqual({ enabled: false });
   });
 
-  it('passes numeric property names as strings with literal key types', () => {
-    const received: Array<[string, string]> = [];
+  it('passes numeric property names as strings', () => {
+    const received: Array<[string, unknown]> = [];
     const result = omitBy({ 12: 'off', 48: 'error' }, (value, key) => {
-      expectTypeOf(key).toEqualTypeOf<'12' | '48'>();
+      expectTypeOf(key).toEqualTypeOf<string>();
       received.push([key, value]);
       return value === 'off';
     });
@@ -64,26 +64,39 @@ describe('omitBy', () => {
     expect(result).toEqual({ 48: 'error' });
   });
 
-  it('uses numeric string key types for number-indexed records', () => {
+  it('filters number-indexed records using string keys', () => {
     const settings: Record<number, string> = { 10: 'warn', 20: 'error' };
     const result = omitBy(settings, (_value, key) => {
-      expectTypeOf(key).toEqualTypeOf<`${number}`>();
+      expectTypeOf(key).toEqualTypeOf<string>();
       return key === '10';
     });
 
     expect(result).toEqual({ 20: 'error' });
   });
 
-  it('preserves property value and literal key types in the callback and result', () => {
+  it('preserves result types without assuming exact input keys or value types', () => {
     const settings = { enabled: true, mode: 'strict' };
     const result = omitBy(settings, (value, key) => {
-      expectTypeOf(value).toEqualTypeOf<boolean | string>();
-      expectTypeOf(key).toEqualTypeOf<'enabled' | 'mode'>();
+      expectTypeOf(value).toEqualTypeOf<unknown>();
+      expectTypeOf(key).toEqualTypeOf<string>();
       return key === 'mode';
     });
 
     expectTypeOf(result).toEqualTypeOf<Partial<typeof settings>>();
     expect(result).toEqual({ enabled: true });
+  });
+
+  it('handles runtime properties absent from the declared input type', () => {
+    const original = { label: 'preview', count: 1 };
+    const settings: { label: string } = original;
+    const received: unknown[] = [];
+    const result = omitBy(settings, (value) => {
+      received.push(value);
+      return typeof value === 'string' && value.trim() === 'preview';
+    });
+
+    expect(received).toEqual(['preview', 1]);
+    expect(result).toEqual({ count: 1 });
   });
 
   it('removes undefined while retaining other falsy values and empty containers', () => {

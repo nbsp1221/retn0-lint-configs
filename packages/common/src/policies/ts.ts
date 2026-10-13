@@ -284,6 +284,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-unsafe-type-assertion
+       */
+      'no-unsafe-type-assertion': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unsafe-type-assertion',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unsafe-type-assertion',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/only-throw-error
        */
       'only-throw-error': {
