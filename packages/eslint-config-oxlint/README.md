@@ -9,7 +9,7 @@ My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.86.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.87.x
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
 
 ## Installation
