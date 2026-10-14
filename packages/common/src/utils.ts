@@ -7,27 +7,11 @@ export function omitBy<T extends object>(
   obj: T,
   predicate: (value: T[keyof T], key: ObjectKeys<T>) => boolean,
 ): Partial<T> {
-  const entries: Array<[ObjectKeys<T>, T[keyof T]]> = [];
+  // Config callers only compare values with undefined; runtime keys may exceed keyof T.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  const entries = Object.entries(obj) as Array<[ObjectKeys<T>, T[keyof T]]>;
 
-  for (const key in obj) {
-    if (Object.hasOwn(obj, key)) {
-      entries.push([key, obj[key]]);
-    }
-  }
-
-  const result: Partial<T> = {};
-
-  for (const [key, value] of entries) {
-    if (!predicate(value, key)) {
-      // Define data properties so "__proto__" remains an ordinary key.
-      Object.defineProperty(result, key, {
-        value,
-        configurable: true,
-        enumerable: true,
-        writable: true,
-      });
-    }
-  }
-
-  return result;
+  // Filtering removes properties without changing retained values.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return Object.fromEntries(entries.filter(([key, value]) => !predicate(value, key))) as Partial<T>;
 }
