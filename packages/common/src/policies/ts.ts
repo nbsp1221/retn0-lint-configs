@@ -104,6 +104,22 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-meaningless-void-operator
+       */
+      'no-meaningless-void-operator': {
+        // Preserve intentional getter reads that would otherwise conflict with no-unused-expressions.
+        config: 'off',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-meaningless-void-operator',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-meaningless-void-operator',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/no-misused-promises
        */
       'no-misused-promises': {
@@ -114,6 +130,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/no-misused-promises',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-misused-spread
+       */
+      'no-misused-spread': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-misused-spread',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-misused-spread',
           },
         },
       },
@@ -174,6 +205,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/no-unnecessary-condition',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-unnecessary-parameter-property-assignment
+       */
+      'no-unnecessary-parameter-property-assignment': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unnecessary-parameter-property-assignment',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unnecessary-parameter-property-assignment',
           },
         },
       },
@@ -329,6 +375,37 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-useless-default-assignment
+       */
+      'no-useless-default-assignment': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-useless-default-assignment',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-useless-default-assignment',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-useless-empty-export
+       */
+      'no-useless-empty-export': {
+        // Empty exports can control visibility inside ambient namespaces.
+        config: 'off',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-useless-empty-export',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-useless-empty-export',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/only-throw-error
        */
       'only-throw-error': {
@@ -354,6 +431,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/prefer-promise-reject-errors',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/require-array-sort-compare
+       */
+      'require-array-sort-compare': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/require-array-sort-compare',
+          },
+          oxlint: {
+            ruleId: 'typescript/require-array-sort-compare',
           },
         },
       },

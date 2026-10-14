@@ -1,6 +1,7 @@
 import createConfig from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
 import { ESLint } from 'eslint';
+import ts from 'typescript';
 import { afterEach, describe, expect, it } from 'vitest';
 import { type TempProject, createTempProject } from '../helpers/temp-project.js';
 
@@ -53,6 +54,167 @@ while (left) {
 
     expect(result.exitCode).toBe(0);
     expect(ruleIds).toEqual([]);
+  });
+
+  it('enforces shared TypeScript defaults without duplicate reports when combined', async () => {
+    project = await createTempProject('shared-ts-defaults');
+    await project.writeFile('package.json', JSON.stringify({ type: 'module' }));
+    await project.writeFile(
+      'tsconfig.json',
+      JSON.stringify({ compilerOptions: { strict: true, target: 'ESNext' }, include: ['*.ts'] }),
+    );
+    await project.writeFile(
+      'oxlint.config.ts',
+      "import retn0 from '@retn0/oxlint-config';\nexport default retn0();\n",
+    );
+    await project.writeFile(
+      'unsafe.ts',
+      `
+export const spread = { ...Promise.resolve(1) };
+export const numbers = [20, 3].sort();
+export class Store {
+  constructor(public value: string) { this.value = value; }
+}
+export function label({ name = 'guest' }: { name: string }): string { return name; }
+`,
+    );
+    await project.writeFile(
+      'safe.ts',
+      `
+export const source = { value: 1 };
+export const spread = { ...source };
+export const numbers = [20, 3].sort((left, right) => left - right);
+export class Store {
+  constructor(public value: string) {}
+}
+export function label({ name = 'guest' }: { name?: string }): string { return name; }
+`,
+    );
+
+    const rules = [
+      'no-misused-spread',
+      'require-array-sort-compare',
+      'no-unnecessary-parameter-property-assignment',
+      'no-useless-default-assignment',
+    ];
+    const options = { environments: ['node' as const], perfectionist: false, react: false };
+    const standalone = new ESLint({
+      cwd: project.root,
+      overrideConfigFile: true,
+      overrideConfig: createConfig(options),
+    });
+    const results = await standalone.lintFiles(['unsafe.ts', 'safe.ts']);
+    const combined = new ESLint({
+      cwd: project.root,
+      overrideConfigFile: true,
+      overrideConfig: createConfig(options, eslintConfigOxlint),
+    });
+    const combinedResults = await combined.lintFiles(['unsafe.ts', 'safe.ts']);
+    const unsafeResult = await project.runBin('oxlint', ['--format=json', 'unsafe.ts']);
+    const safeResult = await project.runBin('oxlint', ['--format=json', 'safe.ts']);
+
+    expect(results.flatMap((result) => result.messages.filter((message) => message.fatal))).toEqual(
+      [],
+    );
+    expect(
+      combinedResults.flatMap((result) => result.messages.filter((message) => message.fatal)),
+    ).toEqual([]);
+    expect(unsafeResult.exitCode).toBe(1);
+    expect(safeResult.exitCode, safeResult.stdout).toBe(0);
+
+    for (const rule of rules) {
+      const ruleId = `@typescript-eslint/${rule}`;
+
+      expect(
+        results.flatMap((result) => result.messages.filter((message) => message.ruleId === ruleId)),
+      ).toEqual([expect.objectContaining({ severity: 2 })]);
+      expect(
+        results
+          .find((result) => result.filePath.endsWith('/safe.ts'))
+          ?.messages.some((message) => message.ruleId === ruleId),
+      ).toBe(false);
+      expect(
+        combinedResults.flatMap((result) =>
+          result.messages.filter((message) => message.ruleId === ruleId),
+        ),
+      ).toEqual([]);
+      expect(unsafeResult.stdout).toContain(`typescript(${rule})`);
+      expect(safeResult.stdout).not.toContain(`typescript(${rule})`);
+    }
+  });
+
+  it('preserves getter reads and private namespace types when fixing either setup', async () => {
+    project = await createTempProject('ts-side-effects-and-visibility');
+    await project.writeFile('package.json', JSON.stringify({ type: 'module' }));
+    await project.writeFile(
+      'tsconfig.json',
+      JSON.stringify({ compilerOptions: { strict: true, target: 'ESNext' }, include: ['*.ts'] }),
+    );
+    await project.writeFile(
+      'oxlint.config.ts',
+      `
+import retn0 from '@retn0/oxlint-config';
+export default retn0({
+  overrides: [{ files: ['fixture.ts'], rules: { 'typescript/no-namespace': 'off' } }],
+});
+`,
+    );
+    await project.writeFile(
+      'fixture.ts',
+      `
+let reads = 0;
+const subject = { get value(): number { reads += 1; return reads; } };
+void subject.value;
+export { reads };
+export declare namespace Library {
+  interface Hidden { readonly value: string; }
+  export interface Public { readonly hidden: Hidden; }
+  export {};
+}
+`,
+    );
+
+    for (const compatibility of [[], eslintConfigOxlint]) {
+      const eslint = new ESLint({
+        cwd: project.root,
+        overrideConfigFile: true,
+        fix: true,
+        overrideConfig: createConfig({ react: false }, compatibility, {
+          // Isolate the visibility regression from the separate namespace style policy.
+          rules: { '@typescript-eslint/no-namespace': 'off' },
+        }),
+      });
+      const results = await eslint.lintFiles(['fixture.ts']);
+
+      expect(results.flatMap((result) => result.messages)).toEqual([]);
+      await ESLint.outputFixes(results);
+    }
+
+    const result = await project.runBin('oxlint', ['--fix', '--format=json', 'fixture.ts']);
+    const fixed = await project.readFile('fixture.ts');
+
+    expect(result.exitCode, result.stdout).toBe(0);
+    expect(fixed).toContain('void subject.value;');
+    expect(fixed).toContain('export {};');
+
+    await project.writeFile(
+      'consumer.ts',
+      "import type { Library } from './fixture.js';\nexport type Leaked = Library.Hidden;\n",
+    );
+    const program = ts.createProgram(
+      [`${project.root}/fixture.ts`, `${project.root}/consumer.ts`],
+      {
+        strict: true,
+        noEmit: true,
+        skipLibCheck: true,
+        types: [],
+        target: ts.ScriptTarget.ESNext,
+        module: ts.ModuleKind.NodeNext,
+        moduleResolution: ts.ModuleResolutionKind.NodeNext,
+      },
+    );
+
+    expect(ts.getPreEmitDiagnostics(program).map((diagnostic) => diagnostic.code)).toEqual([2694]);
   });
 
   it('reports unsafe assertions in either tool without duplicate reports when combined', async () => {
