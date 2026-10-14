@@ -133,7 +133,7 @@ describe('omitBy', () => {
     expect(predicate).toHaveBeenCalledExactlyOnceWith('strict', 'mode');
   });
 
-  it('reads enumerable getters once when copying and excludes symbol keys from the result', () => {
+  it('captures enumerable string getters once before filtering without reading symbols', () => {
     const metadata = Symbol('metadata');
     const reads: string[] = [];
     const nested = { enabled: true };
@@ -147,18 +147,40 @@ describe('omitBy', () => {
         return undefined;
       },
       get [metadata]() {
-        reads.push('metadata');
-        return 'internal';
+        throw new Error('Symbol properties must not be read');
       },
     };
-    const result = omitBy(settings, (value) => value === undefined);
+    const result = omitBy(settings, (value, key) => {
+      reads.push(`predicate:${key}`);
+      return value === undefined;
+    });
 
-    expect(reads).toEqual(['retained', 'removed', 'metadata']);
+    expect(reads).toEqual(['retained', 'removed', 'predicate:retained', 'predicate:removed']);
     expect(result).toEqual({ retained: nested });
     expect(result.retained).toBe(nested);
     expect(Object.getOwnPropertySymbols(result)).toEqual([]);
     expect(Object.getOwnPropertySymbols(settings)).toEqual([metadata]);
   });
+
+  it.each(['replace', 'remove'] as const)(
+    'filters captured entries when the predicate can %s an input property',
+    (mutation) => {
+      const settings = { first: 1, second: 2 };
+      const result = omitBy(settings, (_value, key) => {
+        if (key === 'first') {
+          if (mutation === 'replace') {
+            settings.second = 99;
+          } else {
+            Reflect.deleteProperty(settings, 'second');
+          }
+        }
+
+        return false;
+      });
+
+      expect(result).toEqual({ first: 1, second: 2 });
+    },
+  );
 
   it('retains a __proto__ data property without changing the result prototype', () => {
     const settings = { ['__proto__']: { enabled: true }, mode: 'strict' };
@@ -166,6 +188,12 @@ describe('omitBy', () => {
 
     expect(Object.hasOwn(result, '__proto__')).toBe(true);
     expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+    expect(Object.getOwnPropertyDescriptor(result, '__proto__')).toEqual({
+      value: settings['__proto__'],
+      configurable: true,
+      enumerable: true,
+      writable: true,
+    });
     expect(result).toEqual(settings);
   });
 });
