@@ -13,7 +13,7 @@ describe('omitBy', () => {
 
   it('returns a fresh empty object when every property matches', () => {
     const settings = Object.freeze({ lint: 'off', format: 'off' });
-    const result = omitBy(settings, (value) => value === 'off');
+    const result = omitBy(settings, () => true);
 
     expect(result).toEqual({});
     expect(result).not.toBe(settings);
@@ -22,7 +22,7 @@ describe('omitBy', () => {
 
   it('returns a fresh object when no property matches', () => {
     const settings = Object.freeze({ lint: 'error', format: 'warn' });
-    const result = omitBy(settings, (value) => typeof value === 'string' && value.length === 0);
+    const result = omitBy(settings, (value) => value.length === 0);
 
     expect(result).toEqual(settings);
     expect(result).not.toBe(settings);
@@ -50,9 +50,9 @@ describe('omitBy', () => {
   });
 
   it('passes numeric property names as strings', () => {
-    const received: Array<[string, unknown]> = [];
+    const received: Array<[string, string]> = [];
     const result = omitBy({ 12: 'off', 48: 'error' }, (value, key) => {
-      expectTypeOf(key).toEqualTypeOf<string>();
+      expectTypeOf(key).toEqualTypeOf<'12' | '48'>();
       received.push([key, value]);
       return value === 'off';
     });
@@ -67,18 +67,18 @@ describe('omitBy', () => {
   it('filters number-indexed records using string keys', () => {
     const settings: Record<number, string> = { 10: 'warn', 20: 'error' };
     const result = omitBy(settings, (_value, key) => {
-      expectTypeOf(key).toEqualTypeOf<string>();
+      expectTypeOf(key).toEqualTypeOf<`${number}`>();
       return key === '10';
     });
 
     expect(result).toEqual({ 20: 'error' });
   });
 
-  it('preserves result types without assuming exact input keys or value types', () => {
+  it('infers property values and string literal keys while preserving result types', () => {
     const settings = { enabled: true, mode: 'strict' };
     const result = omitBy(settings, (value, key) => {
-      expectTypeOf(value).toEqualTypeOf<unknown>();
-      expectTypeOf(key).toEqualTypeOf<string>();
+      expectTypeOf(value).toEqualTypeOf<boolean | string>();
+      expectTypeOf(key).toEqualTypeOf<'enabled' | 'mode'>();
       return key === 'mode';
     });
 
@@ -86,17 +86,17 @@ describe('omitBy', () => {
     expect(result).toEqual({ enabled: true });
   });
 
-  it('handles runtime properties absent from the declared input type', () => {
+  it('visits runtime properties absent from the declared input type', () => {
     const original = { label: 'preview', count: 1 };
     const settings: { label: string } = original;
     const received: unknown[] = [];
     const result = omitBy(settings, (value) => {
       received.push(value);
-      return typeof value === 'string' && value.trim() === 'preview';
+      return false;
     });
 
     expect(received).toEqual(['preview', 1]);
-    expect(result).toEqual({ count: 1 });
+    expect(result).toEqual(original);
   });
 
   it('removes undefined while retaining other falsy values and empty containers', () => {
@@ -131,6 +131,33 @@ describe('omitBy', () => {
 
     expect(omitBy(settings, predicate)).toEqual({ mode: 'strict' });
     expect(predicate).toHaveBeenCalledExactlyOnceWith('strict', 'mode');
+  });
+
+  it('reads enumerable getters once when copying and excludes symbol keys from the result', () => {
+    const metadata = Symbol('metadata');
+    const reads: string[] = [];
+    const nested = { enabled: true };
+    const settings = {
+      get retained() {
+        reads.push('retained');
+        return nested;
+      },
+      get removed() {
+        reads.push('removed');
+        return undefined;
+      },
+      get [metadata]() {
+        reads.push('metadata');
+        return 'internal';
+      },
+    };
+    const result = omitBy(settings, (value) => value === undefined);
+
+    expect(reads).toEqual(['retained', 'removed', 'metadata']);
+    expect(result).toEqual({ retained: nested });
+    expect(result.retained).toBe(nested);
+    expect(Object.getOwnPropertySymbols(result)).toEqual([]);
+    expect(Object.getOwnPropertySymbols(settings)).toEqual([metadata]);
   });
 
   it('retains a __proto__ data property without changing the result prototype', () => {
