@@ -1,4 +1,4 @@
-export type ObjectKeys<T> = Extract<keyof T, string> | `${Extract<keyof T, number>}`;
+export type ObjectKeys<T> = `${Exclude<keyof T, symbol>}`;
 
 /**
  * Captures own enumerable string properties before filtering without cloning retained values.
