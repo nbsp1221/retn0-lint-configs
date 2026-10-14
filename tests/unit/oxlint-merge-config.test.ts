@@ -6,6 +6,20 @@ describe('oxlint config merger', () => {
     expect(mergeOxlintConfigs({}, {})).toEqual({});
   });
 
+  it.each(['base', 'override'] as const)(
+    'copies object fields when only %s provides them',
+    (source) => {
+      const globals = Object.freeze({ React: 'readonly' } as const);
+      const config =
+        source === 'base'
+          ? mergeOxlintConfigs({ globals }, {})
+          : mergeOxlintConfigs({}, { globals });
+
+      expect(config.globals).toEqual(globals);
+      expect(config.globals).not.toBe(globals);
+    },
+  );
+
   it('merges root config fields with Oxlint-specific semantics', () => {
     const config = mergeOxlintConfigs(
       {

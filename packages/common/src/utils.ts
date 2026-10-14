@@ -4,18 +4,8 @@ export function omitBy<T extends object>(
   predicate: (value: unknown, key: string) => boolean,
 ): Partial<T> {
   const entries: Array<[string, unknown]> = Object.entries(object);
-  const result: Partial<T> = {};
 
-  for (const [key, value] of entries) {
-    if (!predicate(value, key)) {
-      Object.defineProperty(result, key, {
-        value,
-        configurable: true,
-        enumerable: true,
-        writable: true,
-      });
-    }
-  }
-
-  return result;
+  // Filtering only removes entries; retained properties keep their original types.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return Object.fromEntries(entries.filter(([key, value]) => !predicate(value, key))) as Partial<T>;
 }

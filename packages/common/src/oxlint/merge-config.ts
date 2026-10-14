@@ -17,10 +17,6 @@ function mergeObject<T extends object>(
     return override === undefined ? undefined : { ...override };
   }
 
-  if (override === undefined) {
-    return { ...base };
-  }
-
   return {
     ...base,
     ...override,
