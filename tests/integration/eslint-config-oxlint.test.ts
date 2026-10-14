@@ -159,9 +159,7 @@ export default retn0({
 });
 `,
     );
-    await project.writeFile(
-      'fixture.ts',
-      `
+    const fixture = `
 let reads = 0;
 const subject = { get value(): number { reads += 1; return reads; } };
 void subject.value;
@@ -171,39 +169,16 @@ export declare namespace Library {
   export interface Public { readonly hidden: Hidden; }
   export {};
 }
-`,
-    );
-
-    for (const compatibility of [[], eslintConfigOxlint]) {
-      const eslint = new ESLint({
-        cwd: project.root,
-        overrideConfigFile: true,
-        fix: true,
-        overrideConfig: createConfig({ react: false }, compatibility, {
-          // Isolate the visibility regression from the separate namespace style policy.
-          rules: { '@typescript-eslint/no-namespace': 'off' },
-        }),
-      });
-      const results = await eslint.lintFiles(['fixture.ts']);
-
-      expect(results.flatMap((result) => result.messages)).toEqual([]);
-      await ESLint.outputFixes(results);
-    }
-
-    const result = await project.runBin('oxlint', ['--fix', '--format=json', 'fixture.ts']);
-    const fixed = await project.readFile('fixture.ts');
-
-    expect(result.exitCode, result.stdout).toBe(0);
-    expect(fixed).toContain('void subject.value;');
-    expect(fixed).toContain('export {};');
-
+`;
+    await project.writeFile('fixture.ts', fixture);
     await project.writeFile(
       'consumer.ts',
       "import type { Library } from './fixture.js';\nexport type Leaked = Library.Hidden;\n",
     );
-    const program = ts.createProgram(
-      [`${project.root}/fixture.ts`, `${project.root}/consumer.ts`],
-      {
+    const root = project.root;
+
+    function typeDiagnostics(): number[] {
+      const program = ts.createProgram([`${root}/fixture.ts`, `${root}/consumer.ts`], {
         strict: true,
         noEmit: true,
         skipLibCheck: true,
@@ -211,10 +186,52 @@ export declare namespace Library {
         target: ts.ScriptTarget.ESNext,
         module: ts.ModuleKind.NodeNext,
         moduleResolution: ts.ModuleResolutionKind.NodeNext,
-      },
-    );
+      });
 
-    expect(ts.getPreEmitDiagnostics(program).map((diagnostic) => diagnostic.code)).toEqual([2694]);
+      return ts.getPreEmitDiagnostics(program).map((diagnostic) => diagnostic.code);
+    }
+
+    expect(typeDiagnostics()).toEqual([2694]);
+
+    for (const mode of ['eslint', 'combined', 'oxlint']) {
+      await project.writeFile('fixture.ts', fixture);
+
+      if (mode !== 'eslint') {
+        const result = await project.runBin('oxlint', ['--fix', '--format=json', 'fixture.ts']);
+
+        expect(result.exitCode, result.stdout).toBe(0);
+      }
+
+      if (mode !== 'oxlint') {
+        const eslint = new ESLint({
+          cwd: root,
+          overrideConfigFile: true,
+          fix: true,
+          overrideConfig: createConfig(
+            { react: false },
+            mode === 'combined' ? eslintConfigOxlint : [],
+            {
+              // Isolate the visibility regression from the separate namespace style policy.
+              rules: { '@typescript-eslint/no-namespace': 'off' },
+            },
+          ),
+        });
+        const results = await eslint.lintFiles(['fixture.ts']);
+
+        expect(results.flatMap((result) => result.messages)).toEqual([]);
+        await ESLint.outputFixes(results);
+      }
+
+      const fixed = await project.readFile('fixture.ts');
+
+      expect(fixed).toContain('void subject.value;');
+      expect(fixed).toContain('export {};');
+      expect(typeDiagnostics()).toEqual([2694]);
+    }
+
+    // Removing the empty export exposes Hidden, so the compiler must stop rejecting the consumer.
+    await project.writeFile('fixture.ts', fixture.replace('  export {};\n', ''));
+    expect(typeDiagnostics()).toEqual([]);
   });
 
   it('reports unsafe assertions in either tool without duplicate reports when combined', async () => {

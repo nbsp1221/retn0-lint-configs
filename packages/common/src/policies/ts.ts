@@ -107,7 +107,7 @@ export const tsPolicyLayers: PolicyLayer[] = [
        * @see https://typescript-eslint.io/rules/no-meaningless-void-operator
        */
       'no-meaningless-void-operator': {
-        // Preserve intentional getter reads that would otherwise conflict with no-unused-expressions.
+        // ESLint flags intentional getter reads; removing void conflicts with no-unused-expressions.
         config: 'off',
         tools: {
           eslint: {
@@ -393,7 +393,7 @@ export const tsPolicyLayers: PolicyLayer[] = [
        * @see https://typescript-eslint.io/rules/no-useless-empty-export
        */
       'no-useless-empty-export': {
-        // Empty exports can control visibility inside ambient namespaces.
+        // Oxlint can remove meaningful empty exports inside ambient namespaces.
         config: 'off',
         tools: {
           eslint: {
