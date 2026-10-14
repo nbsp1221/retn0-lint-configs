@@ -134,6 +134,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-non-null-assertion
+       */
+      'no-non-null-assertion': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-non-null-assertion',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-non-null-assertion',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/no-require-imports
        */
       'no-require-imports': {

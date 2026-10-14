@@ -123,6 +123,73 @@ export function widen(value: string): string | number {
     expect(unsafeResult.stdout).toContain('typescript(no-unsafe-type-assertion)');
     expect(safeResult.exitCode).toBe(0);
   });
+  it('reports non-null assertions in either tool without duplicate reports when combined', async () => {
+    project = await createTempProject('non-null-assertions');
+    await project.writeFile('package.json', JSON.stringify({ type: 'module' }));
+    await project.writeFile(
+      'tsconfig.json',
+      JSON.stringify({ compilerOptions: { strict: true }, include: ['*.ts'] }),
+    );
+    await project.writeFile(
+      'oxlint.config.ts',
+      "import retn0 from '@retn0/oxlint-config';\nexport default retn0();\n",
+    );
+    await project.writeFile(
+      'unsafe.ts',
+      'export function read(value: { name: string } | undefined): string { return value!.name; }\n',
+    );
+    await project.writeFile(
+      'safe.ts',
+      `
+export function read(value: { name: string } | undefined): string {
+  if (value === undefined) {
+    throw new Error('User not found');
+  }
+
+  return value.name;
+}
+
+export class Service {
+  value!: string;
+}
+`,
+    );
+
+    const options = { perfectionist: false, react: false };
+    const ruleId = '@typescript-eslint/no-non-null-assertion';
+    const standalone = new ESLint({
+      cwd: project.root,
+      overrideConfigFile: true,
+      overrideConfig: createConfig(options),
+    });
+    const results = await standalone.lintFiles(['unsafe.ts', 'safe.ts']);
+
+    expect(
+      results.flatMap((result) => result.messages.filter((message) => message.ruleId === ruleId)),
+    ).toEqual([expect.objectContaining({ severity: 2 })]);
+    expect(results.find((result) => result.filePath.endsWith('/safe.ts'))?.messages).toEqual([]);
+
+    const combined = new ESLint({
+      cwd: project.root,
+      overrideConfigFile: true,
+      overrideConfig: createConfig(options, eslintConfigOxlint),
+    });
+    const combinedResults = await combined.lintFiles(['unsafe.ts', 'safe.ts']);
+
+    expect(
+      combinedResults.flatMap((result) =>
+        result.messages.filter((message) => message.ruleId === ruleId),
+      ),
+    ).toEqual([]);
+
+    const unsafeResult = await project.runBin('oxlint', ['--format=json', 'unsafe.ts']);
+    const safeResult = await project.runBin('oxlint', ['--format=json', 'safe.ts']);
+
+    expect(unsafeResult.exitCode).toBe(1);
+    expect(unsafeResult.stdout).toContain('typescript(no-non-null-assertion)');
+    expect(safeResult.exitCode).toBe(0);
+  });
+
   it('reports unnecessary conditions while allowing literal loops and runtime type guards', async () => {
     project = await createTempProject('unnecessary-conditions');
     await project.writeFile('package.json', JSON.stringify({ type: 'module' }));
