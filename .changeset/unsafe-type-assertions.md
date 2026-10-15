@@ -11,3 +11,5 @@ Report unnecessary conditions as errors while allowing literal loop conditions. 
 Apply four existing Oxlint checks to ESLint as well: `no-misused-spread`, `require-array-sort-compare`, `no-unnecessary-parameter-property-assignment`, and `no-useless-default-assignment`. Let Oxlint handle these checks when combining both linters.
 
 Disable `no-meaningless-void-operator` and `no-useless-empty-export` in both presets to preserve intentional getter reads and ambient namespace visibility.
+
+Enable `return-await` with `error-handling-correctness-only`, `use-unknown-in-catch-callback-variable`, `prefer-readonly`, and `no-unnecessary-type-conversion` as errors in both presets. Let Oxlint handle these checks when combining both linters.

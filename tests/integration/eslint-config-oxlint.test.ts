@@ -76,6 +76,28 @@ export class Store {
   constructor(public value: string) { this.value = value; }
 }
 export function label({ name = 'guest' }: { name: string }): string { return name; }
+
+export async function load() {
+  try {
+    return Promise.resolve(1);
+  } catch {
+    return 0;
+  }
+}
+
+export const fallback = Promise.resolve(1).catch(error => {
+  console.error(error);
+
+  return 0;
+});
+
+export class Cache {
+  private value = 1;
+
+  read(): number { return this.value; }
+}
+
+export function count(value: number): number { return Number(value); }
 `,
     );
     await project.writeFile(
@@ -88,6 +110,46 @@ export class Store {
   constructor(public value: string) {}
 }
 export function label({ name = 'guest' }: { name?: string }): string { return name; }
+
+export async function load() {
+  try {
+    return await Promise.resolve(1);
+  } catch {
+    return 0;
+  }
+}
+
+export async function delegate() { return Promise.resolve(1); }
+
+export async function awaitDelegate() { return await Promise.resolve(1); }
+
+export const fallback = Promise.resolve(1).catch((error: unknown) => {
+  console.error(error);
+
+  return 0;
+});
+
+export class Cache {
+  private readonly values = new Map<string, number>();
+
+  set(key: string, value: number): void { this.values.set(key, value); }
+
+  get(key: string): number | undefined { return this.values.get(key); }
+}
+
+export class Counter {
+  private value = 0;
+
+  increment(): number {
+    this.value += 1;
+
+    return this.value;
+  }
+}
+
+export function count(value: number): number { return value; }
+
+export function parse(value: string | number): number { return Number(value); }
 `,
     );
 
@@ -96,6 +158,10 @@ export function label({ name = 'guest' }: { name?: string }): string { return na
       'require-array-sort-compare',
       'no-unnecessary-parameter-property-assignment',
       'no-useless-default-assignment',
+      'return-await',
+      'use-unknown-in-catch-callback-variable',
+      'prefer-readonly',
+      'no-unnecessary-type-conversion',
     ];
     const options = { environments: ['node' as const], perfectionist: false, react: false };
     const standalone = new ESLint({

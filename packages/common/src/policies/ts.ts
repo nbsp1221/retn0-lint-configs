@@ -255,6 +255,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-unnecessary-type-conversion
+       */
+      'no-unnecessary-type-conversion': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unnecessary-type-conversion',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unnecessary-type-conversion',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/no-unsafe-argument
        */
       'no-unsafe-argument': {
@@ -436,6 +451,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/prefer-readonly
+       */
+      'prefer-readonly': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/prefer-readonly',
+          },
+          oxlint: {
+            ruleId: 'typescript/prefer-readonly',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/require-array-sort-compare
        */
       'require-array-sort-compare': {
@@ -481,6 +511,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/return-await
+       */
+      'return-await': {
+        config: ['error', 'error-handling-correctness-only'],
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/return-await',
+          },
+          oxlint: {
+            ruleId: 'typescript/return-await',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/switch-exhaustiveness-check
        */
       'switch-exhaustiveness-check': {
@@ -491,6 +536,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/switch-exhaustiveness-check',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/use-unknown-in-catch-callback-variable
+       */
+      'use-unknown-in-catch-callback-variable': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/use-unknown-in-catch-callback-variable',
+          },
+          oxlint: {
+            ruleId: 'typescript/use-unknown-in-catch-callback-variable',
           },
         },
       },
