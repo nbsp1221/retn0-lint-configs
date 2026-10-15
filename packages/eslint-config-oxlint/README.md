@@ -65,28 +65,28 @@ Then run both tools:
 
 ## Vitest
 
-Enable `vitest` in both lint presets and use the named compatibility factory with the same option.
+Oxlint applies recommended Vitest rules to test files by default. Enable `vitest` in ESLint and append the existing compatibility config array.
 
 `oxlint.config.mts`:
 
 ```ts
 import retn0 from '@retn0/oxlint-config';
 
-export default retn0({ vitest: true });
+export default retn0();
 ```
 
 `eslint.config.mjs`:
 
 ```js
 import retn0 from '@retn0/eslint-config';
-import { createConfig as oxlintCompat } from '@retn0/eslint-config-oxlint';
+import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
 
-export default retn0({ environments: ['node'], vitest: true }, oxlintCompat({ vitest: true }));
+export default retn0({ environments: ['node'], vitest: true }, eslintConfigOxlint);
 ```
 
-The factory disables overlapping Vitest rules in ESLint on test files, leaving Oxlint responsible for those diagnostics. Keep both presets and compatibility options synchronized, and continue to run both tools. Their enabled Vitest rule sets match, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
+The compatibility config disables overlapping Vitest rules in ESLint on test files, leaving Oxlint responsible for those diagnostics. Continue to run both tools. Their enabled Vitest rule sets match, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
 
-The default export remains the existing config array. `createConfig()` and `createConfig({ vitest: false })` produce the same array contents as that default export; they do not disable opt-in ESLint Vitest rules. Existing consumers do not need to change their imports.
+The default export remains the existing config array. No additional factory or options are needed, and existing consumers do not need to change their imports. It can also be appended when ESLint's `vitest` option is off.
 
 ## License
 

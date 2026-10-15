@@ -71,6 +71,8 @@ describe('eslint fixtures regression', () => {
 
       if (UPDATE_FIXTURES) {
         await writeFixtureOutputs(outputSuiteDir, actualOutputs, diagnostics);
+        // Fixture-update mode writes the baseline instead of comparing it.
+        // oxlint-disable-next-line vitest/no-conditional-expect
         expect(true).toBe(true);
         return;
       }

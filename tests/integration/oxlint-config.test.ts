@@ -131,25 +131,15 @@ export function Component({ enabled }: { enabled: boolean }) {
   });
 });
 
-describe('oxlint vitest option', () => {
+describe('oxlint vitest defaults', () => {
   afterEach(async () => {
     await project?.cleanup();
     project = undefined;
   });
 
-  it('does not enable Vitest rules by default', async () => {
-    project = await createTempProject('oxlint-config-vitest-default');
-    await writeOxlintProject(project);
-    await project.writeFile('fixture.test.js', vitestRecommendedViolations);
-
-    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
-
-    expect(vitestRuleIds(diagnosticEntries(result.stdout))).toEqual([]);
-  });
-
-  it('reports recommended Vitest rules in test files only', async () => {
+  it('reports recommended Vitest rules in test files by default', async () => {
     project = await createTempProject('oxlint-config-vitest');
-    await writeOxlintProject(project, `{ vitest: true }, { rules: { 'no-undef': 'error' } }`);
+    await writeOxlintProject(project, `{ rules: { 'no-undef': 'error' } }`);
     await project.writeFile('fixture.test.js', vitestRecommendedViolations);
     await project.writeFile('fixture.js', vitestRecommendedViolations);
 
@@ -175,9 +165,26 @@ describe('oxlint vitest option', () => {
     expect(sourceDiagnostics.filter(({ code }) => code === 'eslint(no-undef)')).not.toEqual([]);
   });
 
+  it('lets local overrides disable a Vitest default', async () => {
+    project = await createTempProject('oxlint-config-vitest-override');
+    await writeOxlintProject(
+      project,
+      `{ overrides: [{ files: ['**/*.test.js'], plugins: ['vitest'], rules: { 'vitest/no-focused-tests': 'off' } }] }`,
+    );
+    await project.writeFile(
+      'fixture.test.js',
+      "it.only('focused', () => { expect(1).toBe(1); });\n",
+    );
+
+    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
+
+    expect(result.exitCode).toBe(0);
+    expect(vitestRuleIds(diagnosticEntries(result.stdout))).toEqual([]);
+  });
+
   it('keeps correctness Vitest rules outside the recommended preset off', async () => {
     project = await createTempProject('oxlint-config-vitest-candidates');
-    await writeOxlintProject(project, '{ vitest: true }');
+    await writeOxlintProject(project);
     await project.writeFile('fixture.test.ts', vitestCandidateViolations);
 
     const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.ts']);
@@ -189,7 +196,7 @@ describe('oxlint vitest option', () => {
     project = await createTempProject('oxlint-config-vitest-candidates-on');
     await writeOxlintProject(
       project,
-      `{ vitest: true }, { overrides: [{ files: ['**/*.test.ts'], plugins: ['vitest'], rules: ${JSON.stringify(
+      `{ overrides: [{ files: ['**/*.test.ts'], plugins: ['vitest'], rules: ${JSON.stringify(
         Object.fromEntries(vitestCandidateRuleIds.map((ruleId) => [ruleId, 'error'])),
       )} }] }`,
     );

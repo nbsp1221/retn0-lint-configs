@@ -54,7 +54,7 @@ Each setup runs a different set of rules.
 
 ### Vitest
 
-Both lint presets accept `vitest: true` (off by default) to enable the same 17 recommended Vitest rules on `*.test.*` and `*.spec.*` files. With both linters, also pass `vitest: true` to the named compatibility factory to suppress duplicate ESLint diagnostics. See the [Vitest setup](./packages/eslint-config-oxlint#vitest) for the complete configuration. The rules and severities match across presets; native implementations may report different diagnostics.
+ESLint accepts `vitest: true` (off by default) to enable 17 recommended Vitest rules on `*.test.*` and `*.spec.*` files. Oxlint applies those rules to the same files by default through its existing `retn0(...overrides)` API. When running both linters, append the existing compatibility config array to suppress duplicate ESLint diagnostics. See the [Vitest setup](./packages/eslint-config-oxlint#vitest) for the complete configuration. The rules and severities match across presets; native implementations may report different diagnostics.
 
 ### Formatting
 

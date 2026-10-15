@@ -187,6 +187,8 @@ export function parse(value: string | number): number { return Number(value); }
       combinedResults.flatMap((result) => result.messages.filter((message) => message.fatal)),
     ).toEqual([]);
     expect(unsafeResult.exitCode).toBe(1);
+    // Vitest supports an optional assertion message; the pinned rule defaults to maxArgs: 1.
+    // oxlint-disable-next-line vitest/valid-expect
     expect(safeResult.exitCode, safeResult.stdout).toBe(0);
 
     for (const rule of rules) {
@@ -266,6 +268,8 @@ export declare namespace Library {
       if (mode !== 'eslint') {
         const result = await project.runBin('oxlint', ['--fix', '--format=json', 'fixture.ts']);
 
+        // Assert only when this mode runs Oxlint, retaining its output as a Vitest failure message.
+        // oxlint-disable-next-line vitest/no-conditional-expect, vitest/valid-expect
         expect(result.exitCode, result.stdout).toBe(0);
       }
 
@@ -285,6 +289,8 @@ export declare namespace Library {
         });
         const results = await eslint.lintFiles(['fixture.ts']);
 
+        // This mode-specific assertion checks ESLint only when it is part of the setup.
+        // oxlint-disable-next-line vitest/no-conditional-expect
         expect(results.flatMap((result) => result.messages)).toEqual([]);
         await ESLint.outputFixes(results);
       }
@@ -511,19 +517,19 @@ export function validate(value: string): boolean {
     expect(necessaryResult.exitCode).toBe(0);
   });
 
-  it('leaves Vitest linting on with the default compatibility export', async () => {
+  it('supports the default compatibility export without the ESLint Vitest plugin', async () => {
     project = await createTempProject('eslint-config-oxlint-vitest-default');
-    await writeVitestProject(project, 'eslintConfigOxlint');
+    await writeVitestProject(project, false);
 
     const result = await project.runBin('eslint', ['--format=json', 'fixture.test.js']);
 
-    expect(result.exitCode).toBe(1);
-    expect(eslintRuleIds(result.stdout)).toContain('vitest/no-focused-tests');
+    expect(result.exitCode).toBe(0);
+    expect(eslintRuleIds(result.stdout)).toEqual([]);
   });
 
-  it('disables Vitest duplicates only when both configs opt in', async () => {
+  it('disables Vitest duplicates with the existing default compatibility export', async () => {
     project = await createTempProject('eslint-config-oxlint-vitest');
-    await writeVitestProject(project, 'createOxlintCompat({ vitest: true })');
+    await writeVitestProject(project, true);
 
     const eslint = await project.runBin('eslint', ['--format=json', 'fixture.test.js']);
     const oxlint = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
@@ -538,21 +544,21 @@ export function validate(value: string): boolean {
   });
 });
 
-async function writeVitestProject(project: TempProject, compat: string): Promise<void> {
+async function writeVitestProject(project: TempProject, vitest: boolean): Promise<void> {
   await project.writeFile('package.json', JSON.stringify({ type: 'module' }));
   await project.writeFile(
     'eslint.config.mjs',
     `
 import retn0 from '@retn0/eslint-config';
-import eslintConfigOxlint, { createConfig as createOxlintCompat } from '@retn0/eslint-config-oxlint';
-export default retn0({ js: false, ts: false, stylistic: false, vitest: true }, ${compat});
+import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+export default retn0({ js: false, ts: false, stylistic: false, vitest: ${vitest} }, eslintConfigOxlint);
 `,
   );
   await project.writeFile(
     'oxlint.config.mts',
     `
 import retn0 from '@retn0/oxlint-config';
-export default retn0({ vitest: true });
+export default retn0();
 `,
   );
   await project.writeFile('fixture.test.js', vitestRecommendedViolations);
