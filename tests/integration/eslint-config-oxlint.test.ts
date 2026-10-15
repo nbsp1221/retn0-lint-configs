@@ -527,6 +527,33 @@ export function validate(value: string): boolean {
     expect(eslintRuleIds(result.stdout)).toEqual([]);
   });
 
+  it('preserves explicitly enabled Vitest rules not handled by Oxlint', async () => {
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: createConfig(
+        { js: false, ts: false, stylistic: false, vitest: true },
+        {
+          files: ['**/*.test.js'],
+          rules: { 'vitest/require-to-throw-message': 'error' },
+        },
+        eslintConfigOxlint,
+      ),
+    });
+    const [result] = await eslint.lintText(
+      `
+import { expect, it } from 'vitest';
+it.only('throws', () => {
+  expect(() => { throw new Error('failure'); }).toThrow();
+});
+`,
+      { filePath: 'fixture.test.js' },
+    );
+
+    expect(result.messages.map((message) => message.ruleId)).toEqual([
+      'vitest/require-to-throw-message',
+    ]);
+  });
+
   it('disables Vitest duplicates with the existing default compatibility export', async () => {
     project = await createTempProject('eslint-config-oxlint-vitest');
     await writeVitestProject(project, true);

@@ -5,7 +5,6 @@ import {
   reactPolicyLayers,
   toEslintDisableConfigs,
   tsPolicyLayers,
-  vitestPolicyLayers,
 } from '@retn0/common';
 import oxlint from 'eslint-plugin-oxlint';
 import { defineConfig } from 'eslint/config';
@@ -19,7 +18,6 @@ const config = defineConfig([
   ...toEslintDisableConfigs(jsPolicyLayers),
   ...toEslintDisableConfigs(reactPolicyLayers),
   ...toEslintDisableConfigs(tsPolicyLayers),
-  ...toEslintDisableConfigs(vitestPolicyLayers),
 ]) as Linter.Config[];
 
 export default config;
