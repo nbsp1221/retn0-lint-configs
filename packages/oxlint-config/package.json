@@ -1,6 +1,6 @@
 {
   "name": "@retn0/oxlint-config",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "My personal Oxlint configuration",
   "keywords": [
     "config",
