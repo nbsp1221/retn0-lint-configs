@@ -1,5 +1,21 @@
 # @retn0/eslint-config
 
+## 2.2.0
+
+### Minor Changes
+
+- [#5](https://github.com/nbsp1221/retn0-lint-configs/pull/5) [`5f367d9`](https://github.com/nbsp1221/retn0-lint-configs/commit/5f367d9be7727c4db39a1e7ac4d9e11db2861082) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Update ESLint plugins. React checks now detect additional cases, including components created through logical or sequence expressions during render, so existing code may produce new lint errors.
+
+- [#8](https://github.com/nbsp1221/retn0-lint-configs/pull/8) [`b04c0eb`](https://github.com/nbsp1221/retn0-lint-configs/commit/b04c0eb6eabbc6cd2116046c5e8cd5fbddda3dda) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Report unsafe type assertions and non-null assertions as errors. When combining ESLint and Oxlint, let Oxlint report them without duplicate ESLint diagnostics.
+
+  Report unnecessary conditions as errors while allowing literal loop conditions. Keep runtime type guard checks unchanged, and let Oxlint handle this rule when combining both linters.
+
+  Apply four existing Oxlint checks to ESLint as well: `no-misused-spread`, `require-array-sort-compare`, `no-unnecessary-parameter-property-assignment`, and `no-useless-default-assignment`. Let Oxlint handle these checks when combining both linters.
+
+  Disable `no-meaningless-void-operator` and `no-useless-empty-export` in both presets to preserve intentional getter reads and ambient namespace visibility.
+
+  Enable `return-await` with `error-handling-correctness-only`, `use-unknown-in-catch-callback-variable`, `prefer-readonly`, and `no-unnecessary-type-conversion` as errors in both presets. Let Oxlint handle these checks when combining both linters.
+
 ## 2.1.0
 
 ### Minor Changes
