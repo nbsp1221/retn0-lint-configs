@@ -104,6 +104,22 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-meaningless-void-operator
+       */
+      'no-meaningless-void-operator': {
+        // ESLint flags intentional getter reads; removing void conflicts with no-unused-expressions.
+        config: 'off',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-meaningless-void-operator',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-meaningless-void-operator',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/no-misused-promises
        */
       'no-misused-promises': {
@@ -114,6 +130,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/no-misused-promises',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-misused-spread
+       */
+      'no-misused-spread': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-misused-spread',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-misused-spread',
           },
         },
       },
@@ -134,6 +165,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-non-null-assertion
+       */
+      'no-non-null-assertion': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-non-null-assertion',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-non-null-assertion',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/no-require-imports
        */
       'no-require-imports': {
@@ -144,6 +190,36 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/no-require-imports',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-unnecessary-condition
+       */
+      'no-unnecessary-condition': {
+        config: ['error', { allowConstantLoopConditions: 'only-allowed-literals' }],
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unnecessary-condition',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unnecessary-condition',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-unnecessary-parameter-property-assignment
+       */
+      'no-unnecessary-parameter-property-assignment': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unnecessary-parameter-property-assignment',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unnecessary-parameter-property-assignment',
           },
         },
       },
@@ -174,6 +250,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/no-unnecessary-type-constraint',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-unnecessary-type-conversion
+       */
+      'no-unnecessary-type-conversion': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unnecessary-type-conversion',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unnecessary-type-conversion',
           },
         },
       },
@@ -284,6 +375,52 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/no-unsafe-type-assertion
+       */
+      'no-unsafe-type-assertion': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-unsafe-type-assertion',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-unsafe-type-assertion',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-useless-default-assignment
+       */
+      'no-useless-default-assignment': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-useless-default-assignment',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-useless-default-assignment',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/no-useless-empty-export
+       */
+      'no-useless-empty-export': {
+        // Oxlint can remove meaningful empty exports inside ambient namespaces.
+        config: 'off',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/no-useless-empty-export',
+          },
+          oxlint: {
+            ruleId: 'typescript/no-useless-empty-export',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/only-throw-error
        */
       'only-throw-error': {
@@ -309,6 +446,36 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/prefer-promise-reject-errors',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/prefer-readonly
+       */
+      'prefer-readonly': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/prefer-readonly',
+          },
+          oxlint: {
+            ruleId: 'typescript/prefer-readonly',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/require-array-sort-compare
+       */
+      'require-array-sort-compare': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/require-array-sort-compare',
+          },
+          oxlint: {
+            ruleId: 'typescript/require-array-sort-compare',
           },
         },
       },
@@ -344,6 +511,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * @see https://typescript-eslint.io/rules/return-await
+       */
+      'return-await': {
+        config: ['error', 'error-handling-correctness-only'],
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/return-await',
+          },
+          oxlint: {
+            ruleId: 'typescript/return-await',
+          },
+        },
+      },
+
+      /**
        * @see https://typescript-eslint.io/rules/switch-exhaustiveness-check
        */
       'switch-exhaustiveness-check': {
@@ -354,6 +536,21 @@ export const tsPolicyLayers: PolicyLayer[] = [
           },
           oxlint: {
             ruleId: 'typescript/switch-exhaustiveness-check',
+          },
+        },
+      },
+
+      /**
+       * @see https://typescript-eslint.io/rules/use-unknown-in-catch-callback-variable
+       */
+      'use-unknown-in-catch-callback-variable': {
+        config: 'error',
+        tools: {
+          eslint: {
+            ruleId: '@typescript-eslint/use-unknown-in-catch-callback-variable',
+          },
+          oxlint: {
+            ruleId: 'typescript/use-unknown-in-catch-callback-variable',
           },
         },
       },

@@ -201,5 +201,7 @@ async function readExpectedOutputs(outputSuiteDir: string): Promise<Record<strin
 async function readExpectedDiagnostics(outputSuiteDir: string): Promise<LintDiagnostic[]> {
   const diagnosticsPath = join(outputSuiteDir, '__diagnostics__.json');
   const content = await readFile(diagnosticsPath, 'utf8');
+  // This checked-in fixture uses the diagnostics schema written by this test suite.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return JSON.parse(content) as LintDiagnostic[];
 }

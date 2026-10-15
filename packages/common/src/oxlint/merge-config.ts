@@ -13,14 +13,14 @@ function mergeObject<T extends object>(
   base: T | undefined,
   override: T | undefined,
 ): T | undefined {
-  if (base === undefined && override === undefined) {
-    return undefined;
+  if (base === undefined) {
+    return override === undefined ? undefined : { ...override };
   }
 
   return {
     ...base,
     ...override,
-  } as T;
+  };
 }
 
 function mergeJsPlugins(

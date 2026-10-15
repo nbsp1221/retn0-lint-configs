@@ -154,6 +154,8 @@ export default retn0();
 }
 
 function diagnosticCodes(stdout: string): string[] {
+  // The local Oxlint CLI produces this JSON schema.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const output = JSON.parse(stdout) as { diagnostics: Array<{ code: string }> };
   return output.diagnostics.map((diagnostic) => diagnostic.code).sort();
 }
@@ -161,6 +163,8 @@ function diagnosticCodes(stdout: string): string[] {
 function diagnosticEntries(
   stdout: string,
 ): Array<{ code: string; filename: string; severity: string }> {
+  // The local Oxlint CLI produces this JSON schema.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const output = JSON.parse(stdout) as {
     diagnostics: Array<{ code: string; filename: string; severity: string }>;
   };

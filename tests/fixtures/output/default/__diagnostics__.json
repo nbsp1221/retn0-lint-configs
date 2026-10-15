@@ -57,9 +57,17 @@
   },
   {
     "filePath": "typescript.ts",
-    "errorCount": 1,
+    "errorCount": 2,
     "warningCount": 0,
     "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unnecessary-condition",
+        "severity": 2,
+        "line": 7,
+        "column": 37,
+        "endLine": 7,
+        "endColumn": 49
+      },
       {
         "ruleId": "@typescript-eslint/switch-exhaustiveness-check",
         "severity": 2,
