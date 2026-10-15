@@ -1,5 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { type TempProject, createTempProject } from '../helpers/temp-project.js';
+import {
+  oxlintCodeToRuleId,
+  vitestCandidateRuleIds,
+  vitestCandidateViolations,
+  vitestRecommendedRuleIds,
+  vitestRecommendedViolations,
+} from '../helpers/vitest-fixtures.js';
 
 let project: TempProject | undefined;
 
@@ -124,7 +131,77 @@ export function Component({ enabled }: { enabled: boolean }) {
   });
 });
 
-async function writeOxlintProject(project: TempProject): Promise<void> {
+describe('oxlint vitest option', () => {
+  afterEach(async () => {
+    await project?.cleanup();
+    project = undefined;
+  });
+
+  it('does not enable Vitest rules by default', async () => {
+    project = await createTempProject('oxlint-config-vitest-default');
+    await writeOxlintProject(project);
+    await project.writeFile('fixture.test.js', vitestRecommendedViolations);
+
+    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
+
+    expect(vitestRuleIds(diagnosticEntries(result.stdout))).toEqual([]);
+  });
+
+  it('reports recommended Vitest rules in test files only', async () => {
+    project = await createTempProject('oxlint-config-vitest');
+    await writeOxlintProject(project, `{ vitest: true }, { rules: { 'no-undef': 'error' } }`);
+    await project.writeFile('fixture.test.js', vitestRecommendedViolations);
+    await project.writeFile('fixture.js', vitestRecommendedViolations);
+
+    const result = await project.runBin('oxlint', [
+      '--format=json',
+      'fixture.test.js',
+      'fixture.js',
+    ]);
+    const diagnostics = diagnosticEntries(result.stdout);
+    const testDiagnostics = diagnostics.filter(({ filename }) => filename === 'fixture.test.js');
+    const sourceDiagnostics = diagnostics.filter(({ filename }) => filename === 'fixture.js');
+
+    expect(result.exitCode).toBe(1);
+    expect(vitestRuleIds(testDiagnostics)).toEqual(vitestRecommendedRuleIds);
+    expect(
+      testDiagnostics
+        .filter(({ code }) => code === 'vitest(no-disabled-tests)')
+        .map(({ severity }) => severity),
+    ).toEqual(['warning']);
+    expect(testDiagnostics.filter(({ code }) => code === 'eslint(no-undef)')).toEqual([]);
+
+    expect(vitestRuleIds(sourceDiagnostics)).toEqual([]);
+    expect(sourceDiagnostics.filter(({ code }) => code === 'eslint(no-undef)')).not.toEqual([]);
+  });
+
+  it('keeps correctness Vitest rules outside the recommended preset off', async () => {
+    project = await createTempProject('oxlint-config-vitest-candidates');
+    await writeOxlintProject(project, '{ vitest: true }');
+    await project.writeFile('fixture.test.ts', vitestCandidateViolations);
+
+    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.ts']);
+
+    expect(vitestRuleIds(diagnosticEntries(result.stdout))).toEqual([]);
+  });
+
+  it('reports the candidate Vitest rules when they are enabled', async () => {
+    project = await createTempProject('oxlint-config-vitest-candidates-on');
+    await writeOxlintProject(
+      project,
+      `{ vitest: true }, { overrides: [{ files: ['**/*.test.ts'], plugins: ['vitest'], rules: ${JSON.stringify(
+        Object.fromEntries(vitestCandidateRuleIds.map((ruleId) => [ruleId, 'error'])),
+      )} }] }`,
+    );
+    await project.writeFile('fixture.test.ts', vitestCandidateViolations);
+
+    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.ts']);
+
+    expect(vitestRuleIds(diagnosticEntries(result.stdout))).toEqual(vitestCandidateRuleIds);
+  });
+});
+
+async function writeOxlintProject(project: TempProject, configArgs = ''): Promise<void> {
   await project.writeFile('package.json', JSON.stringify({ type: 'module' }, undefined, 2));
   await project.writeFile(
     'tsconfig.json',
@@ -148,7 +225,7 @@ async function writeOxlintProject(project: TempProject): Promise<void> {
     `
 import retn0 from '@retn0/oxlint-config';
 
-export default retn0();
+export default retn0(${configArgs});
 `,
   );
 }
@@ -169,4 +246,14 @@ function diagnosticEntries(
     diagnostics: Array<{ code: string; filename: string; severity: string }>;
   };
   return output.diagnostics;
+}
+
+function vitestRuleIds(diagnostics: Array<{ code: string }>): string[] {
+  return [
+    ...new Set(
+      diagnostics
+        .map(({ code }) => oxlintCodeToRuleId(code))
+        .filter((ruleId) => ruleId.startsWith('vitest/')),
+    ),
+  ].sort();
 }

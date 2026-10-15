@@ -4,6 +4,7 @@ import { ESLint } from 'eslint';
 import ts from 'typescript';
 import { afterEach, describe, expect, it } from 'vitest';
 import { type TempProject, createTempProject } from '../helpers/temp-project.js';
+import { vitestRecommendedViolations } from '../helpers/vitest-fixtures.js';
 
 let project: TempProject | undefined;
 
@@ -509,7 +510,53 @@ export function validate(value: string): boolean {
     expect(unnecessaryResult.stdout).toContain('typescript(no-unnecessary-condition)');
     expect(necessaryResult.exitCode).toBe(0);
   });
+
+  it('leaves Vitest linting on with the default compatibility export', async () => {
+    project = await createTempProject('eslint-config-oxlint-vitest-default');
+    await writeVitestProject(project, 'eslintConfigOxlint');
+
+    const result = await project.runBin('eslint', ['--format=json', 'fixture.test.js']);
+
+    expect(result.exitCode).toBe(1);
+    expect(eslintRuleIds(result.stdout)).toContain('vitest/no-focused-tests');
+  });
+
+  it('disables Vitest duplicates only when both configs opt in', async () => {
+    project = await createTempProject('eslint-config-oxlint-vitest');
+    await writeVitestProject(project, 'createOxlintCompat({ vitest: true })');
+
+    const eslint = await project.runBin('eslint', ['--format=json', 'fixture.test.js']);
+    const oxlint = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
+    // The local Oxlint CLI produces this JSON schema.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    const diagnostics = JSON.parse(oxlint.stdout) as { diagnostics: Array<{ code: string }> };
+
+    expect(eslint.exitCode).toBe(0);
+    expect(eslintRuleIds(eslint.stdout)).toEqual([]);
+    expect(oxlint.exitCode).toBe(1);
+    expect(diagnostics.diagnostics.map(({ code }) => code)).toContain('vitest(no-focused-tests)');
+  });
 });
+
+async function writeVitestProject(project: TempProject, compat: string): Promise<void> {
+  await project.writeFile('package.json', JSON.stringify({ type: 'module' }));
+  await project.writeFile(
+    'eslint.config.mjs',
+    `
+import retn0 from '@retn0/eslint-config';
+import eslintConfigOxlint, { createConfig as createOxlintCompat } from '@retn0/eslint-config-oxlint';
+export default retn0({ js: false, ts: false, stylistic: false, vitest: true }, ${compat});
+`,
+  );
+  await project.writeFile(
+    'oxlint.config.mts',
+    `
+import retn0 from '@retn0/oxlint-config';
+export default retn0({ vitest: true });
+`,
+  );
+  await project.writeFile('fixture.test.js', vitestRecommendedViolations);
+}
 
 function eslintRuleIds(stdout: string): string[] {
   // The local ESLint CLI produces this JSON schema.

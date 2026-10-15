@@ -33,4 +33,14 @@ describe('oxlint config exports', () => {
     );
     expect(config.rules).toMatchObject({ 'no-console': 'warn' });
   });
+
+  it('accepts options before local overrides', () => {
+    const config = createConfig({ vitest: true }, { rules: { 'no-console': 'warn' } });
+
+    expect(config.rules).toMatchObject({ 'no-console': 'warn' });
+    expect(config.overrides?.at(-1)).toMatchObject({
+      plugins: ['vitest'],
+      env: { vitest: true },
+    });
+  });
 });

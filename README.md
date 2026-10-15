@@ -52,6 +52,10 @@ See the [combined setup guide](./packages/eslint-config-oxlint) for pnpm, Yarn, 
 
 Each setup runs a different set of rules.
 
+### Vitest
+
+Both lint presets accept `vitest: true` (off by default) to enable the same 17 recommended Vitest rules on `*.test.*` and `*.spec.*` files. With both linters, also pass `vitest: true` to the named compatibility factory to suppress duplicate ESLint diagnostics. See the [Vitest setup](./packages/eslint-config-oxlint#vitest) for the complete configuration. The rules and severities match across presets; native implementations may report different diagnostics.
+
 ### Formatting
 
 [Oxfmt](./packages/oxfmt-config) can be used with any of these linting setups.
