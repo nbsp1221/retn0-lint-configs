@@ -1,6 +1,14 @@
+import type { Linter } from 'eslint';
+import { createOxlintConfig } from '@retn0/common';
 import createConfig from '@retn0/eslint-config';
 import { ESLint } from 'eslint';
 import { describe, expect, it } from 'vitest';
+import {
+  vitestCandidateRuleIds,
+  vitestCandidateViolations,
+  vitestRecommendedRuleIds,
+  vitestRecommendedViolations,
+} from '../helpers/vitest-fixtures.js';
 
 describe('eslint config behavior', () => {
   it('rejects unsupported environments', () => {
@@ -304,6 +312,129 @@ export { Delta } from './delta';
   });
 });
 
+describe('eslint vitest option', () => {
+  const vitestGlobalsMessages = [
+    "'expect' is not defined.",
+    "'describe' is not defined.",
+    "'it' is not defined.",
+    "'vi' is not defined.",
+  ];
+
+  it('does not enable Vitest rules or globals by default', async () => {
+    const config = createConfig({ ts: false, perfectionist: false, react: false });
+    const eslint = new ESLint({ overrideConfigFile: true, overrideConfig: config });
+
+    const [result] = await eslint.lintText(vitestRecommendedViolations, {
+      filePath: 'fixture.test.js',
+    });
+
+    expect(vitestRuleIdsOf(result)).toEqual([]);
+    expect(uniqueMessagesForRule(result, 'no-undef')).toEqual(
+      expect.arrayContaining(vitestGlobalsMessages),
+    );
+    expect(config.map((entry) => entry.name)).not.toEqual(
+      expect.arrayContaining([expect.stringMatching(/^retn0\/vitest/u)]),
+    );
+  });
+
+  it('reports recommended Vitest rules with plugin severities in test files only', async () => {
+    const config = createConfig({ ts: false, perfectionist: false, react: false, vitest: true });
+    const eslint = new ESLint({ overrideConfigFile: true, overrideConfig: config });
+
+    const [testResult] = await eslint.lintText(vitestRecommendedViolations, {
+      filePath: 'fixture.test.js',
+    });
+    const [sourceResult] = await eslint.lintText(vitestRecommendedViolations, {
+      filePath: 'fixture.js',
+    });
+
+    expect(vitestRuleIdsOf(testResult)).toEqual(vitestRecommendedRuleIds);
+    expect(vitestSeveritiesOf(testResult)).toEqual(recommendedSeverities(config));
+    expect(messagesForRule(testResult, 'no-undef')).toEqual([]);
+
+    expect(vitestRuleIdsOf(sourceResult)).toEqual([]);
+    expect(uniqueMessagesForRule(sourceResult, 'no-undef')).toEqual(
+      expect.arrayContaining(vitestGlobalsMessages),
+    );
+  });
+
+  it('keeps Vitest rules outside the recommended preset off', async () => {
+    const config = createConfig({ ts: false, perfectionist: false, react: false, vitest: true });
+    const eslint = new ESLint({ overrideConfigFile: true, overrideConfig: config });
+
+    const [result] = await eslint.lintText(vitestCandidateViolations, {
+      filePath: 'fixture.test.js',
+    });
+    // ESLint returns the resolved config as any.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    const resolved = (await eslint.calculateConfigForFile('fixture.test.js')) as Linter.Config;
+
+    expect(vitestRuleIdsOf(result)).toEqual([]);
+    expect(
+      Object.fromEntries(
+        vitestCandidateRuleIds.map((ruleId) => [ruleId, severityName(resolved.rules?.[ruleId])]),
+      ),
+    ).toEqual(Object.fromEntries(vitestCandidateRuleIds.map((ruleId) => [ruleId, 'off'])));
+  });
+
+  it('reports the candidate Vitest rules when they are enabled', async () => {
+    const config = createConfig(
+      { ts: false, perfectionist: false, react: false, vitest: true },
+      {
+        files: ['**/*.test.js'],
+        rules: Object.fromEntries(vitestCandidateRuleIds.map((ruleId) => [ruleId, 'error'])),
+      },
+    );
+    const eslint = new ESLint({ overrideConfigFile: true, overrideConfig: config });
+
+    const [result] = await eslint.lintText(vitestCandidateViolations, {
+      filePath: 'fixture.test.js',
+    });
+
+    expect(vitestRuleIdsOf(result)).toEqual(vitestCandidateRuleIds);
+  });
+
+  it('enables exactly the @vitest/eslint-plugin recommended preset', () => {
+    const config = createConfig({ vitest: true });
+    const enabledRules = Object.fromEntries(
+      config
+        .filter((entry) => entry.name?.startsWith('retn0/vitest'))
+        .flatMap((entry) => Object.entries(entry.rules ?? {}))
+        .map(([ruleId, entry]) => [ruleId, severityName(entry)] as const)
+        .filter(([, severity]) => severity !== 'off'),
+    );
+
+    expect(enabledRules).toEqual(recommendedSeverities(config));
+  });
+
+  it('resolves the same Vitest rule set as the Oxlint config', async () => {
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: createConfig({ vitest: true }),
+    });
+    // ESLint returns the resolved config as any.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    const resolved = (await eslint.calculateConfigForFile('fixture.test.ts')) as Linter.Config;
+    const eslintRules = Object.fromEntries(
+      Object.entries(resolved.rules ?? {})
+        .filter(([ruleId]) => ruleId.startsWith('vitest/'))
+        .map(([ruleId, entry]) => [ruleId, severityName(entry)]),
+    );
+
+    const oxlintRules = Object.fromEntries(
+      (createOxlintConfig().overrides ?? [])
+        .flatMap((override) => Object.entries(override.rules ?? {}))
+        .filter(([ruleId]) => ruleId.startsWith('vitest/'))
+        .map(([ruleId, entry]) => [ruleId, severityName(entry)]),
+    );
+
+    expect(Object.keys(eslintRules).sort()).toEqual(
+      [...vitestRecommendedRuleIds, ...vitestCandidateRuleIds].sort(),
+    );
+    expect(eslintRules).toEqual(oxlintRules);
+  });
+});
+
 async function lintJs(
   code: string,
   overrideConfig: ReturnType<typeof createConfig>,
@@ -328,4 +459,68 @@ function severitiesByRule(result: ESLint.LintResult): Record<string, number> {
       message.ruleId ? [[message.ruleId, message.severity]] : [],
     ),
   );
+}
+
+function uniqueMessagesForRule(result: ESLint.LintResult, ruleId: string): string[] {
+  return [...new Set(messagesForRule(result, ruleId))];
+}
+
+function vitestRuleIdsOf(result: ESLint.LintResult): string[] {
+  return [
+    ...new Set(
+      result.messages
+        .map((message) => message.ruleId)
+        .filter((ruleId): ruleId is string => ruleId?.startsWith('vitest/') ?? false),
+    ),
+  ].sort();
+}
+
+function vitestSeveritiesOf(result: ESLint.LintResult): Record<string, string> {
+  return Object.fromEntries(
+    result.messages.flatMap((message) =>
+      message.ruleId?.startsWith('vitest/')
+        ? [[message.ruleId, message.severity === 2 ? 'error' : 'warn']]
+        : [],
+    ),
+  );
+}
+
+function recommendedSeverities(config: Linter.Config[]): Record<string, string> {
+  const setup = config.find((entry) => entry.name === 'retn0/vitest/setup');
+  // The configured plugin is @vitest/eslint-plugin; ESLint's generic Plugin type
+  // does not expose its recommended config shape.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  const plugin = setup?.plugins?.vitest as
+    | { configs: { recommended: { rules: Record<string, Linter.RuleEntry> } } }
+    | undefined;
+
+  if (!plugin) {
+    throw new Error('Missing retn0/vitest/setup plugin');
+  }
+
+  return Object.fromEntries(
+    Object.entries(plugin.configs.recommended.rules).map(([ruleId, entry]) => [
+      ruleId,
+      severityName(entry),
+    ]),
+  );
+}
+
+function severityName(entry: unknown): string {
+  const severity: unknown = Array.isArray(entry) ? entry[0] : entry;
+
+  switch (severity) {
+    case 2:
+    case 'error':
+      return 'error';
+    case 1:
+    case 'warn':
+      return 'warn';
+    case undefined:
+    case 0:
+    case 'off':
+      return 'off';
+    default:
+      throw new TypeError('Unexpected lint rule severity');
+  }
 }

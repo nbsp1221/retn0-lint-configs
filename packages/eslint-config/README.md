@@ -47,6 +47,7 @@ export default retn0({
   stylistic: true,
   react: false,
   perfectionist: false,
+  vitest: false,
 });
 ```
 
@@ -73,6 +74,25 @@ export default retn0(
   },
 );
 ```
+
+## Vitest
+
+Enable recommended Vitest rules and globals with `vitest: true` (default: `false`):
+
+```js
+import retn0 from '@retn0/eslint-config';
+
+export default retn0({
+  environments: ['node'],
+  vitest: true,
+});
+```
+
+Rules and globals apply only to `**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}`. Files named only by their `__tests__` directory are not included. Use scoped rule overrides when mixing test runners.
+
+Prefer explicit imports from `vitest`. If using globals in TypeScript, add `vitest/globals` to the test tsconfig. The `environments: ['vitest']` option declares globals for all JS/TS files without enabling Vitest rules.
+
+When also running Oxlint, use [`@retn0/eslint-config-oxlint`](../eslint-config-oxlint#vitest) to avoid duplicate diagnostics.
 
 ## License
 

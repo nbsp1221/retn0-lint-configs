@@ -51,6 +51,28 @@ export default retn0({
 });
 ```
 
+## Vitest
+
+Recommended Vitest rules and globals are enabled by default on `**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}`. Files named only by their `__tests__` directory are not included. This pattern also matches other runners, including Node.js, Playwright, and Bun; use scoped rule overrides when mixing runners.
+
+Prefer explicit imports from `vitest`. If using globals in TypeScript, add `vitest/globals` to the test tsconfig.
+
+When overriding scoped Vitest rules, include the plugin in that override. Oxlint does not inherit it from an earlier override:
+
+```ts
+export default retn0({
+  overrides: [
+    {
+      files: ['**/*.test.ts'],
+      plugins: ['vitest'],
+      rules: { 'vitest/no-disabled-tests': 'error' },
+    },
+  ],
+});
+```
+
+When also running ESLint, use [`@retn0/eslint-config-oxlint`](../eslint-config-oxlint#vitest) to avoid duplicate diagnostics.
+
 ## License
 
 MIT © [nbsp1221](https://github.com/nbsp1221)
