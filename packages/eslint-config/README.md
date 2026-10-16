@@ -60,27 +60,6 @@ export default retn0({
 });
 ```
 
-## Vitest
-
-Enable Vitest linting explicitly:
-
-```js
-import retn0 from '@retn0/eslint-config';
-
-export default retn0({
-  environments: ['node'],
-  vitest: true,
-});
-```
-
-`vitest` defaults to `false`. When enabled, the preset applies the 17 recommended rules from the pinned `@vitest/eslint-plugin` version, preserving their severities (`no-disabled-tests` is a warning; the others are errors). The rule definitions are shared with `@retn0/oxlint-config`. Native rule implementations can still produce different diagnostics on some code.
-
-Rules and Vitest globals apply only to `**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}`. This does not include helpers, config files, or files named only by their `__tests__` directory. It also matches Playwright and Bun test filenames; use local exclusions or scoped rule overrides when mixing test runners.
-
-Prefer explicit imports from `vitest`. If using globals in TypeScript, include `vitest/globals` in the appropriate test tsconfig: lint globals do not provide TypeScript types. The existing `environments: ['vitest']` option still declares globals for all JS/TS files; it does not enable Vitest rules. Use `vitest: true` for scoped rules and globals.
-
-When also running Oxlint, append the existing default config array from [`@retn0/eslint-config-oxlint`](../eslint-config-oxlint#vitest) to avoid duplicate Vitest diagnostics.
-
 User overrides are appended after the shared config:
 
 ```js
@@ -95,6 +74,25 @@ export default retn0(
   },
 );
 ```
+
+## Vitest
+
+Enable recommended Vitest rules and globals with `vitest: true` (default: `false`):
+
+```js
+import retn0 from '@retn0/eslint-config';
+
+export default retn0({
+  environments: ['node'],
+  vitest: true,
+});
+```
+
+Rules and globals apply only to `**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}`. Files named only by their `__tests__` directory are not included. Use scoped rule overrides when mixing test runners.
+
+Prefer explicit imports from `vitest`. If using globals in TypeScript, add `vitest/globals` to the test tsconfig. The `environments: ['vitest']` option declares globals for all JS/TS files without enabling Vitest rules.
+
+When also running Oxlint, use [`@retn0/eslint-config-oxlint`](../eslint-config-oxlint#vitest) to avoid duplicate diagnostics.
 
 ## License
 

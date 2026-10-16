@@ -53,19 +53,9 @@ export default retn0({
 
 ## Vitest
 
-Vitest linting is enabled by default on test files, like the preset's existing JavaScript, TypeScript, and React rules. Continue to use the existing override-only factory:
+Recommended Vitest rules and globals are enabled by default on `**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}`. Files named only by their `__tests__` directory are not included. This pattern also matches other runners, including Node.js, Playwright, and Bun; use scoped rule overrides when mixing runners.
 
-```ts
-import retn0 from '@retn0/oxlint-config';
-
-export default retn0({ ignorePatterns: ['generated/**'] });
-```
-
-There is no separate Vitest options argument. Existing `retn0(...overrides)` calls continue to work, including `retn0({})`. Existing JavaScript, TypeScript, and React behavior is unchanged.
-
-The native Vitest plugin applies the same 17 recommended rules and severities as `@retn0/eslint-config` to `**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}`. Seven additional rules normally enabled by Oxlint's correctness category are explicitly off, so the preset matches ESLint's recommended rule set. Native rule implementations can still produce different diagnostics on some code.
-
-Vitest globals are scoped to the same test files. For TypeScript globals, add `vitest/globals` to the appropriate test tsconfig or use explicit imports. Helpers, config files, and filenames without `.test.` or `.spec.` are outside the scope. The filename pattern also matches other runners such as Playwright and Bun; apply consumer exclusions or overrides as appropriate.
+Prefer explicit imports from `vitest`. If using globals in TypeScript, add `vitest/globals` to the test tsconfig.
 
 When overriding scoped Vitest rules, include the plugin in that override. Oxlint does not inherit it from an earlier override:
 
@@ -81,7 +71,7 @@ export default retn0({
 });
 ```
 
-When also running ESLint, append the existing default config array from [`@retn0/eslint-config-oxlint`](../eslint-config-oxlint#vitest).
+When also running ESLint, use [`@retn0/eslint-config-oxlint`](../eslint-config-oxlint#vitest) to avoid duplicate diagnostics.
 
 ## License
 

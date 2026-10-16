@@ -65,28 +65,11 @@ Then run both tools:
 
 ## Vitest
 
-Oxlint applies recommended Vitest rules to test files by default. Enable `vitest` in ESLint and append the existing compatibility config array.
+The setup above runs recommended Vitest rules through [Oxlint](../oxlint-config#vitest) and disables overlapping ESLint rules.
 
-`oxlint.config.mts`:
+With explicit imports from `vitest`, no additional setup is needed. If using globals, enable [ESLint's `vitest` option](../eslint-config#vitest) to declare them for test files.
 
-```ts
-import retn0 from '@retn0/oxlint-config';
-
-export default retn0();
-```
-
-`eslint.config.mjs`:
-
-```js
-import retn0 from '@retn0/eslint-config';
-import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
-
-export default retn0({ environments: ['node'], vitest: true }, eslintConfigOxlint);
-```
-
-The compatibility config disables overlapping Vitest rules in ESLint on test files, leaving Oxlint responsible for those diagnostics. Continue to run both tools. Their enabled Vitest rule sets match, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
-
-The default export remains the existing config array. No additional factory or options are needed, and existing consumers do not need to change their imports. It can also be appended when ESLint's `vitest` option is off.
+The presets share rule IDs and severities, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
 
 ## License
 
