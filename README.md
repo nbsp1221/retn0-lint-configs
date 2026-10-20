@@ -33,7 +33,7 @@ export default retn0(
   {
     environments: ['node'],
   },
-  eslintConfigOxlint,
+  eslintConfigOxlint(),
 );
 ```
 
@@ -50,7 +50,7 @@ See the [combined setup guide](./packages/eslint-config-oxlint) for pnpm, Yarn, 
 - [Oxlint only](./packages/oxlint-config): Use the Oxlint preset without ESLint.
 - [ESLint only](./packages/eslint-config): Use the ESLint preset without Oxlint or the compatibility config.
 
-Each setup runs a different set of rules.
+Each setup runs a different set of rules. The presets share the `js`, `ts`, `react`, and `vitest` feature options, not their native configuration formats. JavaScript and TypeScript are enabled by default; React and Vitest are opt-in. Pass the same feature choices to the compatibility factory when running both linters.
 
 ### Formatting
 

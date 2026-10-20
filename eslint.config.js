@@ -8,6 +8,6 @@ export default retn0(
     perfectionist: true,
     react: true,
   },
-  eslintConfigOxlint,
+  eslintConfigOxlint({ react: true, vitest: true }),
   globalIgnores(['packages/*/dist/**']),
 );

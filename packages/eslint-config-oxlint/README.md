@@ -47,7 +47,7 @@ export default retn0(
   {
     environments: ['node'],
   },
-  eslintConfigOxlint,
+  eslintConfigOxlint(),
 );
 ```
 
@@ -63,13 +63,30 @@ Then run both tools:
 }
 ```
 
+## Feature selection
+
+This package exports a factory, not a config array. Pass the same `js`, `ts`, `react`, and `vitest` choices used by the Oxlint preset. Defaults are `js: true`, `ts: true`, `react: false`, and `vitest: false`.
+
+For React and Vitest, use `retn0({ react: true, vitest: true })` in your Oxlint config. In your ESLint config:
+
+```js
+export default retn0(
+  { environments: ['node'], react: true, vitest: true },
+  eslintConfigOxlint({ react: true, vitest: true }),
+);
+```
+
+The compatibility layer disables overlapping rules for the selected preset features, including the preset's shared rule preferences. It does not inspect your Oxlint config file or synchronize native overrides. Keep project-specific changes in each tool's native configuration. Put explicit ESLint rule overrides after the compatibility config when a check should remain in ESLint.
+
 ## Vitest
 
-The setup above runs recommended Vitest rules through [Oxlint](../oxlint-config#vitest) and disables overlapping ESLint rules.
-
-With explicit imports from `vitest`, no additional setup is needed. If using globals, enable [ESLint's `vitest` option](../eslint-config#vitest) to declare them for test files.
+With `vitest: true`, recommended Vitest rules run through [Oxlint](../oxlint-config#vitest), and overlapping ESLint rules are disabled only on matching test files. Enable ESLint's `vitest` option as well when using Vitest globals. Explicit imports need no global declarations.
 
 The presets share rule IDs and severities, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
+
+## Migration
+
+Replace the old default config array with a factory call: `eslintConfigOxlint()` for the default features, or `eslintConfigOxlint({ react: true, vitest: true })` to match an Oxlint preset with those integrations enabled.
 
 ## License
 

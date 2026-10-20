@@ -132,14 +132,14 @@ export function Component({ enabled }: { enabled: boolean }) {
   });
 });
 
-describe('oxlint vitest defaults', () => {
+describe('oxlint vitest options', () => {
   afterEach(async () => {
     await project?.cleanup();
     project = undefined;
   });
 
   it('scopes the Vitest plugin and globals to test files', () => {
-    expect(createConfig().overrides).toEqual(
+    expect(createConfig({ vitest: true }).overrides).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           files: ['**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
@@ -150,7 +150,7 @@ describe('oxlint vitest defaults', () => {
     );
   });
 
-  it('reports recommended Vitest rules in test files by default', async () => {
+  it('reports recommended Vitest rules in test files when enabled', async () => {
     project = await createTempProject('oxlint-config-vitest');
     await writeOxlintProject(project, `{ rules: { 'no-undef': 'error' } }`);
     await project.writeFile('fixture.test.js', vitestRecommendedViolations);
@@ -245,7 +245,7 @@ async function writeOxlintProject(project: TempProject, configArgs = ''): Promis
     `
 import retn0 from '@retn0/oxlint-config';
 
-export default retn0(${configArgs});
+export default retn0({ react: true, vitest: true }, ${configArgs});
 `,
   );
 }

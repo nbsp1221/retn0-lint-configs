@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "eslint": "10.12.0",
+    "eslint-plugin-oxlint": "1.87.0",
     "oxlint": "1.87.0"
   },
   "engines": {

@@ -422,7 +422,7 @@ describe('eslint vitest option', () => {
     );
 
     const oxlintRules = Object.fromEntries(
-      (createOxlintConfig().overrides ?? [])
+      (createOxlintConfig({ vitest: true }).overrides ?? [])
         .flatMap((override) => Object.entries(override.rules ?? {}))
         .filter(([ruleId]) => ruleId.startsWith('vitest/'))
         .map(([ruleId, entry]) => [ruleId, severityName(entry)]),

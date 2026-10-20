@@ -51,6 +51,8 @@ export default retn0({
 });
 ```
 
+The `js`, `ts`, `react`, and `vitest` options share their meanings and defaults with `@retn0/oxlint-config`. They select preset rule sets, not which file extensions the parser accepts. For example, `ts: false` removes TypeScript rules but keeps TypeScript parsing available. `environments`, `stylistic`, and `perfectionist` remain ESLint-specific options.
+
 Runtime environments are opt-in:
 
 ```js

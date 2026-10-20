@@ -220,6 +220,9 @@ importers:
       eslint:
         specifier: 10.12.0
         version: 10.12.0
+      eslint-plugin-oxlint:
+        specifier: 1.87.0
+        version: 1.87.0(oxlint@1.87.0(oxlint-tsgolint@7.0.2003))
       oxlint:
         specifier: 1.87.0
         version: 1.87.0(oxlint-tsgolint@7.0.2003)
@@ -282,8 +285,11 @@ importers:
 
   packages/oxlint-config:
     dependencies:
+      eslint-plugin-oxlint:
+        specifier: 1.87.0
+        version: 1.87.0(oxlint@1.87.0(oxlint-tsgolint@7.0.2003))
       oxlint:
-        specifier: ^1.86.0
+        specifier: ~1.87.0
         version: 1.87.0(oxlint-tsgolint@7.0.2003)
       oxlint-tsgolint:
         specifier: '>=7.0.2003'

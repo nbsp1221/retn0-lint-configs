@@ -1,3 +1,3 @@
 import retn0 from '@retn0/oxlint-config';
 
-export default retn0();
+export default retn0({ react: true, vitest: true });
