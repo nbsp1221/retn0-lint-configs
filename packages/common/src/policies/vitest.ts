@@ -142,10 +142,9 @@ export const vitestPolicyLayers: PolicyLayer[] = [
         config: 'error',
       },
 
-      // Oxlint correctness also enables these non-recommended rules. Keep them off to
-      // match the recommended preset in both tools.
-
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/hoisted-apis-on-top.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/hoisted-apis-on-top
        */
@@ -154,6 +153,8 @@ export const vitestPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/no-conditional-tests.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-conditional-tests
        */
@@ -162,6 +163,8 @@ export const vitestPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-snapshot-hint.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/prefer-snapshot-hint
        */
@@ -170,6 +173,8 @@ export const vitestPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-awaited-expect-poll.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/require-awaited-expect-poll
        */
@@ -178,6 +183,8 @@ export const vitestPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-mock-type-parameters.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/require-mock-type-parameters
        */
@@ -186,6 +193,8 @@ export const vitestPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-to-throw-message.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/require-to-throw-message
        */
@@ -194,6 +203,8 @@ export const vitestPolicyLayers: PolicyLayer[] = [
       },
 
       /**
+       * Disable the Oxlint correctness default to match the Vitest recommended preset.
+       *
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/warn-todo.md
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/warn-todo
        */
