@@ -38,13 +38,35 @@ import retn0 from '@retn0/oxlint-config';
 export default retn0();
 ```
 
-Add local overrides after the shared preset:
+Include your TypeScript files in `tsconfig.json`, then run:
+
+```sh
+npx oxlint .
+```
+
+## Configuration
+
+The default options are:
 
 ```ts
-import retn0 from '@retn0/oxlint-config';
+export default retn0({
+  js: true,
+  ts: true,
+  react: false,
+  vitest: false,
+});
+```
 
+- `js`: Enable JavaScript rules.
+- `ts`: Enable TypeScript rules and type-aware linting. Setting this to `false` does not exclude TypeScript files from linting.
+- `react`: Enable React and React Hooks rules.
+- `vitest`: Enable Vitest rules and globals for test files.
+
+Pass local overrides after the options:
+
+```ts
 export default retn0(
-  {},
+  { react: true },
   {
     ignorePatterns: ['generated/**'],
     rules: {
@@ -53,30 +75,6 @@ export default retn0(
   },
 );
 ```
-
-## Feature options
-
-The first argument selects preset features. Subsequent arguments contain native Oxlint configuration overrides:
-
-```ts
-export default retn0(
-  { js: true, ts: true, react: false, vitest: false },
-  { rules: { 'no-console': 'warn' } },
-);
-```
-
-These defaults and option meanings match `@retn0/eslint-config`:
-
-- `js`: Enable the JavaScript rule set, including Oxlint's ESLint core, Oxc, and Unicorn checks.
-- `ts`: Enable TypeScript rules and type-aware linting. Disabling this does not exclude TypeScript files from JavaScript rules or parsing.
-- `react`: Enable React and React Hooks checks.
-- `vitest`: Enable test-scoped Vitest rules and globals.
-
-Disabled features are not added by the preset. Native overrides can explicitly enable rules or plugins afterward. The factories do not translate overrides between ESLint and Oxlint.
-
-### Migration
-
-The factory now accepts feature options before native overrides. Change `retn0({ rules: ... })` to `retn0({}, { rules: ... })`. Add `{ react: true, vitest: true }` to retain the previous enabled integrations. Oxlint 1.87.x is required so the core-rule metadata used by `js: false` matches the linter.
 
 ## Vitest
 

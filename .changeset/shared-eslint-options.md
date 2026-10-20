@@ -2,4 +2,4 @@
 '@retn0/eslint-config': patch
 ---
 
-Clarify the shared feature options and the distinction between disabling TypeScript rules and parsing TypeScript files. Existing ESLint defaults and rule behavior are unchanged.
+Document configuration defaults, feature options, and running ESLint. Existing defaults and rule behavior are unchanged.
