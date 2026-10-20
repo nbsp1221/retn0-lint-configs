@@ -1,11 +1,6 @@
 import type { PolicyLayer } from '../types.js';
 import { testFilePatterns } from './common.js';
 
-/**
- * Vitest rules shared by ESLint (`@vitest/eslint-plugin`) and Oxlint (native `vitest` plugin).
- *
- * The enabled rules mirror `@vitest/eslint-plugin` `configs.recommended`, including its severities.
- */
 export const vitestPolicyLayers: PolicyLayer[] = [
   {
     name: 'vitest',
