@@ -7,5 +7,6 @@ describe('eslint oxlint compatibility exports', () => {
 
     expect(module.default).toBe(eslintConfigOxlint);
     expect(Array.isArray(eslintConfigOxlint)).toBe(true);
+    expect(module).not.toHaveProperty('createConfig');
   });
 });

@@ -1,3 +1,4 @@
+import type { OxlintOverride } from 'oxlint';
 import {
   type PolicyLayer,
   type RulePolicies,
@@ -83,6 +84,19 @@ describe('lint policy layer adapters', () => {
         },
       },
     ]);
+  });
+
+  it('applies scoped Oxlint settings while preserving policy rules and file order', () => {
+    const options = {
+      plugins: ['vitest'],
+      env: { vitest: true },
+    } satisfies Pick<OxlintOverride, 'plugins' | 'env'>;
+    const defaults = toOxlintOverrides(layers);
+    const overrides = toOxlintOverrides(layers, options);
+
+    expect(overrides).toEqual(defaults.map((override) => ({ ...options, ...override })));
+    expect(toOxlintOverrides(layers)).toEqual(defaults);
+    expect(options).toEqual({ plugins: ['vitest'], env: { vitest: true } });
   });
 
   it('creates file-scoped ESLint disables for Oxlint compatibility', () => {

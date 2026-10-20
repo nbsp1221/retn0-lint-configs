@@ -1,5 +1,6 @@
+import type { OxlintConfig } from 'oxlint';
 import createConfig, { createConfig as namedCreateConfig } from '@retn0/oxlint-config';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 
 describe('oxlint config exports', () => {
   it('exports the default factory as the named factory', async () => {
@@ -31,6 +32,19 @@ describe('oxlint config exports', () => {
     expect(config.plugins).toEqual(
       expect.arrayContaining(['oxc', 'react', 'typescript', 'unicorn']),
     );
+    expect(config.rules).toMatchObject({ 'no-console': 'warn' });
+  });
+
+  it('keeps the override-only factory signature and accepts multiple overrides', () => {
+    expectTypeOf(createConfig).parameters.toEqualTypeOf<OxlintConfig[]>();
+
+    const config = createConfig(
+      { ignorePatterns: ['generated/**'] },
+      { rules: { 'no-console': 'warn' } },
+    );
+
+    expect(config.ignorePatterns).toContain('generated/**');
+    expect(createConfig({})).toEqual(createConfig());
     expect(config.rules).toMatchObject({ 'no-console': 'warn' });
   });
 });

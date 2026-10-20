@@ -7,6 +7,7 @@ import { reactHooksConfigs } from './configs/react-hooks.js';
 import { reactConfigs } from './configs/react.js';
 import { stylisticConfigs } from './configs/stylistic.js';
 import { tsConfigs } from './configs/ts.js';
+import { vitestConfigs } from './configs/vitest.js';
 
 export type { RuntimeEnvironment };
 
@@ -19,6 +20,7 @@ export interface ConfigOptions {
   stylistic?: boolean;
   react?: boolean;
   perfectionist?: boolean;
+  vitest?: boolean;
 }
 
 export function createConfig(
@@ -32,6 +34,7 @@ export function createConfig(
     stylistic = true,
     react = false,
     perfectionist = false,
+    vitest = false,
   } = options;
 
   const config = [
@@ -41,6 +44,7 @@ export function createConfig(
     ...(stylistic && (js || ts) ? stylisticConfigs : []),
     ...(react ? [...reactConfigs, ...reactHooksConfigs] : []),
     ...(perfectionist ? perfectionistConfigs : []),
+    ...(vitest ? vitestConfigs : []),
     ...overrides.flat(),
   ] as Linter.Config[];
 

@@ -63,6 +63,14 @@ Then run both tools:
 }
 ```
 
+## Vitest
+
+The setup above runs recommended Vitest rules through [Oxlint](../oxlint-config#vitest) and disables overlapping ESLint rules.
+
+With explicit imports from `vitest`, no additional setup is needed. If using globals, enable [ESLint's `vitest` option](../eslint-config#vitest) to declare them for test files.
+
+The presets share rule IDs and severities, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
+
 ## License
 
 MIT © [nbsp1221](https://github.com/nbsp1221)
