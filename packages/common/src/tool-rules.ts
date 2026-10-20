@@ -62,8 +62,12 @@ export function toEslintDisableConfigs(
   }));
 }
 
-export function toOxlintOverrides(layers: readonly PolicyLayer[]): OxlintOverride[] {
+export function toOxlintOverrides(
+  layers: readonly PolicyLayer[],
+  options: Pick<OxlintOverride, 'plugins' | 'env'> = {},
+): OxlintOverride[] {
   return layers.map((layer) => ({
+    ...options,
     files: [...layer.files],
     rules: resolveRules(layer.rules, 'oxlint'),
   }));

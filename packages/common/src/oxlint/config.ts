@@ -1,4 +1,4 @@
-import type { OxlintConfig, OxlintOverride } from 'oxlint';
+import type { OxlintConfig } from 'oxlint';
 import type { RuleConfig } from '../types.js';
 import { jsPolicyLayers } from '../policies/js.js';
 import { reactPolicyLayers } from '../policies/react.js';
@@ -29,11 +29,10 @@ export function createOxlintConfig(...overrides: OxlintConfig[]) {
       ...toOxlintOverrides(jsPolicyLayers),
       ...toOxlintOverrides(tsPolicyLayers),
       ...toOxlintOverrides(reactPolicyLayers),
-      ...toOxlintOverrides(vitestPolicyLayers).map((override): OxlintOverride => ({
-        ...override,
+      ...toOxlintOverrides(vitestPolicyLayers, {
         plugins: ['vitest'],
         env: { vitest: true },
-      })),
+      }),
     ],
   } satisfies OxlintConfig;
 
