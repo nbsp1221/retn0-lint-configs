@@ -45,7 +45,6 @@ describe('oxlint config exports', () => {
 
     expect(config.ignorePatterns).toContain('generated/**');
     expect(createConfig({})).toEqual(createConfig());
-
     expect(config.rules).toMatchObject({ 'no-console': 'warn' });
   });
 });

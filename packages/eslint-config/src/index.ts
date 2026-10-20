@@ -20,7 +20,6 @@ export interface ConfigOptions {
   stylistic?: boolean;
   react?: boolean;
   perfectionist?: boolean;
-  /** Enable Vitest recommended rules and globals for test files. Defaults to false. */
   vitest?: boolean;
 }
 

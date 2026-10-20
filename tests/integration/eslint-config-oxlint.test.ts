@@ -187,7 +187,7 @@ export function parse(value: string | number): number { return Number(value); }
       combinedResults.flatMap((result) => result.messages.filter((message) => message.fatal)),
     ).toEqual([]);
     expect(unsafeResult.exitCode).toBe(1);
-    // Vitest supports an optional assertion message; the pinned rule defaults to maxArgs: 1.
+    // The pinned rule rejects a non-literal assertion message.
     // oxlint-disable-next-line vitest/valid-expect
     expect(safeResult.exitCode, safeResult.stdout).toBe(0);
 
@@ -578,6 +578,7 @@ async function writeVitestProject(project: TempProject, vitest: boolean): Promis
     `
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+
 export default retn0({ js: false, ts: false, stylistic: false, vitest: ${vitest} }, eslintConfigOxlint);
 `,
   );
@@ -585,6 +586,7 @@ export default retn0({ js: false, ts: false, stylistic: false, vitest: ${vitest}
     'oxlint.config.mts',
     `
 import retn0 from '@retn0/oxlint-config';
+
 export default retn0();
 `,
   );
