@@ -28,12 +28,13 @@ Create `eslint.config.mjs`:
 ```js
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import oxlintConfig from './oxlint.config.mts';
 
 export default retn0(
   {
     environments: ['node'],
   },
-  eslintConfigOxlint(),
+  eslintConfigOxlint(oxlintConfig),
 );
 ```
 

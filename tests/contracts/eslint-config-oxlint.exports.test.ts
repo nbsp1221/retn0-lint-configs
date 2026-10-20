@@ -6,7 +6,7 @@ describe('eslint oxlint compatibility exports', () => {
     const module = await import('@retn0/eslint-config-oxlint');
 
     expect(module.default).toBe(eslintConfigOxlint);
-    expect(Array.isArray(eslintConfigOxlint())).toBe(true);
+    expect(Array.isArray(eslintConfigOxlint({}))).toBe(true);
     expect(module.createConfig).toBe(eslintConfigOxlint);
   });
 });

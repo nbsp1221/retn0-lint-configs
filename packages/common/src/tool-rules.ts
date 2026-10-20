@@ -28,18 +28,6 @@ function resolveRules(policies: RulePolicies, tool: ToolName): Record<string, Ru
   return rules;
 }
 
-function disableRules(policies: RulePolicies, tool: ToolName): Record<string, 'off'> {
-  const rules: Record<string, 'off'> = {};
-
-  for (const [policyId, policy] of Object.entries(policies)) {
-    const rule = resolveRule(policyId, policy, tool);
-
-    rules[rule.id] = 'off';
-  }
-
-  return rules;
-}
-
 export function toEslintConfigs(
   layers: readonly PolicyLayer[],
   namePrefix = 'retn0',
@@ -48,17 +36,6 @@ export function toEslintConfigs(
     name: `${namePrefix}/${layer.name}`,
     files: [...layer.files],
     rules: resolveRules(layer.rules, 'eslint'),
-  }));
-}
-
-export function toEslintDisableConfigs(
-  layers: readonly PolicyLayer[],
-  namePrefix = 'retn0/oxlint',
-): Linter.Config[] {
-  return layers.map((layer) => ({
-    name: `${namePrefix}/${layer.name}`,
-    files: [...layer.files],
-    rules: disableRules(layer.rules, 'eslint'),
   }));
 }
 

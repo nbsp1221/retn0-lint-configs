@@ -41,7 +41,9 @@ describe('shared feature options', () => {
 
     expect(createEslintConfig()).toEqual(createEslintConfig(defaults));
     expect(createOxlintConfig()).toEqual(createOxlintConfig(defaults));
-    expect(createCompatConfig()).toEqual(createCompatConfig(defaults));
+    expect(createCompatConfig(createOxlintConfig())).toEqual(
+      createCompatConfig(createOxlintConfig(defaults)),
+    );
     expect(createOxlintConfig(options)).toEqual(createOxlintConfig());
     expect(options).toEqual({ react: undefined, vitest: undefined });
     expect(createOxlintConfig().plugins).not.toContain('react');
@@ -77,7 +79,7 @@ describe('shared feature options', () => {
         overrideConfigFile: true,
         overrideConfig: createEslintConfig(
           { ...options, stylistic: false },
-          createCompatConfig(options),
+          createCompatConfig(createOxlintConfig(options)),
         ),
       });
       const [combinedResult] = await combined.lintFiles(['fixture.test.ts']);
@@ -104,7 +106,7 @@ describe('shared feature options', () => {
       overrideConfigFile: true,
       overrideConfig: createEslintConfig(
         { js: false, ts: false, stylistic: false, vitest: true },
-        createCompatConfig({ js: false, ts: false }),
+        createCompatConfig(createOxlintConfig({ js: false, ts: false })),
       ),
     });
     const [result] = await eslint.lintText("it.only('focused', () => { expect(1).toBe(1); });", {

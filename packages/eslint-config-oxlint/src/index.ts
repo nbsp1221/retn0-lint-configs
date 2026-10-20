@@ -1,31 +1,50 @@
-import type { LintOptions } from '@retn0/common';
 import type { Linter } from 'eslint';
-import {
-  createOxlintConfig,
-  jsPolicyLayers,
-  reactPolicyLayers,
-  resolveLintOptions,
-  toEslintDisableConfigs,
-  tsPolicyLayers,
-} from '@retn0/common';
+import type { OxlintConfig } from 'oxlint';
 import oxlint from 'eslint-plugin-oxlint';
-import { defineConfig } from 'eslint/config';
 
 type OxlintCompatConfig = Parameters<typeof oxlint.buildFromOxlintConfig>[0];
 
-export type ConfigOptions = LintOptions;
+const reactRuleAliases: Record<string, string> = {
+  'react-hooks/exhaustive-deps': '@eslint-react/exhaustive-deps',
+  'react-hooks/rules-of-hooks': '@eslint-react/rules-of-hooks',
+  'react/jsx-no-comment-textnodes': '@eslint-react/jsx-no-comment-textnodes',
+  'react/no-namespace': '@eslint-react/jsx-no-namespace',
+  'react/no-unstable-nested-components': '@eslint-react/no-nested-component-definitions',
+};
 
-export function createConfig(options: ConfigOptions = {}): Linter.Config[] {
-  const { js, ts, react } = resolveLintOptions(options);
+export function createConfig(config: OxlintConfig): Linter.Config[] {
+  const input = cloneConfig(config);
 
-  return defineConfig([
-    // Oxlint's interfaces lack the index signatures required by this plugin's config types.
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-    ...oxlint.buildFromOxlintConfig(createOxlintConfig(options) as OxlintCompatConfig),
-    ...(js ? toEslintDisableConfigs(jsPolicyLayers) : []),
-    ...(react ? toEslintDisableConfigs(reactPolicyLayers) : []),
-    ...(ts ? toEslintDisableConfigs(tsPolicyLayers) : []),
-  ]);
+  // Oxlint's interfaces lack the index signatures required by this plugin's config types.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  const compatInput = input as OxlintCompatConfig;
+  const configs = oxlint.buildFromOxlintConfig(compatInput, { withNursery: true });
+
+  return configs.map((entry) => {
+    if (!entry.rules) {
+      return entry;
+    }
+
+    const rules = { ...entry.rules };
+
+    for (const [ruleId, alias] of Object.entries(reactRuleAliases)) {
+      if (rules[ruleId] === 'off') {
+        rules[alias] = 'off';
+      }
+    }
+
+    return { ...entry, rules };
+  });
+}
+
+// The upstream adapter mutates plugin/override arrays and nested extends objects.
+function cloneConfig(config: OxlintConfig): OxlintConfig {
+  return {
+    ...config,
+    plugins: config.plugins ? [...config.plugins] : undefined,
+    overrides: config.overrides ? [...config.overrides] : undefined,
+    extends: config.extends?.map(cloneConfig),
+  };
 }
 
 export default createConfig;

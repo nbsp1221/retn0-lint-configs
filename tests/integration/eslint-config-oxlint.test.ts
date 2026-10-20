@@ -1,5 +1,6 @@
 import createConfig from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import createOxlintConfig from '@retn0/oxlint-config';
 import { ESLint } from 'eslint';
 import ts from 'typescript';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -22,6 +23,7 @@ describe('eslint oxlint compatibility behavior', () => {
       `
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import createOxlintConfig from '@retn0/oxlint-config';
 
 export default retn0(
   {
@@ -30,7 +32,7 @@ export default retn0(
     perfectionist: false,
     react: false,
   },
-  eslintConfigOxlint(),
+  eslintConfigOxlint(createOxlintConfig()),
 );
 `,
     );
@@ -174,7 +176,7 @@ export function parse(value: string | number): number { return Number(value); }
     const combined = new ESLint({
       cwd: project.root,
       overrideConfigFile: true,
-      overrideConfig: createConfig(options, eslintConfigOxlint()),
+      overrideConfig: createConfig(options, eslintConfigOxlint(createOxlintConfig())),
     });
     const combinedResults = await combined.lintFiles(['unsafe.ts', 'safe.ts']);
     const unsafeResult = await project.runBin('oxlint', ['--format=json', 'unsafe.ts']);
@@ -280,7 +282,7 @@ export declare namespace Library {
           fix: true,
           overrideConfig: createConfig(
             { react: false },
-            mode === 'combined' ? eslintConfigOxlint() : [],
+            mode === 'combined' ? eslintConfigOxlint(createOxlintConfig()) : [],
             {
               // Isolate the visibility regression from the separate namespace style policy.
               rules: { '@typescript-eslint/no-namespace': 'off' },
@@ -358,7 +360,7 @@ export function widen(value: string): string | number {
     const combined = new ESLint({
       cwd: project.root,
       overrideConfigFile: true,
-      overrideConfig: createConfig(options, eslintConfigOxlint()),
+      overrideConfig: createConfig(options, eslintConfigOxlint(createOxlintConfig())),
     });
     const combinedResults = await combined.lintFiles(['unsafe.ts', 'safe.ts']);
 
@@ -424,7 +426,7 @@ export class Service {
     const combined = new ESLint({
       cwd: project.root,
       overrideConfigFile: true,
-      overrideConfig: createConfig(options, eslintConfigOxlint()),
+      overrideConfig: createConfig(options, eslintConfigOxlint(createOxlintConfig())),
     });
     const combinedResults = await combined.lintFiles(['unsafe.ts', 'safe.ts']);
 
@@ -499,7 +501,7 @@ export function validate(value: string): boolean {
     const combined = new ESLint({
       cwd: project.root,
       overrideConfigFile: true,
-      overrideConfig: createConfig(options, eslintConfigOxlint()),
+      overrideConfig: createConfig(options, eslintConfigOxlint(createOxlintConfig())),
     });
     const combinedResults = await combined.lintFiles(['unnecessary.ts', 'necessary.ts']);
 
@@ -536,7 +538,7 @@ export function validate(value: string): boolean {
           files: ['**/*.test.js'],
           rules: { 'vitest/require-to-throw-message': 'error' },
         },
-        eslintConfigOxlint({ vitest: true }),
+        eslintConfigOxlint(createOxlintConfig({ vitest: true })),
       ),
     });
     const [result] = await eslint.lintText(
@@ -578,8 +580,9 @@ async function writeVitestProject(project: TempProject, vitest: boolean): Promis
     `
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import createOxlintConfig from '@retn0/oxlint-config';
 
-export default retn0({ js: false, ts: false, stylistic: false, vitest: ${vitest} }, eslintConfigOxlint({ vitest: true }));
+export default retn0({ js: false, ts: false, stylistic: false, vitest: ${vitest} }, eslintConfigOxlint(createOxlintConfig({ vitest: true })));
 `,
   );
   await project.writeFile(

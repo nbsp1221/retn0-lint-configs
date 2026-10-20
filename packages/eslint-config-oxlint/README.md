@@ -42,12 +42,13 @@ Create `eslint.config.mjs` and append the compatibility config after the base co
 ```js
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import oxlintConfig from './oxlint.config.mts';
 
 export default retn0(
   {
     environments: ['node'],
   },
-  eslintConfigOxlint(),
+  eslintConfigOxlint(oxlintConfig),
 );
 ```
 
@@ -65,7 +66,7 @@ Then run both tools:
 
 ## Configuration
 
-JavaScript and TypeScript rules are enabled by default. React and Vitest are opt-in. Pass the same feature options to the Oxlint preset and the compatibility config.
+JavaScript and TypeScript rules are enabled by default. React and Vitest are opt-in. The compatibility config reads the Oxlint configuration you pass to it.
 
 For a React project using Vitest, configure `oxlint.config.mts`:
 
@@ -80,14 +81,13 @@ Then configure `eslint.config.mjs`:
 ```js
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import oxlintConfig from './oxlint.config.mts';
 
 export default retn0(
   { environments: ['browser'], react: true, vitest: true },
-  eslintConfigOxlint({ react: true, vitest: true }),
+  eslintConfigOxlint(oxlintConfig),
 );
 ```
-
-Set `js: false` or `ts: false` in both the Oxlint preset and the compatibility config to leave those rules to ESLint.
 
 ### Custom rules
 
@@ -102,10 +102,12 @@ export default retn0({}, { rules: { 'no-console': 'off' } });
 Then enable it after the compatibility config in `eslint.config.mjs`:
 
 ```js
-export default retn0({ environments: ['node'] }, eslintConfigOxlint(), {
+export default retn0({ environments: ['node'] }, eslintConfigOxlint(oxlintConfig), {
   rules: { 'no-console': 'warn' },
 });
 ```
+
+Oxlint ignore patterns also apply to ESLint. For file-specific rule exceptions, place explicit ESLint overrides after the compatibility config.
 
 ## Vitest
 

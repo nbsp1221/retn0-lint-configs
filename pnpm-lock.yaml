@@ -272,10 +272,6 @@ importers:
       oxlint:
         specifier: ~1.87.0
         version: 1.87.0(oxlint-tsgolint@7.0.2003)
-    devDependencies:
-      '@retn0/common':
-        specifier: workspace:*
-        version: link:../common
 
   packages/oxfmt-config:
     dependencies:

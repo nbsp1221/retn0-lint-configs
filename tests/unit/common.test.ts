@@ -3,7 +3,6 @@ import {
   type PolicyLayer,
   type RulePolicies,
   toEslintConfigs,
-  toEslintDisableConfigs,
   toOxlintOverrides,
 } from '@retn0/common';
 import { describe, expect, it } from 'vitest';
@@ -97,26 +96,5 @@ describe('lint policy layer adapters', () => {
     expect(overrides).toEqual(defaults.map((override) => ({ ...options, ...override })));
     expect(toOxlintOverrides(layers)).toEqual(defaults);
     expect(options).toEqual({ plugins: ['vitest'], env: { vitest: true } });
-  });
-
-  it('creates file-scoped ESLint disables for Oxlint compatibility', () => {
-    expect(toEslintDisableConfigs(layers)).toEqual([
-      {
-        name: 'retn0/oxlint/shared',
-        files: ['**/*.js'],
-        rules: {
-          'shared': 'off',
-          'shared-name': 'off',
-          'eslint/mapped': 'off',
-        },
-      },
-      {
-        name: 'retn0/oxlint/tests',
-        files: ['**/*.test.js'],
-        rules: {
-          shared: 'off',
-        },
-      },
-    ]);
   });
 });
