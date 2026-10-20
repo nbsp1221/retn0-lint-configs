@@ -1,3 +1,4 @@
+import createConfig from '@retn0/oxlint-config';
 import { afterEach, describe, expect, it } from 'vitest';
 import { type TempProject, createTempProject } from '../helpers/temp-project.js';
 import {
@@ -135,6 +136,18 @@ describe('oxlint vitest defaults', () => {
   afterEach(async () => {
     await project?.cleanup();
     project = undefined;
+  });
+
+  it('scopes the Vitest plugin and globals to test files', () => {
+    expect(createConfig().overrides).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          files: ['**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
+          plugins: ['vitest'],
+          env: { vitest: true },
+        }),
+      ]),
+    );
   });
 
   it('reports recommended Vitest rules in test files by default', async () => {

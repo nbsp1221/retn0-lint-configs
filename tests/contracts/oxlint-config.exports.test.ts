@@ -47,9 +47,5 @@ describe('oxlint config exports', () => {
     expect(createConfig({})).toEqual(createConfig());
 
     expect(config.rules).toMatchObject({ 'no-console': 'warn' });
-    expect(config.overrides?.at(-1)).toMatchObject({
-      plugins: ['vitest'],
-      env: { vitest: true },
-    });
   });
 });
