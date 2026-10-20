@@ -4,8 +4,6 @@ import { testFilePatterns } from './common.js';
 /**
  * Vitest rules shared by ESLint (`@vitest/eslint-plugin`) and Oxlint (native `vitest` plugin).
  *
- * ESLint is the primary reference; Oxlint links cover tool-specific options and diagnostics.
- *
  * The enabled rules mirror `@vitest/eslint-plugin` `configs.recommended`, including its severities.
  */
 export const vitestPolicyLayers: PolicyLayer[] = [
@@ -23,6 +21,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/no-commented-out-tests.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-commented-out-tests
        */
       'vitest/no-commented-out-tests': {
         config: 'error',
@@ -38,6 +37,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/no-disabled-tests.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-disabled-tests
        */
       'vitest/no-disabled-tests': {
         config: 'warn',
@@ -77,6 +77,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/no-mocks-import.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-mocks-import
        */
       'vitest/no-mocks-import': {
         config: 'error',
@@ -92,6 +93,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/no-unneeded-async-expect-function.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-unneeded-async-expect-function
        */
       'vitest/no-unneeded-async-expect-function': {
         config: 'error',
@@ -99,6 +101,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-called-exactly-once-with.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/prefer-called-exactly-once-with
        */
       'vitest/prefer-called-exactly-once-with': {
         config: 'error',
@@ -106,6 +109,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-local-test-context-for-concurrent-snapshots.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/require-local-test-context-for-concurrent-snapshots
        */
       'vitest/require-local-test-context-for-concurrent-snapshots': {
         config: 'error',
@@ -113,6 +117,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/valid-describe-callback.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/valid-describe-callback
        */
       'vitest/valid-describe-callback': {
         config: 'error',
@@ -128,6 +133,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/valid-expect-in-promise.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/valid-expect-in-promise
        */
       'vitest/valid-expect-in-promise': {
         config: 'error',
@@ -146,6 +152,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/hoisted-apis-on-top.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/hoisted-apis-on-top
        */
       'vitest/hoisted-apis-on-top': {
         config: 'off',
@@ -153,6 +160,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/no-conditional-tests.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-conditional-tests
        */
       'vitest/no-conditional-tests': {
         config: 'off',
@@ -160,6 +168,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-snapshot-hint.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/prefer-snapshot-hint
        */
       'vitest/prefer-snapshot-hint': {
         config: 'off',
@@ -167,6 +176,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-awaited-expect-poll.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/require-awaited-expect-poll
        */
       'vitest/require-awaited-expect-poll': {
         config: 'off',
@@ -182,6 +192,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-to-throw-message.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/require-to-throw-message
        */
       'vitest/require-to-throw-message': {
         config: 'off',
@@ -189,6 +200,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
 
       /**
        * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/warn-todo.md
+       * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/warn-todo
        */
       'vitest/warn-todo': {
         config: 'off',
