@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { type TempProject, createTempProject } from '../helpers/temp-project.js';
 import {
   oxlintCodeToRuleId,
+  validExpectCases,
   vitestCandidateRuleIds,
   vitestCandidateViolations,
   vitestRecommendedRuleIds,
@@ -136,6 +137,19 @@ describe('oxlint vitest options', () => {
   afterEach(async () => {
     await project?.cleanup();
     project = undefined;
+  });
+
+  it.each(validExpectCases)('validates expect usage: $code', async ({ code, errors }) => {
+    project = await createTempProject('oxlint-config-valid-expect');
+    await writeOxlintProject(project);
+    await project.writeFile('fixture.test.js', `it('response', () => { ${code} });`);
+
+    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
+    const diagnostics = diagnosticEntries(result.stdout);
+
+    expect(
+      diagnostics.filter(({ code: ruleCode }) => ruleCode === 'vitest(valid-expect)'),
+    ).toHaveLength(errors);
   });
 
   it('scopes the Vitest plugin and globals to test files', () => {
