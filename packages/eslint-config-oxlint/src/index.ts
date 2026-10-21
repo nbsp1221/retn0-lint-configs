@@ -9,8 +9,6 @@ import {
 import oxlint from 'eslint-plugin-oxlint';
 import { toEslintCompatRuleMappings } from './rule-mappings.js';
 
-type OxlintCompatConfig = Parameters<typeof oxlint.buildFromOxlintConfig>[0];
-
 const ruleMappings = toEslintCompatRuleMappings([
   ...jsPolicyLayers,
   ...tsPolicyLayers,
@@ -21,10 +19,7 @@ const ruleMappings = toEslintCompatRuleMappings([
 export function createConfig(config: OxlintConfig): Linter.Config[] {
   const input = cloneConfig(config);
 
-  // Oxlint's interfaces lack the index signatures required by this plugin's config types.
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  const compatInput = input as OxlintCompatConfig;
-  const configs = oxlint.buildFromOxlintConfig(compatInput, { withNursery: true });
+  const configs = oxlint.buildFromOxlintConfig(input, { withNursery: true });
 
   return configs.map((entry) => {
     if (!entry.rules) {

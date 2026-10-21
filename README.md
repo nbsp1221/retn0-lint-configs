@@ -44,6 +44,8 @@ Include your TypeScript source and config files in `tsconfig.json`, then run:
 npx oxlint . && npx eslint .
 ```
 
+Keep `node_modules/` in your project's `.gitignore`. Without a `.gitignore`, add `--ignore-pattern 'node_modules/**'` to the Oxlint command.
+
 See the [combined setup guide](./packages/eslint-config-oxlint) for pnpm, Yarn, and tool requirements.
 
 ### Use one linter
@@ -74,5 +76,5 @@ This repository contains four public packages:
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.72.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.87.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.89.x
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher

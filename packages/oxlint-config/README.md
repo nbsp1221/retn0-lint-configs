@@ -8,7 +8,7 @@ My personal Oxlint configuration.
 ## Requirements
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.87.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.89.x
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
 
 ## Installation
@@ -43,6 +43,8 @@ Include your TypeScript files in `tsconfig.json`, then run:
 ```sh
 npx oxlint .
 ```
+
+Keep `node_modules/` in your project's `.gitignore`. Without a `.gitignore`, add `--ignore-pattern 'node_modules/**'` to the Oxlint command.
 
 ## Configuration
 
