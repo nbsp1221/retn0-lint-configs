@@ -116,6 +116,55 @@ describe('shared feature options', () => {
     expect(result.messages.map(({ ruleId }) => ruleId)).toContain('vitest/no-focused-tests');
   });
 
+  it.each([false, true])(
+    'preserves React diagnostics with Oxlint React enabled: %s',
+    async (react) => {
+      project = await createTempProject('react-compatibility');
+      await project.writeFile(
+        'fixture.jsx',
+        `
+import { useEffect, useState } from 'react';
+export function Component({ enabled, value }) {
+  if (enabled) { useState(0); }
+  useEffect(() => { console.log(value); }, []);
+  function Child() { return <span />; }
+  return <div>// comment
+    <svg:path /><Child />
+  </div>;
+}
+`,
+      );
+      const oxlintConfig = createOxlintConfig({ js: false, ts: false, react });
+      await project.writeFile('.oxlintrc.json', JSON.stringify(oxlintConfig));
+      const eslint = new ESLint({
+        cwd: project.root,
+        overrideConfigFile: true,
+        overrideConfig: createEslintConfig(
+          { js: false, ts: false, react: true, stylistic: false },
+          createCompatConfig(oxlintConfig),
+        ),
+      });
+      const [result] = await eslint.lintFiles(['fixture.jsx']);
+      const oxlint = await project.runBin('oxlint', ['--format=json', 'fixture.jsx']);
+      const eslintIds = result.messages.map(({ ruleId }) => ruleId);
+      const rules = [
+        ['@eslint-react/exhaustive-deps', 'react-hooks(exhaustive-deps)'],
+        ['@eslint-react/rules-of-hooks', 'react-hooks(rules-of-hooks)'],
+        ['@eslint-react/jsx-no-comment-textnodes', 'react(jsx-no-comment-textnodes)'],
+        ['@eslint-react/jsx-no-namespace', 'react(no-namespace)'],
+        ['@eslint-react/no-nested-component-definitions', 'react(no-unstable-nested-components)'],
+      ];
+
+      expect(result.messages.filter(({ fatal }) => fatal)).toEqual([]);
+      expect(oxlint.stderr).toBe('');
+
+      for (const [eslintRule, oxlintRule] of rules) {
+        expect(eslintIds.includes(eslintRule)).toBe(!react);
+        expect(oxlint.stdout.includes(oxlintRule)).toBe(react);
+      }
+    },
+  );
+
   it('keeps all features disabled and leaves native overrides under caller control', async () => {
     project = await createTempProject('feature-options-overrides');
     const options = { js: false, ts: false, react: false, vitest: false };

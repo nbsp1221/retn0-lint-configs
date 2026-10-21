@@ -5,4 +5,7 @@ export default defineConfig({
   clean: true,
   fixedExtension: false,
   format: ['esm'],
+  deps: {
+    alwaysBundle: ['@retn0/common'],
+  },
 });

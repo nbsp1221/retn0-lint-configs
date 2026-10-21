@@ -1,16 +1,22 @@
 import type { Linter } from 'eslint';
 import type { OxlintConfig } from 'oxlint';
+import {
+  jsPolicyLayers,
+  reactPolicyLayers,
+  tsPolicyLayers,
+  vitestPolicyLayers,
+} from '@retn0/common';
 import oxlint from 'eslint-plugin-oxlint';
+import { toEslintCompatRuleMappings } from './rule-mappings.js';
 
 type OxlintCompatConfig = Parameters<typeof oxlint.buildFromOxlintConfig>[0];
 
-const reactRuleAliases: Record<string, string> = {
-  'react-hooks/exhaustive-deps': '@eslint-react/exhaustive-deps',
-  'react-hooks/rules-of-hooks': '@eslint-react/rules-of-hooks',
-  'react/jsx-no-comment-textnodes': '@eslint-react/jsx-no-comment-textnodes',
-  'react/no-namespace': '@eslint-react/jsx-no-namespace',
-  'react/no-unstable-nested-components': '@eslint-react/no-nested-component-definitions',
-};
+const ruleMappings = toEslintCompatRuleMappings([
+  ...jsPolicyLayers,
+  ...tsPolicyLayers,
+  ...reactPolicyLayers,
+  ...vitestPolicyLayers,
+]);
 
 export function createConfig(config: OxlintConfig): Linter.Config[] {
   const input = cloneConfig(config);
@@ -27,7 +33,7 @@ export function createConfig(config: OxlintConfig): Linter.Config[] {
 
     const rules = { ...entry.rules };
 
-    for (const [ruleId, alias] of Object.entries(reactRuleAliases)) {
+    for (const [ruleId, alias] of ruleMappings) {
       if (rules[ruleId] === 'off') {
         rules[alias] = 'off';
       }

@@ -7,7 +7,7 @@ interface ResolvedRule {
   readonly config: RuleConfig;
 }
 
-function resolveRule(policyId: string, policy: RulePolicy, tool: ToolName): ResolvedRule {
+export function resolveRule(policyId: string, policy: RulePolicy, tool: ToolName): ResolvedRule {
   const mapping = policy.tools?.[tool];
 
   return {
