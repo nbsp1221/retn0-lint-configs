@@ -64,11 +64,9 @@ Then run both tools:
 }
 ```
 
-Keep `node_modules/` in your project's `.gitignore`. Without a `.gitignore`, add `--ignore-pattern 'node_modules/**'` to the Oxlint command.
-
 ## Configuration
 
-JavaScript and TypeScript rules are enabled by default. React and Vitest are opt-in. The compatibility config reads the Oxlint configuration you pass to it.
+JavaScript and TypeScript rules are enabled by default. React and Vitest are opt-in.
 
 For a React project using Vitest, configure `oxlint.config.mts`:
 
@@ -108,8 +106,6 @@ export default retn0({ environments: ['node'] }, eslintConfigOxlint(oxlintConfig
   rules: { 'no-console': 'warn' },
 });
 ```
-
-Oxlint ignore patterns also apply to ESLint. For file-specific rule exceptions, place explicit ESLint overrides after the compatibility config.
 
 ## Vitest
 

@@ -132,20 +132,6 @@ export function Component({ enabled }: { enabled: boolean }) {
     expect(result.stdout).toContain('index.ts');
     expect(result.stdout).not.toContain('node_modules/');
   });
-
-  // Known upstream limitation: nested config discovery bypasses root ignorePatterns.
-  // https://github.com/oxc-project/oxc/issues/27270
-  it.todo('excludes dependency configs without a project gitignore', async () => {
-    project = await createTempProject('oxlint-config-no-gitignore');
-    await writeOxlintProject(project);
-    await project.writeFile('index.ts', 'const value = 1;\n');
-
-    const result = await project.runBin('oxlint', ['--debug=files', '.']);
-
-    expect(result.exitCode).toBe(0);
-    expect(result.stdout).toContain('index.ts');
-    expect(result.stdout).not.toContain('node_modules/');
-  });
 });
 
 describe('oxlint vitest options', () => {

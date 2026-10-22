@@ -44,8 +44,6 @@ Include your TypeScript files in `tsconfig.json`, then run:
 npx oxlint .
 ```
 
-Keep `node_modules/` in your project's `.gitignore`. Without a `.gitignore`, add `--ignore-pattern 'node_modules/**'` to the Oxlint command.
-
 ## Configuration
 
 The default options are:
