@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { type TempProject, createTempProject } from '../helpers/temp-project.js';
 import {
   oxlintCodeToRuleId,
+  validExpectCases,
   vitestCandidateRuleIds,
   vitestCandidateViolations,
   vitestRecommendedRuleIds,
@@ -119,9 +120,10 @@ export function Component({ enabled }: { enabled: boolean }) {
     ).toEqual([]);
   });
 
-  it('does not lint dependency files when running from the project root', async () => {
+  it('excludes dependencies when the project gitignore lists node_modules', async () => {
     project = await createTempProject('oxlint-config-ignores');
     await writeOxlintProject(project);
+    await project.writeFile('.gitignore', 'node_modules/\n');
     await project.writeFile('index.ts', 'const value = 1;\n');
 
     const result = await project.runBin('oxlint', ['--debug=files', '.']);
@@ -132,14 +134,27 @@ export function Component({ enabled }: { enabled: boolean }) {
   });
 });
 
-describe('oxlint vitest defaults', () => {
+describe('oxlint vitest options', () => {
   afterEach(async () => {
     await project?.cleanup();
     project = undefined;
   });
 
+  it.each(validExpectCases)('validates expect usage: $code', async ({ code, errors }) => {
+    project = await createTempProject('oxlint-config-valid-expect');
+    await writeOxlintProject(project);
+    await project.writeFile('fixture.test.js', `it('response', () => { ${code} });`);
+
+    const result = await project.runBin('oxlint', ['--format=json', 'fixture.test.js']);
+    const diagnostics = diagnosticEntries(result.stdout);
+
+    expect(
+      diagnostics.filter(({ code: ruleCode }) => ruleCode === 'vitest(valid-expect)'),
+    ).toHaveLength(errors);
+  });
+
   it('scopes the Vitest plugin and globals to test files', () => {
-    expect(createConfig().overrides).toEqual(
+    expect(createConfig({ vitest: true }).overrides).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           files: ['**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
@@ -150,7 +165,7 @@ describe('oxlint vitest defaults', () => {
     );
   });
 
-  it('reports recommended Vitest rules in test files by default', async () => {
+  it('reports recommended Vitest rules in test files when enabled', async () => {
     project = await createTempProject('oxlint-config-vitest');
     await writeOxlintProject(project, `{ rules: { 'no-undef': 'error' } }`);
     await project.writeFile('fixture.test.js', vitestRecommendedViolations);
@@ -245,7 +260,7 @@ async function writeOxlintProject(project: TempProject, configArgs = ''): Promis
     `
 import retn0 from '@retn0/oxlint-config';
 
-export default retn0(${configArgs});
+export default retn0({ react: true, vitest: true }, ${configArgs});
 `,
   );
 }

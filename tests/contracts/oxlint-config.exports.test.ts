@@ -1,3 +1,4 @@
+import type { ConfigOptions } from '@retn0/oxlint-config';
 import type { OxlintConfig } from 'oxlint';
 import createConfig, { createConfig as namedCreateConfig } from '@retn0/oxlint-config';
 import { describe, expect, expectTypeOf, it } from 'vitest';
@@ -14,12 +15,15 @@ describe('oxlint config exports', () => {
   });
 
   it('creates a complete root config with local overrides', () => {
-    const config = createConfig({
-      ignorePatterns: ['generated/**'],
-      rules: {
-        'no-console': 'warn',
+    const config = createConfig(
+      {},
+      {
+        ignorePatterns: ['generated/**'],
+        rules: {
+          'no-console': 'warn',
+        },
       },
-    });
+    );
 
     expect(config.ignorePatterns).toEqual([
       'node_modules/**',
@@ -29,16 +33,17 @@ describe('oxlint config exports', () => {
     ]);
     expect(config.options).toMatchObject({ typeAware: true });
     expect(config.categories).toMatchObject({ correctness: 'error' });
-    expect(config.plugins).toEqual(
-      expect.arrayContaining(['oxc', 'react', 'typescript', 'unicorn']),
-    );
+    expect(config.plugins).toEqual(expect.arrayContaining(['oxc', 'typescript', 'unicorn']));
     expect(config.rules).toMatchObject({ 'no-console': 'warn' });
   });
 
-  it('keeps the override-only factory signature and accepts multiple overrides', () => {
-    expectTypeOf(createConfig).parameters.toEqualTypeOf<OxlintConfig[]>();
+  it('separates feature options from native configuration and accepts multiple overrides', () => {
+    expectTypeOf(createConfig).parameters.toEqualTypeOf<
+      [options?: ConfigOptions, ...overrides: OxlintConfig[]]
+    >();
 
     const config = createConfig(
+      {},
       { ignorePatterns: ['generated/**'] },
       { rules: { 'no-console': 'warn' } },
     );

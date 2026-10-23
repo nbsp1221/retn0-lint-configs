@@ -123,7 +123,7 @@ export const vitestPolicyLayers: PolicyLayer[] = [
        * @see https://oxc.rs/docs/guide/usage/linter/rules/vitest/valid-expect
        */
       'vitest/valid-expect': {
-        config: 'error',
+        config: ['error', { maxArgs: 2 }],
       },
 
       /**

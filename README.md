@@ -28,12 +28,13 @@ Create `eslint.config.mjs`:
 ```js
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import oxlintConfig from './oxlint.config.mts';
 
 export default retn0(
   {
     environments: ['node'],
   },
-  eslintConfigOxlint,
+  eslintConfigOxlint(oxlintConfig),
 );
 ```
 
@@ -73,5 +74,5 @@ This repository contains four public packages:
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) 0.72.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.87.x when using the ESLint compatibility package
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.89.x
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher

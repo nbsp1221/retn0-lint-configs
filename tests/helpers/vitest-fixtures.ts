@@ -152,3 +152,14 @@ export const vitestCandidateRuleIds = [
 export function oxlintCodeToRuleId(code: string): string {
   return code.replace(/^([\w-]+)\((.+)\)$/u, '$1/$2');
 }
+
+export const validExpectCases = [
+  { code: 'expect(200).toBe(200);', errors: 0 },
+  { code: "expect(200, 'response body').toBe(200);", errors: 0 },
+  { code: "const message = 'response body'; expect(200, message).toBe(200);", errors: 0 },
+  { code: "const message = 'response body'; expect(200, message, message).toBe(200);", errors: 1 },
+  { code: 'expect().toBe(200);', errors: 1 },
+  { code: 'expect(200);', errors: 1 },
+  { code: 'expect(200).toBe;', errors: 1 },
+  { code: 'expect(Promise.resolve(200)).resolves.toBe(200);', errors: 1 },
+];

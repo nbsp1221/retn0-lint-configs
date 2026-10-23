@@ -4,6 +4,7 @@ import createConfig from '@retn0/eslint-config';
 import { ESLint } from 'eslint';
 import { describe, expect, it } from 'vitest';
 import {
+  validExpectCases,
   vitestCandidateRuleIds,
   vitestCandidateViolations,
   vitestRecommendedRuleIds,
@@ -313,6 +314,19 @@ export { Delta } from './delta';
 });
 
 describe('eslint vitest option', () => {
+  it.each(validExpectCases)('validates expect usage: $code', async ({ code, errors }) => {
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: createConfig({ ts: false, perfectionist: false, vitest: true }),
+    });
+    const [result] = await eslint.lintText(`it('response', () => { ${code} });`, {
+      filePath: 'fixture.test.js',
+    });
+
+    expect(result.fatalErrorCount).toBe(0);
+    expect(messagesForRule(result, 'vitest/valid-expect')).toHaveLength(errors);
+  });
+
   const vitestGlobalsMessages = [
     "'expect' is not defined.",
     "'describe' is not defined.",
@@ -394,7 +408,7 @@ describe('eslint vitest option', () => {
     expect(vitestRuleIdsOf(result)).toEqual(vitestCandidateRuleIds);
   });
 
-  it('enables exactly the @vitest/eslint-plugin recommended preset', () => {
+  it('enables the @vitest/eslint-plugin recommended rules and severities', () => {
     const config = createConfig({ vitest: true });
     const enabledRules = Object.fromEntries(
       config
@@ -422,7 +436,7 @@ describe('eslint vitest option', () => {
     );
 
     const oxlintRules = Object.fromEntries(
-      (createOxlintConfig().overrides ?? [])
+      (createOxlintConfig({ vitest: true }).overrides ?? [])
         .flatMap((override) => Object.entries(override.rules ?? {}))
         .filter(([ruleId]) => ruleId.startsWith('vitest/'))
         .map(([ruleId, entry]) => [ruleId, severityName(entry)]),

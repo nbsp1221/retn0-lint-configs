@@ -9,7 +9,7 @@ My personal ESLint compatibility configuration for `@retn0/oxlint-config`.
 
 - [Node.js](https://nodejs.org) 24.0.0 or higher
 - [ESLint](https://eslint.org) 10.x
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.87.x
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter) 1.89.x
 - [oxlint-tsgolint](https://oxc.rs/docs/guide/usage/linter/type-aware) 7.0.2003 or higher
 
 ## Installation
@@ -42,12 +42,13 @@ Create `eslint.config.mjs` and append the compatibility config after the base co
 ```js
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import oxlintConfig from './oxlint.config.mts';
 
 export default retn0(
   {
     environments: ['node'],
   },
-  eslintConfigOxlint,
+  eslintConfigOxlint(oxlintConfig),
 );
 ```
 
@@ -63,13 +64,52 @@ Then run both tools:
 }
 ```
 
+## Configuration
+
+JavaScript and TypeScript rules are enabled by default. React and Vitest are opt-in.
+
+For a React project using Vitest, configure `oxlint.config.mts`:
+
+```ts
+import retn0 from '@retn0/oxlint-config';
+
+export default retn0({ react: true, vitest: true });
+```
+
+Then configure `eslint.config.mjs`:
+
+```js
+import retn0 from '@retn0/eslint-config';
+import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
+import oxlintConfig from './oxlint.config.mts';
+
+export default retn0(
+  { environments: ['browser'], react: true, vitest: true },
+  eslintConfigOxlint(oxlintConfig),
+);
+```
+
+### Custom rules
+
+Configure custom rules separately in each linter. To run a rule in ESLint instead of Oxlint, disable it in `oxlint.config.mts`:
+
+```ts
+import retn0 from '@retn0/oxlint-config';
+
+export default retn0({}, { rules: { 'no-console': 'off' } });
+```
+
+Then enable it after the compatibility config in `eslint.config.mjs`:
+
+```js
+export default retn0({ environments: ['node'] }, eslintConfigOxlint(oxlintConfig), {
+  rules: { 'no-console': 'warn' },
+});
+```
+
 ## Vitest
 
-The setup above runs recommended Vitest rules through [Oxlint](../oxlint-config#vitest) and disables overlapping ESLint rules.
-
-With explicit imports from `vitest`, no additional setup is needed. If using globals, enable [ESLint's `vitest` option](../eslint-config#vitest) to declare them for test files.
-
-The presets share rule IDs and severities, but native Oxlint diagnostics can differ from the ESLint plugin's diagnostics.
+With `vitest: true`, Oxlint runs the recommended Vitest rules on matching test files. See the [Vitest setup](../oxlint-config#vitest) for file patterns and globals. Enable [ESLint's `vitest` option](../eslint-config#vitest) as well when using Vitest globals.
 
 ## License
 

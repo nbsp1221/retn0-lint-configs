@@ -37,7 +37,15 @@ export default retn0({
 
 TypeScript files must be included in your `tsconfig.json`.
 
-Pass options to the default factory when needed:
+Run ESLint:
+
+```sh
+npx eslint .
+```
+
+## Configuration
+
+The default options are:
 
 ```js
 export default retn0({
@@ -51,11 +59,19 @@ export default retn0({
 });
 ```
 
+- `js`: Enable JavaScript rules.
+- `ts`: Enable TypeScript rules. Setting this to `false` does not exclude TypeScript files from linting.
+- `stylistic`: Enable code-style rules when JavaScript or TypeScript rules are enabled.
+- `react`: Enable React and React Hooks rules.
+- `perfectionist`: Enable sorting rules.
+- `vitest`: Enable Vitest rules and globals for test files.
+- `environments`: Declare globals for the selected runtime environments.
+
 Runtime environments are opt-in:
 
 ```js
 export default retn0({
-  environments: ['browser', 'vitest'],
+  environments: ['browser'],
   react: true,
 });
 ```

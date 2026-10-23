@@ -1,4 +1,6 @@
+import type { LintOptions } from '@retn0/common';
 import type { Linter } from 'eslint';
+import { resolveLintOptions } from '@retn0/common';
 import type { RuntimeEnvironment } from './configs/base.js';
 import { createBaseConfigs } from './configs/base.js';
 import { jsConfigs } from './configs/js.js';
@@ -13,29 +15,19 @@ export type { RuntimeEnvironment };
 
 export type ConfigInput = Linter.Config | Linter.Config[];
 
-export interface ConfigOptions {
+export interface ConfigOptions extends LintOptions {
   environments?: RuntimeEnvironment[];
-  js?: boolean;
-  ts?: boolean;
   stylistic?: boolean;
-  react?: boolean;
   perfectionist?: boolean;
-  vitest?: boolean;
 }
 
 export function createConfig(
   options: ConfigOptions = {},
   ...overrides: ConfigInput[]
 ): Linter.Config[] {
-  const {
-    environments = [],
-    js = true,
-    ts = true,
-    stylistic = true,
-    react = false,
-    perfectionist = false,
-    vitest = false,
-  } = options;
+  const { environments = [], stylistic = true, perfectionist = false } = options;
+
+  const { js, ts, react, vitest } = resolveLintOptions(options);
 
   const config = [
     ...createBaseConfigs({ environments }),

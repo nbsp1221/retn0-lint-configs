@@ -1,6 +1,7 @@
 import retn0 from '@retn0/eslint-config';
 import eslintConfigOxlint from '@retn0/eslint-config-oxlint';
 import { globalIgnores } from 'eslint/config';
+import oxlintConfig from './oxlint.config.ts';
 
 export default retn0(
   {
@@ -8,6 +9,6 @@ export default retn0(
     perfectionist: true,
     react: true,
   },
-  eslintConfigOxlint,
+  eslintConfigOxlint(oxlintConfig),
   globalIgnores(['packages/*/dist/**']),
 );
