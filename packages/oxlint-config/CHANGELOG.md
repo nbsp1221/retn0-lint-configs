@@ -1,5 +1,33 @@
 # @retn0/oxlint-config
 
+## 3.0.0
+
+### Major Changes
+
+- [#5](https://github.com/nbsp1221/retn0-lint-configs/pull/5) [`5f367d9`](https://github.com/nbsp1221/retn0-lint-configs/commit/5f367d9be7727c4db39a1e7ac4d9e11db2861082) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Require Oxlint 1.89.x and oxlint-tsgolint 7.0.2003 or newer. Update both tools when upgrading this preset.
+
+  The updated correctness category enables 13 additional error-level rules: oxc/bad-match-all-arg and 12 React checks, including incompatible-library and set-state-in-effect. Existing code may produce new lint errors.
+
+- [#10](https://github.com/nbsp1221/retn0-lint-configs/pull/10) [`4dce870`](https://github.com/nbsp1221/retn0-lint-configs/commit/4dce8706a0320bda2e2ff8506e761e935d47fb51) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Accept `js`, `ts`, `react`, and `vitest` feature options as the first factory argument, with native Oxlint overrides afterward. JavaScript and TypeScript remain enabled by default; React and Vitest are now opt-in. Move existing overrides from `retn0(overrides)` to `retn0({}, overrides)` and enable `{ react: true, vitest: true }` to retain those integrations. Require Oxlint 1.89.x.
+
+### Minor Changes
+
+- [#8](https://github.com/nbsp1221/retn0-lint-configs/pull/8) [`b04c0eb`](https://github.com/nbsp1221/retn0-lint-configs/commit/b04c0eb6eabbc6cd2116046c5e8cd5fbddda3dda) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Report unsafe type assertions and non-null assertions as errors. When combining ESLint and Oxlint, let Oxlint report them without duplicate ESLint diagnostics.
+
+  Report unnecessary conditions as errors while allowing literal loop conditions. Keep runtime type guard checks unchanged, and let Oxlint handle this rule when combining both linters.
+
+  Apply four existing Oxlint checks to ESLint as well: `no-misused-spread`, `require-array-sort-compare`, `no-unnecessary-parameter-property-assignment`, and `no-useless-default-assignment`. Let Oxlint handle these checks when combining both linters.
+
+  Disable `no-meaningless-void-operator` and `no-useless-empty-export` in both presets to preserve intentional getter reads and ambient namespace visibility.
+
+  Enable `return-await` with `error-handling-correctness-only`, `use-unknown-in-catch-callback-variable`, `prefer-readonly`, and `no-unnecessary-type-conversion` as errors in both presets. Let Oxlint handle these checks when combining both linters.
+
+- [#9](https://github.com/nbsp1221/retn0-lint-configs/pull/9) [`23dc17e`](https://github.com/nbsp1221/retn0-lint-configs/commit/23dc17e221e710abbe3dfa63323dab8d7fece372) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Add an opt-in `vitest` option to both lint presets with matching recommended rules and test-scoped globals. Suppress duplicate ESLint Vitest diagnostics through the compatibility factory.
+
+### Patch Changes
+
+- [#10](https://github.com/nbsp1221/retn0-lint-configs/pull/10) [`4dce870`](https://github.com/nbsp1221/retn0-lint-configs/commit/4dce8706a0320bda2e2ff8506e761e935d47fb51) Thanks [@nbsp1221](https://github.com/nbsp1221)! - Allow message variables as the second argument to Vitest `expect` without reporting an invalid argument count.
+
 ## 2.2.0
 
 ### Minor Changes
